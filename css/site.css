@@ -149,16 +149,26 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 /* ---- Cards ---------------------------------------------------------------------- */
 .card { display: flex; flex-direction: column; gap: 24px; text-decoration: none; color: inherit; }
 .card-media {
+  position: relative;
   border-radius: 20px; overflow: hidden;
   background: var(--panel);
   aspect-ratio: 471 / 350;
-  transition: transform .35s var(--ease-out), box-shadow .35s ease;
 }
+/* Hover: a dark overlay on the image (clickable cards only) */
+a.card .card-media::after {
+  content: ""; position: absolute; inset: 0;
+  background: rgba(18, 14, 28, .55);
+  opacity: 0;
+  transition: opacity .35s ease;
+  pointer-events: none;
+}
+a.card:hover .card-media::after,
+a.card:focus-visible .card-media::after { opacity: 1; }
 .grid-archive .card-media { aspect-ratio: 309 / 308; }
 .card-media img { width: 100%; height: 100%; object-fit: cover; }
 .card-body { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; }
-.card-label { margin: 0; font-family: var(--font-sans); font-size: 16px; line-height: 1.37; }
-.card-desc { margin: 0; font-weight: 600; font-size: 24px; line-height: 1.3; }
+.card-label { margin: 0; font-family: var(--font-sans); font-weight: 400; font-size: 16px; line-height: 1.37; }
+.card-desc { margin: 0; font-weight: 400; font-size: 24px; line-height: 1.3; }
 .card-cta {
   padding: 8px;
   font-family: var(--font-sans); font-weight: 500; font-size: 16px; line-height: 1.37;
@@ -166,11 +176,39 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 }
 .card-cta .arrow { display: inline-block; transition: transform .25s var(--ease-out); }
 .card-soon { color: var(--khaki); font-weight: 400; font-style: italic; }
-a.card:hover .card-media { transform: translateY(-4px); box-shadow: 0 14px 28px -18px rgba(40, 20, 80, .45); }
-a.card:hover .card-cta .arrow { transform: translateX(4px); }
+a.card:hover .card-cta .arrow,
+a.card:focus-visible .card-cta .arrow { transform: translateX(4px); }
 @media (max-width: 759px) { .card-desc { font-size: 22px; } }
+
+/* ---- Entrance: cards drop in from above as they scroll into view -------------------
+   Only when JS has marked the page ready (so cards are never hidden without JS).
+   Work: left card after 0.5s, right card after 2s. Archive: see below. */
+.reveal-ready .reveal > * {   /* the card's contents animate; the card itself stays measurable */
+  opacity: 0;
+  transform: translateY(-32px);
+  clip-path: inset(0 0 100% 0);
+  transition:
+    opacity .7s ease var(--reveal-delay, 0s),
+    transform .9s var(--ease-out) var(--reveal-delay, 0s),
+    clip-path .9s var(--ease-out) var(--reveal-delay, 0s);
+}
+.reveal-ready .reveal > .card-body { transition-delay: calc(var(--reveal-delay, 0s) + .12s); }
+.reveal-ready .reveal.is-in > * { opacity: 1; transform: none; clip-path: inset(-8px -8px -8px -8px); }
+.grid-work > .reveal:nth-child(odd)  { --reveal-delay: .5s; }
+.grid-work > .reveal:nth-child(even) { --reveal-delay: 2s; }
+.grid-archive > .reveal:nth-child(3n + 1) { --reveal-delay: .1s; }
+.grid-archive > .reveal:nth-child(3n + 2) { --reveal-delay: .3s; }
+.grid-archive > .reveal:nth-child(3n + 3) { --reveal-delay: .5s; }
+@media (max-width: 999px) {   /* 2-column archive */
+  .grid-archive > .reveal:nth-child(odd)  { --reveal-delay: .1s; }
+  .grid-archive > .reveal:nth-child(even) { --reveal-delay: .3s; }
+}
+@media (max-width: 759px) {   /* one column: each card as it arrives, no long waits */
+  .grid > .reveal:nth-child(n) { --reveal-delay: .1s; }
+}
 @media (prefers-reduced-motion: reduce) {
-  a.card:hover .card-media, a.card:hover .card-cta .arrow { transform: none; }
+  a.card:hover .card-cta .arrow { transform: none; }
+  .reveal-ready .reveal > * { transform: none; clip-path: none; transition: opacity .4s ease; }
 }
 
 /* ---- Footer ---------------------------------------------------------------------- */

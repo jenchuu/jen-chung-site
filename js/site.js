@@ -32,6 +32,16 @@
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && nav.classList.contains('is-open')) { setMenu(false); menuBtn.focus(); } });
   document.addEventListener('click', (e) => { if (nav.classList.contains('is-open') && !nav.contains(e.target)) setMenu(false); });
 
+  /* ---- Card entrance ------------------------------------------------------------ */
+  // Each card reveals once, when a fifth of it is on screen — whether visitors scroll,
+  // click Work in the nav, or click the ↓ in the konbini. Delays are set in site.css.
+  if (root.classList.contains('reveal-ready')) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); } });
+    }, { threshold: 0.2 });
+    document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+  }
+
   /* ---- Konbini hero ------------------------------------------------------------- */
   // The hero is its own page (konbini/konbini-hero.html) shown in a frame. It talks to this
   // page with messages: theme, page width, frame height, case-study links and the ↓ scroll.

@@ -13,6 +13,8 @@
     var t = 'dark';
     try { t = localStorage.getItem('jc-theme') || t; } catch (e) {}
     document.documentElement.dataset.theme = t === 'light' ? 'light' : 'dark';
+    // Cards animate in as they scroll into view (skipped for reduced motion)
+    if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('reveal-ready');
   })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -60,7 +62,7 @@
       <div class="grid grid-work">
         <!-- ✏️ Each card: image, label, description, link. Case study links point to the live
              Wix pages until those are rebuilt here (Phase 4). -->
-        <a class="card" href="https://www.jen-chung.com/cube-boards">
+        <a class="card reveal" href="https://www.jen-chung.com/cube-boards">
           <div class="card-media"><img src="assets/work/cube-boards.webp" alt="Cube Boards executive storyboard with budget and revenue charts" width="942" height="700" loading="lazy"></div>
           <div class="card-body">
             <h3 class="card-label">CUBE: BOARDS</h3>
@@ -69,7 +71,7 @@
           </div>
         </a>
 
-        <div class="card">   <!-- no case study page yet: not a link -->
+        <div class="card reveal">   <!-- no case study page yet: not a link -->
           <div class="card-media"><img src="assets/work/cube-comments.webp" alt="Cube comments and @mentions" width="942" height="700" loading="lazy"></div>
           <div class="card-body">
             <h3 class="card-label">CUBE: COMMENTS</h3>
@@ -78,7 +80,7 @@
           </div>
         </div>
 
-        <a class="card" href="https://www.jen-chung.com/switchchord-splits">
+        <a class="card reveal" href="https://www.jen-chung.com/switchchord-splits">
           <div class="card-media"><img src="assets/work/switchchord-splits.webp" alt="Switchchord splits workspace chat where collaborators lock in their percentages" width="942" height="700" loading="lazy"></div>
           <div class="card-body">
             <h3 class="card-label">SWITCHCHORD: SPLITS WORKSPACE</h3>
@@ -87,7 +89,7 @@
           </div>
         </a>
 
-        <a class="card" href="https://www.jen-chung.com/parts-management">
+        <a class="card reveal" href="https://www.jen-chung.com/parts-management">
           <div class="card-media"><img src="assets/work/beacon-parts.webp" alt="Beacon parts request form with order status tags" width="942" height="700" loading="lazy"></div>
           <div class="card-body">
             <h3 class="card-label">BEACON: PARTS MANAGEMENT</h3>
@@ -104,41 +106,41 @@
     <div>
       <h2 id="archive-title">Archive</h2>
       <!-- ✏️ Placeholder images and copy from Figma — replace as the archive is decided.
-           To link a card, change <div class="card"> to <a class="card" href="…"> (and </div> to </a>). -->
+           To link a card, change <div class="card reveal"> to <a class="card reveal" href="…"> (and </div> to </a>). -->
       <div class="grid grid-archive">
-        <div class="card">
+        <div class="card reveal">
           <div class="card-media"><img src="assets/archive/cube-ai-improvements.webp" alt="" width="618" height="616" loading="lazy"></div>
           <div class="card-body"><h3 class="card-label">CUBE: AI IMPROVEMENTS</h3><p class="card-desc">Led AI UX improvements across Boards, Decks, Planner, and AI Analyst</p></div>
         </div>
-        <div class="card">
+        <div class="card reveal">
           <div class="card-media"><img src="assets/archive/cube-background-tasks.webp" alt="" width="618" height="616" loading="lazy"></div>
           <div class="card-body"><h3 class="card-label">CUBE: BACKGROUND TASKS</h3><p class="card-desc">Improved background task card states</p></div>
         </div>
-        <div class="card">
+        <div class="card reveal">
           <div class="card-media"><img src="assets/archive/cube-tables.webp" alt="" width="618" height="616" loading="lazy"></div>
           <div class="card-body"><h3 class="card-label">CUBE: TABLES</h3><p class="card-desc">New feature where users can build tables directly in Cube Workspace and have it available everywhere tables are used, including spreadsheet</p></div>
         </div>
-        <div class="card">
+        <div class="card reveal">
           <div class="card-media"><img src="assets/archive/beacon-internal-teams.webp" alt="" width="618" height="616" loading="lazy"></div>
           <div class="card-body"><h3 class="card-label">BEACON: INTERNAL TEAMS</h3><p class="card-desc">Helping aviation professionals manage parts requests to fix planes quickly so they can get back to flying</p></div>
         </div>
-        <div class="card">
+        <div class="card reveal">
           <div class="card-media"><img src="assets/archive/beacon-pause-maintenance.webp" alt="" width="618" height="616" loading="lazy"></div>
           <div class="card-body"><h3 class="card-label">BEACON: PAUSE MAINTENANCE</h3><p class="card-desc">Feature added to Venmo to help users easily split uneven shared bills</p></div>
         </div>
-        <div class="card">
+        <div class="card reveal">
           <div class="card-media"><img src="assets/archive/beacon-custom-message-tags.webp" alt="" width="618" height="616" loading="lazy"></div>
           <div class="card-body"><h3 class="card-label">BEACON: CUSTOM MESSAGE TAGS</h3><p class="card-desc">Feature added to Venmo to help users easily split uneven shared bills</p></div>
         </div>
-        <a class="card" href="https://www.jen-chung.com/venmo">
+        <a class="card reveal" href="https://www.jen-chung.com/venmo">
           <div class="card-media"><img src="assets/archive/venmo.webp" alt="" width="618" height="616" loading="lazy"></div>
           <div class="card-body"><h3 class="card-label">VENMO</h3><p class="card-desc">Feature added to Venmo to help users easily split uneven shared bills</p></div>
         </a>
-        <div class="card">
+        <div class="card reveal">
           <div class="card-media"><img src="assets/archive/hack-for-la.webp" alt="" width="618" height="616" loading="lazy"></div>
           <div class="card-body"><h3 class="card-label">HACK FOR LA: CIVIC TECH JOBS</h3><p class="card-desc">Helping aviation professionals manage parts requests to fix planes quickly so they can get back to flying</p></div>
         </div>
-        <div class="card">
+        <div class="card reveal">
           <div class="card-media"><img src="assets/archive/traversync.webp" alt="" width="618" height="616" loading="lazy"></div>
           <div class="card-body"><h3 class="card-label">TRAVERSYNC: MOBILE APP</h3><p class="card-desc">Feature added to Venmo to help users easily split uneven shared bills</p></div>
         </div>
