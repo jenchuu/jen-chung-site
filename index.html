@@ -1,17 +1,171 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Jen Chung — Product Designer</title>
-<style>
-  /* Temporary home page: shows the konbini hero while the real page (nav, Work,
-     Archive, footer, light/dark toggle) is built from Figma in Phase 3. */
-  html, body { margin: 0; height: 100%; background: #222; }
-  iframe { display: block; width: min(1022px, calc(100% - 32px)); height: calc(100% - 64px); margin: 64px auto 0; border: 0; }
-</style>
+<title>Jen Chung — Product Designer in Los Angeles</title>
+<meta name="description" content="Jen Chung is a Product Designer in Los Angeles who uses strategy, craft, and curiosity to solve complex problems for people — mostly startups.">
+<meta name="theme-color" content="#222222">
+<script>
+  // Set the theme before the page paints, so there's no flash of the wrong colors.
+  // A visitor's choice is remembered; first-time visitors get dark (the site's default).
+  (function () {
+    var t = 'dark';
+    try { t = localStorage.getItem('jc-theme') || t; } catch (e) {}
+    document.documentElement.dataset.theme = t === 'light' ? 'light' : 'dark';
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@600;700&family=Crimson+Text:wght@400;600;700&family=Inter:ital,wght@0,400;0,500;1,400&display=swap">
+<link rel="stylesheet" href="css/site.css">
 </head>
 <body>
-<iframe src="konbini/konbini-hero.html" title="Jen's konbini"></iframe>
+<a class="skip-link" href="#work">Skip to work</a>
+
+<!-- ===== Nav ===== -->
+<header class="nav wrap">
+  <div class="nav-bar">
+    <a class="logo" href="./" aria-label="Jen Chung, home">Jen<img src="assets/icons/logo-dash.svg" alt=""></a>
+    <nav class="nav-links" aria-label="Main">
+      <div class="nav-link-list" id="nav-menu">
+        <a href="#work">Work</a>
+        <a href="https://drive.google.com/file/d/1YyUNneKgoWcizkY0iiJYyRAiehRn6xVk/view?usp=sharing" target="_blank" rel="noopener">Resume</a>
+        <a href="https://www.jen-chung.com/about">About</a>   <!-- TODO Phase 4: about.html -->
+        <a href="mailto:hello@jen-chung.com">Connect</a>
+      </div>
+      <div class="nav-tools">
+        <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Dark mode" aria-pressed="true">
+          <img class="is-light" src="assets/icons/sun-filled.svg" alt=""><img class="is-light" src="assets/icons/moon-outlined.svg" alt="">
+          <img class="is-dark" src="assets/icons/sun-outlined.svg" alt=""><img class="is-dark" src="assets/icons/moon-filled.svg" alt="">
+        </button>
+        <button class="menu-btn" id="menu-btn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav-menu">
+          <svg viewBox="0 0 28 28" aria-hidden="true"><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><line class="line l1" x1="4" y1="8" x2="24" y2="8"/><line class="line l2" x1="4" y1="14" x2="24" y2="14"/><line class="line l3" x1="4" y1="20" x2="24" y2="20"/></g></svg>
+        </button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <!-- ===== Hero: the konbini (its own file, konbini/konbini-hero.html) ===== -->
+  <section class="hero wrap" aria-label="Introduction">
+    <iframe class="hero-frame" id="hero" title="Jen's konbini: intro and interactive storefront" allow="autoplay"></iframe>
+  </section>
+
+  <!-- ===== Work ===== -->
+  <section class="section wrap" id="work" aria-labelledby="work-title">
+    <div>
+      <h2 id="work-title">Work</h2>
+      <div class="grid grid-work">
+        <!-- ✏️ Each card: image, label, description, link. Case study links point to the live
+             Wix pages until those are rebuilt here (Phase 4). -->
+        <a class="card" href="https://www.jen-chung.com/cube-boards">
+          <div class="card-media"><img src="assets/work/cube-boards.webp" alt="Cube Boards executive storyboard with budget and revenue charts" width="942" height="700" loading="lazy"></div>
+          <div class="card-body">
+            <h3 class="card-label">CUBE: BOARDS</h3>
+            <p class="card-desc">A live-data dashboard feature that puts reporting in finance teams' hands, resulting in 75% adoption across customers in 3 months</p>
+            <span class="card-cta" aria-hidden="true">View case study <span class="arrow">--&gt;</span></span>
+          </div>
+        </a>
+
+        <div class="card">   <!-- no case study page yet: not a link -->
+          <div class="card-media"><img src="assets/work/cube-comments.webp" alt="Cube comments and @mentions" width="942" height="700" loading="lazy"></div>
+          <div class="card-body">
+            <h3 class="card-label">CUBE: COMMENTS</h3>
+            <p class="card-desc">Increasing collaboration with comments and @mentions across reports, boards, and tasks</p>
+            <span class="card-cta card-soon">Case study coming soon</span>
+          </div>
+        </div>
+
+        <a class="card" href="https://www.jen-chung.com/switchchord-splits">
+          <div class="card-media"><img src="assets/work/switchchord-splits.webp" alt="Switchchord splits workspace chat where collaborators lock in their percentages" width="942" height="700" loading="lazy"></div>
+          <div class="card-body">
+            <h3 class="card-label">SWITCHCHORD: SPLITS WORKSPACE</h3>
+            <p class="card-desc">Turning the messiest part of music collaboration, splits, into a transparent agreement everyone can see, edit, and lock in together</p>
+            <span class="card-cta" aria-hidden="true">View case study <span class="arrow">--&gt;</span></span>
+          </div>
+        </a>
+
+        <a class="card" href="https://www.jen-chung.com/parts-management">
+          <div class="card-media"><img src="assets/work/beacon-parts.webp" alt="Beacon parts request form with order status tags" width="942" height="700" loading="lazy"></div>
+          <div class="card-body">
+            <h3 class="card-label">BEACON: PARTS MANAGEMENT</h3>
+            <p class="card-desc">Helping aviation professionals manage parts requests to fix planes quickly so they can get back to flying</p>
+            <span class="card-cta" aria-hidden="true">View case study <span class="arrow">--&gt;</span></span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Archive ===== -->
+  <section class="section wrap" id="archive" aria-labelledby="archive-title">
+    <div>
+      <h2 id="archive-title">Archive</h2>
+      <!-- ✏️ Placeholder images and copy from Figma — replace as the archive is decided.
+           To link a card, change <div class="card"> to <a class="card" href="…"> (and </div> to </a>). -->
+      <div class="grid grid-archive">
+        <div class="card">
+          <div class="card-media"><img src="assets/archive/cube-ai-improvements.webp" alt="" width="618" height="616" loading="lazy"></div>
+          <div class="card-body"><h3 class="card-label">CUBE: AI IMPROVEMENTS</h3><p class="card-desc">Led AI UX improvements across Boards, Decks, Planner, and AI Analyst</p></div>
+        </div>
+        <div class="card">
+          <div class="card-media"><img src="assets/archive/cube-background-tasks.webp" alt="" width="618" height="616" loading="lazy"></div>
+          <div class="card-body"><h3 class="card-label">CUBE: BACKGROUND TASKS</h3><p class="card-desc">Improved background task card states</p></div>
+        </div>
+        <div class="card">
+          <div class="card-media"><img src="assets/archive/cube-tables.webp" alt="" width="618" height="616" loading="lazy"></div>
+          <div class="card-body"><h3 class="card-label">CUBE: TABLES</h3><p class="card-desc">New feature where users can build tables directly in Cube Workspace and have it available everywhere tables are used, including spreadsheet</p></div>
+        </div>
+        <div class="card">
+          <div class="card-media"><img src="assets/archive/beacon-internal-teams.webp" alt="" width="618" height="616" loading="lazy"></div>
+          <div class="card-body"><h3 class="card-label">BEACON: INTERNAL TEAMS</h3><p class="card-desc">Helping aviation professionals manage parts requests to fix planes quickly so they can get back to flying</p></div>
+        </div>
+        <div class="card">
+          <div class="card-media"><img src="assets/archive/beacon-pause-maintenance.webp" alt="" width="618" height="616" loading="lazy"></div>
+          <div class="card-body"><h3 class="card-label">BEACON: PAUSE MAINTENANCE</h3><p class="card-desc">Feature added to Venmo to help users easily split uneven shared bills</p></div>
+        </div>
+        <div class="card">
+          <div class="card-media"><img src="assets/archive/beacon-custom-message-tags.webp" alt="" width="618" height="616" loading="lazy"></div>
+          <div class="card-body"><h3 class="card-label">BEACON: CUSTOM MESSAGE TAGS</h3><p class="card-desc">Feature added to Venmo to help users easily split uneven shared bills</p></div>
+        </div>
+        <a class="card" href="https://www.jen-chung.com/venmo">
+          <div class="card-media"><img src="assets/archive/venmo.webp" alt="" width="618" height="616" loading="lazy"></div>
+          <div class="card-body"><h3 class="card-label">VENMO</h3><p class="card-desc">Feature added to Venmo to help users easily split uneven shared bills</p></div>
+        </a>
+        <div class="card">
+          <div class="card-media"><img src="assets/archive/hack-for-la.webp" alt="" width="618" height="616" loading="lazy"></div>
+          <div class="card-body"><h3 class="card-label">HACK FOR LA: CIVIC TECH JOBS</h3><p class="card-desc">Helping aviation professionals manage parts requests to fix planes quickly so they can get back to flying</p></div>
+        </div>
+        <div class="card">
+          <div class="card-media"><img src="assets/archive/traversync.webp" alt="" width="618" height="616" loading="lazy"></div>
+          <div class="card-body"><h3 class="card-label">TRAVERSYNC: MOBILE APP</h3><p class="card-desc">Feature added to Venmo to help users easily split uneven shared bills</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ===== Footer ===== -->
+<footer class="footer" id="connect">
+  <div class="footer-main">
+    <div class="connect">
+      <h2 class="connect-title">Let’s connect <img src="assets/icons/connect-line.svg" alt=""></h2>
+      <div class="socials">
+        <a href="mailto:hello@jen-chung.com" aria-label="Email Jen">
+          <svg viewBox="0 0 40 32" aria-hidden="true"><path fill="currentColor" d="M33.6667 8.00004C33.6667 6.53337 32.4667 5.33337 31 5.33337H9.66667C8.2 5.33337 7 6.53337 7 8.00004V24C7 25.4667 8.2 26.6667 9.66667 26.6667H31C32.4667 26.6667 33.6667 25.4667 33.6667 24V8.00004ZM31 8.00004L20.3333 14.6667L9.66667 8.00004H31ZM31 24H9.66667V10.6667L20.3333 17.3334L31 10.6667V24Z"/></svg>
+        </a>
+        <a href="https://www.linkedin.com/in/jennifer-chung/" target="_blank" rel="noopener" aria-label="Jen on LinkedIn">
+          <svg viewBox="0 0 40 32" aria-hidden="true"><path fill="currentColor" d="M14.7006 26.8802H10.3469V12.9395H14.7006V26.8802ZM12.5214 11.0379C11.1292 11.0379 10 9.89131 10 8.50703C10 7.84212 10.2656 7.20443 10.7385 6.73426C11.2114 6.26409 11.8527 5.99995 12.5214 5.99995C13.1901 5.99995 13.8315 6.26409 14.3043 6.73426C14.7772 7.20443 15.0428 7.84212 15.0428 8.50703C15.0428 9.89131 13.9131 11.0379 12.5214 11.0379ZM30.9953 26.8802H26.6509V20.0939C26.6509 18.4766 26.6181 16.4025 24.3873 16.4025C22.1237 16.4025 21.7769 18.1597 21.7769 19.9774V26.8802H17.4278V12.9395H21.6034V14.8412H21.6644C22.2456 13.7458 23.6655 12.59 25.7838 12.59C30.19 12.59 31 15.475 31 19.2224V26.8802H30.9953Z"/></svg>
+        </a>
+      </div>
+    </div>
+    <p class="copyright">© 2026 Jen Chung</p>
+  </div>
+  <p class="tagline">Built with craft, a little personality, and a cup of matcha.</p>
+</footer>
+
+<script src="js/site.js"></script>
 </body>
 </html>

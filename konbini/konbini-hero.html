@@ -1055,11 +1055,17 @@ const CONFIG = {
   // below the fold. On load (and resize) we measure how much of the embed is on screen while
   // its top is in view, and fit the storefront into that.
   let visibleH = 0;
+  let lastReportedH = 0;
   function fitStore() {
     if (storeView.hidden || !storeFit.offsetHeight) return;
     const room = visibleH && visibleH < storeView.clientHeight - 1 ? visibleH - 16 : storeView.clientHeight;
     fit = Math.min(1, room / storeFit.offsetHeight);
     storeFit.style.transform = fit < 1 ? `scale(${fit.toFixed(4)})` : '';
+    // Tell the host page how tall the storefront is at full size, so it can size the frame to fit.
+    if (window.parent !== window && storeFit.offsetHeight !== lastReportedH) {
+      lastReportedH = storeFit.offsetHeight;
+      window.parent.postMessage({ type: 'konbini:size', height: lastReportedH }, '*');
+    }
   }
   let foldIO = null;
   if ('IntersectionObserver' in window) {
@@ -1321,6 +1327,7 @@ const CONFIG = {
   function showView(view) {
     setCursor(null);
     kb.dataset.view = view;
+    if (window.parent !== window) window.parent.postMessage({ type: 'konbini:view', view }, '*');
     storeView.hidden = view !== 'store';
     fridgeView.hidden = view !== 'fridge';
     if (view === 'store') requestAnimationFrame(() => { placeUnderline(); fitStore(); placeSpacer(); });
