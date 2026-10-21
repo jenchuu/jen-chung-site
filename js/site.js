@@ -87,7 +87,10 @@
         else { archive.append(content); pin.remove(); row.style.transform = ''; }
       }
       if (pinned) {
-        maxShift = Math.max(0, row.scrollWidth - row.clientWidth);
+        // slide until the last card lines up with the page's right margin
+        const r = row.getBoundingClientRect(), last = row.lastElementChild.getBoundingClientRect();
+        const margin = parseFloat(getComputedStyle(row).paddingRight) || 0;
+        maxShift = Math.max(0, Math.ceil(last.right - r.left + margin - row.clientWidth));
         pin.style.height = `${maxShift + innerHeight}px`;     // one pixel down = one pixel sideways
       }
       update();
