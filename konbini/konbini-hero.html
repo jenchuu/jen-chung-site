@@ -127,7 +127,7 @@ img { display: block; }
 .intro {
   position: relative; z-index: 2;   /* the "people" note can overlap the scene's top edge */
   width: var(--card-w);
-  margin: 0;                   /* the 16px gap above the scene comes from .store-fit */
+  margin: 0 0 18px;            /* + .store-fit's 16px gap = 34px: just enough for the "people" note to clear the scene */
   font-family: var(--font-text); font-weight: 400;
   font-size: 32px; line-height: 1.31;
   color: var(--ink);
@@ -188,8 +188,8 @@ img { display: block; }
   -webkit-mask-position: 0 0; mask-position: 0 0;
   transition-duration: .7s;
 }
-@media (max-width: 899px) { .intro { font-size: 28px; } }
-@media (max-width: 559px) { .intro { font-size: 24px; } }
+@media (max-width: 899px) { .intro { font-size: 28px; margin-bottom: 15px; } }   /* 31px gap */
+@media (max-width: 559px) { .intro { font-size: 24px; margin-bottom: 11px; } }   /* 27px gap */
 
 .card {
   position: relative;
