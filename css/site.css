@@ -207,10 +207,9 @@ a.card:focus-visible .card-cta .arrow { transform: translateX(4px); }
   min-height: 211px;
   display: flex; flex-direction: column; align-items: center; justify-content: space-between;
   gap: 32px;
-  padding: 40px var(--gutter) 16px;
+  padding: 40px var(--gutter);
   text-align: center;
 }
-.footer-main { display: flex; flex-direction: column; align-items: center; gap: 24px; }
 .connect { display: flex; flex-direction: column; align-items: center; gap: 8px; }
 .connect-title {
   display: flex; align-items: center; gap: 12px;
@@ -222,8 +221,10 @@ a.card:focus-visible .card-cta .arrow { transform: translateX(4px); }
 .socials a { display: grid; place-items: center; width: 40px; height: 32px; border-radius: 6px; transition: color .2s ease, transform .2s ease; }
 .socials a:hover { color: var(--purple); transform: translateY(-2px); }
 .socials svg { width: 40px; height: 32px; }
-.copyright { margin: 0; font-family: var(--font-sans); font-size: 12px; line-height: 1.28; }
-.tagline { margin: 0; font-family: var(--font-sans); font-style: italic; font-size: 10px; line-height: 1.28; color: var(--khaki); }
+.colophon { margin: 0; font-family: var(--font-sans); font-style: italic; font-size: 12px; line-height: 1.28; color: var(--khaki); }
+.colophon-end { white-space: nowrap; }   /* the icons never wrap onto a line of their own */
+.colophon-icons { display: inline-flex; align-items: center; gap: 2px; margin-left: 4px; vertical-align: -2px; }
+.colophon-icons img { width: 12px; height: 15px; }
 
 /* ---- Archive: horizontal scroll ------------------------------------------------------
    A row of cards. js/site.js pins the section and slides the row left as you scroll down;

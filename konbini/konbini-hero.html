@@ -133,10 +133,12 @@ img { display: block; }
   color: var(--ink);
 }
 
-/* "people" → typed aside "(mostly startups)". Hover on computers, tap on touch;
-   erases 1.5s after. Its space is reserved, so the sentence never reflows. */
+/* "people" → typed aside "(mostly startups)", tilted under the word from its middle
+   (Figma 8241:10456). Hover on computers, tap on touch; erases 1.5s after. It floats,
+   so the sentence never reflows. */
 .nowrap { white-space: nowrap; }
 .people {
+  position: relative;
   font: inherit; color: inherit; background: none; border: 0; padding: 0; margin: 0;
   cursor: help;
   text-decoration: underline dotted;
@@ -145,7 +147,13 @@ img { display: block; }
   text-decoration-thickness: 1.5px;
 }
 .people:focus-visible { outline: 2px solid var(--purple); outline-offset: 3px; border-radius: 4px; }
-.aside { color: #8a8578; white-space: nowrap; }              /* light mode: 3.5:1 on #FCF9EF */
+.aside {
+  position: absolute; left: 50%; top: calc(100% + 2px);
+  transform: translateX(var(--aside-nudge, 0px)) rotate(-6deg); transform-origin: left top;
+  font-size: .75em; line-height: 1.31;      /* 24px next to the 32px sentence */
+  color: #8a8578; white-space: nowrap;      /* light mode: 3.5:1 on #FCF9EF */
+  pointer-events: none;
+}
 :root[data-theme="dark"] .aside { color: #a5a08f; }         /* dark mode: 6.1:1 on #222 */
 .aside > span { opacity: 0; }
 .aside > span.on { opacity: 1; }
@@ -609,7 +617,7 @@ img { display: block; }
   <section class="store" aria-label="Jen's konbini">
    <div class="store-fit">
     <!-- ✏️ Intro sentence — edit the words here. The rotating words are in CONFIG.introWords. -->
-    <h1 class="intro">Hi! I’m Jen, a Product Designer in Los Angeles who uses <span class="sr-only">strategy, craft, and curiosity to solve</span><span class="rotator" aria-hidden="true"><span class="rotator-word">strategy</span><span class="rotator-tail">&nbsp;to&nbsp;solve</span></span> <span class="fuzzy"><span class="fuzzy-clear">complex</span><span class="fuzzy-noise" aria-hidden="true">complex</span></span> problems for <span class="nowrap"><button class="people" type="button" aria-describedby="people-note">people</button>.</span><span class="aside" aria-hidden="true"> (mostly startups)</span><span class="sr-only" id="people-note">(mostly startups)</span></h1>
+    <h1 class="intro">Hi! I’m Jen, a Product Designer in Los Angeles who uses <span class="sr-only">strategy, craft, and curiosity to solve</span><span class="rotator" aria-hidden="true"><span class="rotator-word">strategy</span><span class="rotator-tail">&nbsp;to&nbsp;solve</span></span> <span class="fuzzy"><span class="fuzzy-clear">complex</span><span class="fuzzy-noise" aria-hidden="true">complex</span></span> problems for <span class="nowrap"><button class="people" type="button" aria-describedby="people-note">people<span class="aside" aria-hidden="true">(mostly startups)</span></button>.</span><span class="sr-only" id="people-note">(mostly startups)</span></h1>
     <div class="card">
       <div class="stage">
         <video class="stage-video" muted playsinline loop preload="auto" aria-hidden="true" tabindex="-1"></video>
@@ -1020,7 +1028,13 @@ const CONFIG = {
         await wait(speed);
       }
     }
-    const show = () => { clearTimeout(asideTimer); typeTo(chars.length, 38); };
+    // On narrow screens, slide it left if it would run past the sentence's right edge
+    const fit = () => {
+      aside.style.removeProperty('--aside-nudge');
+      const over = aside.getBoundingClientRect().right - Math.min(intro.getBoundingClientRect().right, innerWidth - 8);
+      if (over > 0) aside.style.setProperty('--aside-nudge', `${-Math.ceil(over)}px`);
+    };
+    const show = () => { clearTimeout(asideTimer); fit(); typeTo(chars.length, 38); };
     const hideLater = () => { clearTimeout(asideTimer); asideTimer = setTimeout(() => { if (!asideHover) typeTo(0, 22); }, 1500); };
     people.addEventListener('pointerenter', (e) => { if (e.pointerType !== 'mouse') return; asideHover = true; show(); });
     people.addEventListener('pointerleave', (e) => { if (e.pointerType !== 'mouse') return; asideHover = false; hideLater(); });
