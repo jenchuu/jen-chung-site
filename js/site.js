@@ -11,8 +11,9 @@
   // 'width' = full width at full height (the helper line may sit below the fold).
   // 'scale' = everything shrinks to fit (narrower than the rest of the page).
   const HERO_FIT = 'crop';
+  const SHORT_SCREEN = 500;      // windows shorter than this (phones held sideways): hero isn't fit to the screen
   const REVEAL_FIRST_MS = 150;   // first card's delay once its row scrolls into view
-  const REVEAL_STEP_MS = 350;    // then each next card, in reading order
+  const REVEAL_STEP_MS = 500;    // then each next card, in reading order
   // (how long each card's own animation takes is --reveal-dur in css/site.css)
   const root = document.documentElement;
   const hero = document.getElementById('hero');
@@ -65,94 +66,69 @@
     document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
   }
 
-  /* ---- Archive: Helix runway ------------------------------------------------------ */
-  // Built from the archive cards in index.html, so editing a card there updates this too.
+  /* ---- Archive: horizontal scroll ------------------------------------------------- */
+  // The archive is a row of cards. On larger screens the section pins while you scroll
+  // down and the row slides left; on phones (and with reduced motion) it's a row you swipe.
   const archive = document.getElementById('archive');
-  if (archive && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    const cards = [...archive.querySelectorAll('.grid-archive > .card')];
+  if (archive) {
+    const row = archive.querySelector('.grid-archive');
+    const cards = [...row.children];
     const N = cards.length;
-    const data = cards.map((c) => ({
-      img: c.querySelector('img').getAttribute('src'),
-      label: c.querySelector('.card-label').textContent,
-      desc: c.querySelector('.card-desc').textContent,
-      href: c.getAttribute('href'),
-    }));
-    archive.classList.add('is-runway');
-    const runway = Object.assign(document.createElement('div'), { className: 'runway' });
-    runway.style.height = `calc(${N - 1} * 45vh + 100vh)`;
-    runway.innerHTML = `<div class="runway-stage"><div class="runway-inner">
-        <h2>Archive</h2>
-        <div class="runway-track" aria-hidden="true"></div>
-        <ol class="runway-index" aria-label="Archive projects"></ol>
-        <div class="runway-detail" aria-live="polite"><p class="runway-count"></p><h3 class="card-label"></h3><p class="card-desc"></p></div>
-      </div></div>`;
-    archive.append(runway);
-    const track = runway.querySelector('.runway-track'), list = runway.querySelector('.runway-index');
-    const detail = runway.querySelector('.runway-detail');
-    const items = data.map((d, i) => {
-      const it = document.createElement(d.href ? 'a' : 'div');
-      it.className = 'runway-item';
-      if (d.href) { it.href = d.href; it.tabIndex = -1; }
-      it.innerHTML = `<div class="card-media"><img src="${d.img}" alt="" loading="lazy"></div>`;
-      it.addEventListener('click', (e) => { if (i !== active) { e.preventDefault(); jump(i); } });
-      track.append(it);
-      const li = document.createElement('li');
-      li.innerHTML = `<button type="button"><span>${String(i + 1).padStart(2, '0')}</span><span>${d.label}</span></button>`;
-      li.firstChild.addEventListener('click', () => jump(i));
-      list.append(li);
-      return it;
-    });
-    const buttons = [...list.querySelectorAll('button')];
-
-    let cur = 0, active = -1, running = false;
-    const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
-    const progress = () => {
-      const r = runway.getBoundingClientRect();
-      return clamp(-r.top / (r.height - innerHeight), 0, 1) * (N - 1);
+    const progress = Object.assign(document.createElement('div'), { className: 'archive-progress' });
+    progress.innerHTML = '<span class="archive-count">1 of ' + N + '</span><span class="archive-bar"><span></span></span>';
+    row.after(progress);
+    const count = progress.querySelector('.archive-count'), fill = progress.querySelector('.archive-bar span');
+    const show = (p) => {   // p: 0 … 1 along the row
+      fill.style.transform = `scaleX(${Math.max(0.04, p)})`;
+      const edge = progress.getBoundingClientRect().left + 40;   // the content's left edge (doesn't move)
+      const first = cards.findIndex((c) => c.getBoundingClientRect().right > edge);
+      const i = p > 0.995 ? N - 1 : Math.max(0, first);
+      count.textContent = `${i + 1} of ${N}`;
     };
-    function jump(i) {
-      const top = runway.getBoundingClientRect().top + scrollY;
-      scrollTo({ top: top + (i / (N - 1)) * (runway.offsetHeight - innerHeight), behavior: 'smooth' });
+
+    const canPin = () => innerWidth >= 760 && innerHeight >= 560 && !matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let pinned = false, maxShift = 0, raf = 0;
+    const content = archive.firstElementChild;                  // h2 + row + progress
+    const pin = Object.assign(document.createElement('div'), { className: 'archive-pin' });
+    const stage = Object.assign(document.createElement('div'), { className: 'archive-stage' });
+    function layout() {
+      const want = canPin();
+      if (want !== pinned) {
+        pinned = want;
+        archive.classList.toggle('is-pinned', pinned);
+        if (pinned) { stage.append(content); pin.append(stage); archive.append(pin); }
+        else { archive.append(content); pin.remove(); row.style.transform = ''; }
+      }
+      if (pinned) {
+        maxShift = Math.max(0, row.scrollWidth - row.clientWidth);
+        pin.style.height = `${maxShift + innerHeight}px`;     // one pixel down = one pixel sideways
+      }
+      update();
     }
-    function setActive(i) {
-      if (i === active) return;
-      active = i;
-      const d = data[i];
-      buttons.forEach((b, k) => b.setAttribute('aria-current', String(k === i)));
-      items.forEach((it, k) => it.classList.toggle('is-center', k === i));
-      detail.querySelector('.runway-count').textContent = `${i + 1} of ${N}`;
-      detail.querySelector('.card-label').textContent = d.label;
-      detail.querySelector('.card-desc').textContent = d.desc;
-      detail.querySelector('a')?.remove();
-      if (d.href) detail.insertAdjacentHTML('beforeend', `<a href="${d.href}">View project <span class="arrow">--&gt;</span></a>`);
+    function update() {
+      raf = 0;
+      if (pinned) {
+        const r = pin.getBoundingClientRect();
+        const p = Math.min(1, Math.max(0, -r.top / Math.max(1, r.height - innerHeight)));
+        row.style.transform = `translate3d(${-p * maxShift}px, 0, 0)`;
+        show(p);
+      } else {
+        show(row.scrollLeft / Math.max(1, row.scrollWidth - row.clientWidth));
+      }
     }
-    function render() {
-      cur += (progress() - cur) * 0.1;
-      const step = innerWidth < 760 ? innerWidth * 0.42 : Math.min(320, innerWidth * 0.22);
-      items.forEach((el, i) => {
-        const d = i - cur, a = Math.abs(d);
-        const x = d * step + Math.sin(d * 1.15) * step * 0.35;   // the helix twist
-        const y = d * step * 0.42;
-        el.style.transform = `translate(-50%, -50%) translate3d(${x}px, ${y}px, ${-a * 170}px) rotateY(${-d * 26}deg) rotateX(${d * 4}deg)`;
-        el.style.opacity = clamp(1.2 - a * 0.42, 0, 1);              // neighbours fade so the centre leads
-        el.style.zIndex = 100 - Math.round(a * 10);
-        el.style.pointerEvents = a > 2.5 ? 'none' : '';
-      });
-      setActive(clamp(Math.round(cur), 0, N - 1));
-      if (running) requestAnimationFrame(render);
-    }
-    new IntersectionObserver(([e]) => {   // only animate while the archive is on screen
-      if (e.isIntersecting && !running) { running = true; requestAnimationFrame(render); }
-      else if (!e.isIntersecting) running = false;
-    }, { rootMargin: '200px 0px' }).observe(runway);
-    cur = progress(); setActive(0); render();
+    const queue = () => { if (!raf) raf = requestAnimationFrame(update); };
+    addEventListener('scroll', queue, { passive: true });
+    row.addEventListener('scroll', queue, { passive: true });
+    addEventListener('resize', layout);
+    window.addEventListener('load', layout);
+    layout();
   }
 
   /* ---- Konbini hero ------------------------------------------------------------- */
   // The hero is its own page (konbini/konbini-hero.html) shown in a frame. It talks to this
   // page with messages: theme, page width, frame height, case-study links and the ↓ scroll.
   function tellHero(msg) { if (hero.contentWindow) hero.contentWindow.postMessage(msg, '*'); }
-  const hello = () => tellHero({ type: 'konbini:hello', width: innerWidth, theme: theme() });
+  const hello = () => tellHero({ type: 'konbini:hello', width: innerWidth, height: innerHeight, theme: theme() });
 
   hero.src = `konbini/konbini-hero.html?theme=${theme()}&fit=${HERO_FIT}`;
   hero.addEventListener('load', hello);
@@ -163,12 +139,13 @@
     const room = Math.max(420, innerHeight - nav.offsetHeight - gap);
     // Storefront: no taller than it needs (no gap above Work). Inside the fridge on phones:
     // the full screen height, so the fridge can be shown at full width.
-    const fitToContent = heroNatural && !(heroView === 'fridge' && innerWidth < 760);
+    const fitToContent = heroNatural && !(heroView === 'fridge' && innerWidth < 760 && innerHeight >= SHORT_SCREEN);
     const natural = heroNatural + 2;
     const fold = room - 24;          // keep a little space between the helper line and the fold
-    hero.style.height = `${!fitToContent ? room : HERO_FIT === 'width' ? natural : Math.min(fold, natural)}px`;
+    const short = innerHeight < SHORT_SCREEN;
+    hero.style.height = `${!fitToContent ? room : (HERO_FIT === 'width' || short) ? natural : Math.min(fold, natural)}px`;
   }
-  addEventListener('resize', sizeHero);
+  addEventListener('resize', () => { sizeHero(); hello(); });
 
   addEventListener('message', (e) => {
     if (e.source !== hero.contentWindow) return;

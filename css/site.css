@@ -20,9 +20,9 @@
   --content: 1022px;        /* content column at 1280 (129px each side) */
   --gutter: 16px;
   --nav-h: 64px;
-  --hero-gap: 80px;         /* nav → intro sentence */
+  --hero-gap: 40px;         /* nav → intro sentence */
   --ease-out: cubic-bezier(.2, .8, .2, 1);
-  --reveal-dur: 1.4s;       /* ✏️ how long each card's entrance takes */
+  --reveal-dur: 2s;         /* ✏️ how long each card's entrance takes */
 }
 :root[data-theme="dark"] {
   --bg: #222222;
@@ -31,7 +31,6 @@
 }
 @media (min-width: 760px)  { :root { --gutter: 24px; } }
 @media (min-width: 1000px) { :root { --gutter: max(24px, calc((100vw - var(--content)) / 2)); } }
-@media (max-width: 759px)  { :root { --hero-gap: 40px; } }
 
 /* ---- Base ------------------------------------------------------------------- */
 *, *::before, *::after { box-sizing: border-box; }
@@ -165,6 +164,9 @@ a.card .card-media::after {
 }
 a.card:hover .card-media::after,
 a.card:focus-visible .card-media::after { opacity: 1; }
+.card-media img { transition: transform .8s var(--ease-out); }
+a.card:hover .card-media img,
+a.card:focus-visible .card-media img { transform: scale(1.06); }   /* slow zoom under the overlay */
 .grid-archive .card-media { aspect-ratio: 309 / 308; }
 .card-media img { width: 100%; height: 100%; object-fit: cover; }
 .card-body { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
@@ -182,7 +184,7 @@ a.card:focus-visible .card-cta .arrow { transform: translateX(4px); }
 
 /* ---- Entrance: cards drop in from above as they scroll into view -------------------
    Only when JS has marked the page ready (so cards are never hidden without JS).
-   Cards come in reading order, 0.35s apart (see js/site.js). */
+   Cards come in reading order, 0.5s apart (see js/site.js). */
 .reveal-ready .reveal > * {   /* the card's contents animate; the card itself stays measurable */
   opacity: 0;
   transform: translateY(-32px);
@@ -194,9 +196,9 @@ a.card:focus-visible .card-cta .arrow { transform: translateX(4px); }
 }
 .reveal-ready .reveal > .card-body { transition-delay: calc(var(--reveal-delay, 0s) + .2s); }
 .reveal-ready .reveal.is-in > * { opacity: 1; transform: none; clip-path: inset(-8px -8px -8px -8px); }
-/* Delays are set per card by js/site.js (reading order, 0.35s apart). */
+/* Delays are set per card by js/site.js (reading order, 0.5s apart). */
 @media (prefers-reduced-motion: reduce) {
-  a.card:hover .card-cta .arrow { transform: none; }
+  a.card:hover .card-cta .arrow, a.card:hover .card-media img { transform: none; }
   .reveal-ready .reveal > * { transform: none; clip-path: none; transition: opacity .4s ease; }
 }
 
@@ -223,52 +225,32 @@ a.card:focus-visible .card-cta .arrow { transform: translateX(4px); }
 .copyright { margin: 0; font-family: var(--font-sans); font-size: 12px; line-height: 1.28; }
 .tagline { margin: 0; font-family: var(--font-sans); font-style: italic; font-size: 10px; line-height: 1.28; color: var(--khaki); }
 
-/* ---- Archive: Helix runway ------------------------------------------------------------
-   js/site.js turns the archive grid into a pinned gallery: scrolling through the section
-   moves the projects along a twisting diagonal; the centered one shows its details.
-   Without JS, or with reduced motion, the plain grid shows instead. */
-#archive.is-runway { padding-bottom: 0; }
-#archive.is-runway .grid-archive, #archive.is-runway > div > h2 { display: none; }
-.runway { position: relative; }
-.runway-stage { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
-.runway-inner { position: relative; height: 100%; max-width: var(--content); margin: 0 auto; }
-.runway-inner h2 { position: absolute; left: 0; top: 56px; z-index: 120; margin: 0; }
-.runway-track { position: absolute; inset: 0; perspective: 1600px; }
-.runway-item {
-  position: absolute; left: 50%; top: 52%;
-  width: min(560px, 48vw); margin: 0;
-  transform-style: preserve-3d; will-change: transform, opacity;
-  cursor: pointer; text-decoration: none;
+/* ---- Archive: horizontal scroll ------------------------------------------------------
+   A row of cards. Phones / reduced motion: swipe (with snap). Larger screens: js/site.js
+   pins the section and slides the row left as you scroll down. */
+.grid-archive {
+  display: flex; gap: 48px;
+  grid-template-columns: none;
+  overflow-x: auto; overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  margin-inline: calc(-1 * var(--gutter)); padding-inline: var(--gutter);
+  scroll-padding-inline: var(--gutter);
 }
-.runway-item .card-media { aspect-ratio: 4 / 3; box-shadow: 0 30px 60px -30px rgba(0, 0, 0, .55); }
-.runway-item.is-center[href] .card-media::after {
-  content: ""; position: absolute; inset: 0; background: rgba(18, 14, 28, .55); opacity: 0; transition: opacity .35s ease;
-}
-.runway-item.is-center[href]:hover .card-media::after { opacity: 1; }
-.runway-index {
-  position: absolute; left: 0; bottom: 48px; z-index: 120;
-  margin: 0; padding: 0; list-style: none;
-  font-family: var(--font-sans); font-size: 12px; line-height: 1.9;
-}
-.runway-index button { display: flex; gap: 12px; color: var(--khaki); text-align: left; transition: color .25s ease; white-space: nowrap; }
-.runway-index button span:first-child { width: 20px; font-variant-numeric: tabular-nums; }
-.runway-index button:hover { color: var(--ink); }
-.runway-index button[aria-current="true"] { color: var(--ink); }
-.runway-index button[aria-current="true"] span:last-child { text-decoration: underline; text-decoration-color: var(--purple); text-underline-offset: 3px; }
-.runway-detail { position: absolute; right: 0; top: 64px; z-index: 120; width: min(300px, 80vw); }
-.runway-detail .runway-count { display: none; margin: 0 0 6px; font-family: var(--font-sans); font-size: 12px; color: var(--khaki); font-variant-numeric: tabular-nums; }
-.runway-detail .card-label { color: var(--purple); }
-.runway-detail .card-desc { margin-top: 8px; font-size: 22px; line-height: 1.1; }
-.runway-detail a { display: inline-block; margin-top: 12px; font-family: var(--font-sans); font-weight: 500; font-size: 14px; color: var(--purple); text-decoration: none; }
-.runway-detail a .arrow { display: inline-block; transition: transform .25s var(--ease-out); }
-.runway-detail a:hover .arrow { transform: translateX(4px); }
-@media (max-width: 759px) {
-  .runway-index { display: none; }
-  .runway-item { width: min(320px, 80vw); top: 44%; }
-  .runway-detail { left: 0; right: auto; top: auto; bottom: 32px; }
-  .runway-detail .runway-count { display: block; }   /* "1 of 9" instead of the list */
-  .runway-inner h2 { top: 32px; }
-}
-#archive .runway { max-width: none; margin-inline: calc(-1 * var(--gutter)); }   /* full-bleed: cards fly past the edges */
-#archive .runway-inner { margin-inline: var(--gutter); }
-@media (min-width: 1000px) { #archive .runway-inner { margin-inline: auto; } }
+.grid-archive::-webkit-scrollbar { display: none; }
+.grid-archive > .card { flex: 0 0 min(380px, 46vh, 78vw); scroll-snap-align: start; }
+@media (max-width: 759px) { .grid-archive { gap: 24px; } }
+
+.archive-progress { display: flex; align-items: center; gap: 16px; margin-top: 32px; font-family: var(--font-sans); font-size: 12px; color: var(--khaki); font-variant-numeric: tabular-nums; }
+.archive-count { min-width: 44px; }
+.archive-bar { flex: 1; max-width: 240px; height: 2px; border-radius: 2px; background: color-mix(in srgb, var(--khaki) 35%, transparent); overflow: hidden; }
+.archive-bar span { display: block; height: 100%; background: var(--purple); transform-origin: left; transform: scaleX(.04); transition: transform .15s linear; }
+
+/* pinned (set by JS) */
+#archive.is-pinned { padding-bottom: 0; }
+.archive-pin { position: relative; }
+.archive-stage { position: sticky; top: 0; height: 100vh; height: 100svh; display: flex; align-items: center; overflow: hidden; }
+.archive-stage > div { width: 100%; max-width: var(--content); margin-inline: auto; }
+#archive.is-pinned .grid-archive { overflow: visible; scroll-snap-type: none; will-change: transform; }
+.archive-pin { max-width: none; margin-inline: calc(-1 * var(--gutter)); }                 /* full-bleed: cards slide off the screen edge */
+.archive-stage { padding-inline: var(--gutter); }

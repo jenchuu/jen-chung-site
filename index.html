@@ -1,18 +1,18 @@
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Jen Chung — Product Designer in Los Angeles</title>
 <meta name="description" content="Jen Chung is a Product Designer in Los Angeles who uses strategy, craft, and curiosity to solve complex problems for people — mostly startups.">
-<meta name="theme-color" content="#222222">
+<meta name="theme-color" content="#fcf9ef">
 <script>
   // Set the theme before the page paints, so there's no flash of the wrong colors.
-  // A visitor's choice is remembered; first-time visitors get dark (the site's default).
+  // A visitor's choice is remembered; first-time visitors get light (the site's default).
   (function () {
-    var t = 'dark';
+    var t = 'light';
     try { t = localStorage.getItem('jc-theme') || t; } catch (e) {}
-    document.documentElement.dataset.theme = t === 'light' ? 'light' : 'dark';
+    document.documentElement.dataset.theme = t === 'dark' ? 'dark' : 'light';
     // Cards animate in as they scroll into view (skipped for reduced motion)
     if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('reveal-ready');
   })();
@@ -37,7 +37,7 @@
         <a href="mailto:hello@jen-chung.com">Connect</a>
       </div>
       <div class="nav-tools">
-        <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Dark mode" aria-pressed="true">
+        <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Dark mode" aria-pressed="false">
           <img class="is-light" src="assets/icons/sun-filled.svg" alt=""><img class="is-light" src="assets/icons/moon-outlined.svg" alt="">
           <img class="is-dark" src="assets/icons/sun-outlined.svg" alt=""><img class="is-dark" src="assets/icons/moon-filled.svg" alt="">
         </button>
