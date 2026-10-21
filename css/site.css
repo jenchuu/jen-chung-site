@@ -22,6 +22,7 @@
   --nav-h: 64px;
   --hero-gap: 80px;         /* nav → intro sentence */
   --ease-out: cubic-bezier(.2, .8, .2, 1);
+  --reveal-dur: 1.4s;       /* ✏️ how long each card's entrance takes */
 }
 :root[data-theme="dark"] {
   --bg: #222222;
@@ -181,19 +182,19 @@ a.card:focus-visible .card-cta .arrow { transform: translateX(4px); }
 
 /* ---- Entrance: cards drop in from above as they scroll into view -------------------
    Only when JS has marked the page ready (so cards are never hidden without JS).
-   Cards come in reading order, 0.2s apart (see js/site.js). */
+   Cards come in reading order, 0.35s apart (see js/site.js). */
 .reveal-ready .reveal > * {   /* the card's contents animate; the card itself stays measurable */
   opacity: 0;
   transform: translateY(-32px);
   clip-path: inset(0 0 100% 0);
   transition:
-    opacity .7s ease var(--reveal-delay, 0s),
-    transform .9s var(--ease-out) var(--reveal-delay, 0s),
-    clip-path .9s var(--ease-out) var(--reveal-delay, 0s);
+    opacity calc(var(--reveal-dur) * .75) ease var(--reveal-delay, 0s),
+    transform var(--reveal-dur) var(--ease-out) var(--reveal-delay, 0s),
+    clip-path var(--reveal-dur) var(--ease-out) var(--reveal-delay, 0s);
 }
-.reveal-ready .reveal > .card-body { transition-delay: calc(var(--reveal-delay, 0s) + .12s); }
+.reveal-ready .reveal > .card-body { transition-delay: calc(var(--reveal-delay, 0s) + .2s); }
 .reveal-ready .reveal.is-in > * { opacity: 1; transform: none; clip-path: inset(-8px -8px -8px -8px); }
-/* Delays are set per card by js/site.js (reading order, 0.2s apart). */
+/* Delays are set per card by js/site.js (reading order, 0.35s apart). */
 @media (prefers-reduced-motion: reduce) {
   a.card:hover .card-cta .arrow { transform: none; }
   .reveal-ready .reveal > * { transform: none; clip-path: none; transition: opacity .4s ease; }
@@ -221,3 +222,53 @@ a.card:focus-visible .card-cta .arrow { transform: translateX(4px); }
 .socials svg { width: 40px; height: 32px; }
 .copyright { margin: 0; font-family: var(--font-sans); font-size: 12px; line-height: 1.28; }
 .tagline { margin: 0; font-family: var(--font-sans); font-style: italic; font-size: 10px; line-height: 1.28; color: var(--khaki); }
+
+/* ---- Archive: Helix runway ------------------------------------------------------------
+   js/site.js turns the archive grid into a pinned gallery: scrolling through the section
+   moves the projects along a twisting diagonal; the centered one shows its details.
+   Without JS, or with reduced motion, the plain grid shows instead. */
+#archive.is-runway { padding-bottom: 0; }
+#archive.is-runway .grid-archive, #archive.is-runway > div > h2 { display: none; }
+.runway { position: relative; }
+.runway-stage { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
+.runway-inner { position: relative; height: 100%; max-width: var(--content); margin: 0 auto; }
+.runway-inner h2 { position: absolute; left: 0; top: 56px; z-index: 120; margin: 0; }
+.runway-track { position: absolute; inset: 0; perspective: 1600px; }
+.runway-item {
+  position: absolute; left: 50%; top: 52%;
+  width: min(560px, 48vw); margin: 0;
+  transform-style: preserve-3d; will-change: transform, opacity;
+  cursor: pointer; text-decoration: none;
+}
+.runway-item .card-media { aspect-ratio: 4 / 3; box-shadow: 0 30px 60px -30px rgba(0, 0, 0, .55); }
+.runway-item.is-center[href] .card-media::after {
+  content: ""; position: absolute; inset: 0; background: rgba(18, 14, 28, .55); opacity: 0; transition: opacity .35s ease;
+}
+.runway-item.is-center[href]:hover .card-media::after { opacity: 1; }
+.runway-index {
+  position: absolute; left: 0; bottom: 48px; z-index: 120;
+  margin: 0; padding: 0; list-style: none;
+  font-family: var(--font-sans); font-size: 12px; line-height: 1.9;
+}
+.runway-index button { display: flex; gap: 12px; color: var(--khaki); text-align: left; transition: color .25s ease; white-space: nowrap; }
+.runway-index button span:first-child { width: 20px; font-variant-numeric: tabular-nums; }
+.runway-index button:hover { color: var(--ink); }
+.runway-index button[aria-current="true"] { color: var(--ink); }
+.runway-index button[aria-current="true"] span:last-child { text-decoration: underline; text-decoration-color: var(--purple); text-underline-offset: 3px; }
+.runway-detail { position: absolute; right: 0; top: 64px; z-index: 120; width: min(300px, 80vw); }
+.runway-detail .runway-count { display: none; margin: 0 0 6px; font-family: var(--font-sans); font-size: 12px; color: var(--khaki); font-variant-numeric: tabular-nums; }
+.runway-detail .card-label { color: var(--purple); }
+.runway-detail .card-desc { margin-top: 8px; font-size: 22px; line-height: 1.1; }
+.runway-detail a { display: inline-block; margin-top: 12px; font-family: var(--font-sans); font-weight: 500; font-size: 14px; color: var(--purple); text-decoration: none; }
+.runway-detail a .arrow { display: inline-block; transition: transform .25s var(--ease-out); }
+.runway-detail a:hover .arrow { transform: translateX(4px); }
+@media (max-width: 759px) {
+  .runway-index { display: none; }
+  .runway-item { width: min(320px, 80vw); top: 44%; }
+  .runway-detail { left: 0; right: auto; top: auto; bottom: 32px; }
+  .runway-detail .runway-count { display: block; }   /* "1 of 9" instead of the list */
+  .runway-inner h2 { top: 32px; }
+}
+#archive .runway { max-width: none; margin-inline: calc(-1 * var(--gutter)); }   /* full-bleed: cards fly past the edges */
+#archive .runway-inner { margin-inline: var(--gutter); }
+@media (min-width: 1000px) { #archive .runway-inner { margin-inline: auto; } }
