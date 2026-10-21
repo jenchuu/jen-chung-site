@@ -226,8 +226,8 @@ a.card:focus-visible .card-cta .arrow { transform: translateX(4px); }
 .tagline { margin: 0; font-family: var(--font-sans); font-style: italic; font-size: 10px; line-height: 1.28; color: var(--khaki); }
 
 /* ---- Archive: horizontal scroll ------------------------------------------------------
-   A row of cards. Phones / reduced motion: swipe (with snap). Larger screens: js/site.js
-   pins the section and slides the row left as you scroll down. */
+   A row of cards. js/site.js pins the section and slides the row left as you scroll down;
+   with reduced motion or on very short screens it's a row you swipe (with snap). */
 .grid-archive {
   display: flex; gap: 48px;
   grid-template-columns: none;
@@ -240,11 +240,6 @@ a.card:focus-visible .card-cta .arrow { transform: translateX(4px); }
 .grid-archive::-webkit-scrollbar { display: none; }
 .grid-archive > .card { flex: 0 0 min(380px, 46vh, 78vw); scroll-snap-align: start; }
 @media (max-width: 759px) { .grid-archive { gap: 24px; } }
-
-.archive-progress { display: flex; align-items: center; gap: 16px; margin-top: 32px; font-family: var(--font-sans); font-size: 12px; color: var(--khaki); font-variant-numeric: tabular-nums; }
-.archive-count { min-width: 44px; }
-.archive-bar { flex: 1; max-width: 240px; height: 2px; border-radius: 2px; background: color-mix(in srgb, var(--khaki) 35%, transparent); overflow: hidden; }
-.archive-bar span { display: block; height: 100%; background: var(--purple); transform-origin: left; transform: scaleX(.04); transition: transform .15s linear; }
 
 /* pinned (set by JS) */
 #archive.is-pinned { padding-bottom: 0; }

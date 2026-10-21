@@ -67,28 +67,15 @@
   }
 
   /* ---- Archive: horizontal scroll ------------------------------------------------- */
-  // The archive is a row of cards. On larger screens the section pins while you scroll
-  // down and the row slides left; on phones (and with reduced motion) it's a row you swipe.
+  // The archive is a row of cards. The section pins while you scroll down and the row
+  // slides left, at every screen size. With reduced motion, or on very short screens
+  // (phones held sideways), it's a row you swipe instead.
   const archive = document.getElementById('archive');
   if (archive) {
     const row = archive.querySelector('.grid-archive');
-    const cards = [...row.children];
-    const N = cards.length;
-    const progress = Object.assign(document.createElement('div'), { className: 'archive-progress' });
-    progress.innerHTML = '<span class="archive-count">1 of ' + N + '</span><span class="archive-bar"><span></span></span>';
-    row.after(progress);
-    const count = progress.querySelector('.archive-count'), fill = progress.querySelector('.archive-bar span');
-    const show = (p) => {   // p: 0 … 1 along the row
-      fill.style.transform = `scaleX(${Math.max(0.04, p)})`;
-      const edge = progress.getBoundingClientRect().left + 40;   // the content's left edge (doesn't move)
-      const first = cards.findIndex((c) => c.getBoundingClientRect().right > edge);
-      const i = p > 0.995 ? N - 1 : Math.max(0, first);
-      count.textContent = `${i + 1} of ${N}`;
-    };
-
-    const canPin = () => innerWidth >= 760 && innerHeight >= 560 && !matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const canPin = () => innerHeight >= SHORT_SCREEN && !matchMedia('(prefers-reduced-motion: reduce)').matches;
     let pinned = false, maxShift = 0, raf = 0;
-    const content = archive.firstElementChild;                  // h2 + row + progress
+    const content = archive.firstElementChild;                  // h2 + row
     const pin = Object.assign(document.createElement('div'), { className: 'archive-pin' });
     const stage = Object.assign(document.createElement('div'), { className: 'archive-stage' });
     function layout() {
@@ -111,9 +98,6 @@
         const r = pin.getBoundingClientRect();
         const p = Math.min(1, Math.max(0, -r.top / Math.max(1, r.height - innerHeight)));
         row.style.transform = `translate3d(${-p * maxShift}px, 0, 0)`;
-        show(p);
-      } else {
-        show(row.scrollLeft / Math.max(1, row.scrollWidth - row.clientWidth));
       }
     }
     const queue = () => { if (!raf) raf = requestAnimationFrame(update); };
