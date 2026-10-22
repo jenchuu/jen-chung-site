@@ -117,16 +117,36 @@
   function tellHero(msg) { if (hero.contentWindow) hero.contentWindow.postMessage(msg, '*'); }
   const hello = () => tellHero({ type: 'konbini:hello', width: innerWidth, height: innerHeight, theme: theme() });
 
-  hero.src = `konbini/konbini-hero.html?theme=${theme()}&fit=${HERO_FIT}`;
+  // Inside the konbini (the fridge) is its own page at #konbini: the rest of the home page
+  // hides, and the browser's Back button walks back out through the doors.
+  const KONBINI_HASH = '#konbini';
+  const atKonbini = () => location.hash === KONBINI_HASH;
+  let pushedKonbini = false;
+  function setInside(inside) {
+    document.body.classList.toggle('in-konbini', inside);
+    if (inside) scrollTo(0, 0);
+  }
+  addEventListener('hashchange', () => {
+    if (atKonbini()) { if (heroView !== 'fridge') tellHero({ type: 'konbini:enter', quick: true }); return; }
+    pushedKonbini = false;
+    if (heroView === 'fridge') {
+      tellHero({ type: 'konbini:exit' });
+      const target = location.hash && document.getElementById(location.hash.slice(1));   // e.g. Work in the nav
+      if (target) { setInside(false); target.scrollIntoView(); }
+    }
+  });
+
+  hero.src = `konbini/konbini-hero.html?theme=${theme()}&fit=${HERO_FIT}${atKonbini() ? '&view=fridge' : ''}`;
+  if (atKonbini()) setInside(true);
   hero.addEventListener('load', hello);
 
   let heroNatural = 0, heroView = 'store';
   function sizeHero() {
     const gap = parseFloat(getComputedStyle(hero.parentElement).paddingTop) || 0;
     const room = Math.max(420, innerHeight - nav.offsetHeight - gap);
-    // Storefront: no taller than it needs (no gap above Work). Inside the fridge on phones:
-    // the full screen height, so the fridge can be shown at full width.
-    const fitToContent = heroNatural && !(heroView === 'fridge' && innerWidth < 760 && innerHeight >= SHORT_SCREEN);
+    // Storefront: no taller than it needs (no gap above Work). Inside the fridge: the full
+    // screen height, since it's a page of its own.
+    const fitToContent = heroNatural && heroView !== 'fridge';
     const natural = heroNatural + 2;
     const fold = room - 24;          // keep a little space between the helper line and the fold
     const short = innerHeight < SHORT_SCREEN;
@@ -139,7 +159,20 @@
     const msg = e.data || {};
     if (msg.type === 'konbini:ready' || msg.type === 'konbini:measure') hello();
     if (msg.type === 'konbini:size' && msg.height > 0) { heroNatural = msg.height; sizeHero(); }
-    if (msg.type === 'konbini:view') { heroView = msg.view; sizeHero(); }
+    if (msg.type === 'konbini:view') {
+      heroView = msg.view;
+      const inside = heroView === 'fridge';
+      setInside(inside);
+      try {
+        if (inside && !atKonbini()) { history.pushState(null, '', KONBINI_HASH); pushedKonbini = true; }
+        else if (!inside && atKonbini()) {
+          if (pushedKonbini) history.back();      // Exit = Back, so Back from the home page leaves as usual
+          else history.replaceState(null, '', location.pathname + location.search);
+          pushedKonbini = false;
+        }
+      } catch (err) {}
+      sizeHero();
+    }
     if (msg.type === 'konbini:navigate' && msg.url) location.href = msg.url;
     if (msg.type === 'konbini:scroll') document.getElementById('work').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
   });

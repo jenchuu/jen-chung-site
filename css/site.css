@@ -113,6 +113,8 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 
 /* ---- Hero (konbini) ----------------------------------------------------------- */
 .hero { padding-top: var(--hero-gap); }
+/* Inside the konbini (#konbini): the fridge is a page of its own */
+.in-konbini main > :not(.hero), .in-konbini .footer { display: none; }
 .hero-frame {
   display: block; width: 100%;
   height: min(805px, calc(100svh - var(--nav-h) - var(--hero-gap)));   /* JS refines this */

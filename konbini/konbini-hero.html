@@ -1482,6 +1482,9 @@ const CONFIG = {
       if (msg.height > 0 && msg.height !== pageHeight) { pageHeight = msg.height; fitStore(); }
     }
     if (msg.theme === 'dark' || msg.theme === 'light') root.dataset.theme = msg.theme;
+    // The page's address changed (Back / Forward buttons)
+    if (msg.type === 'konbini:enter') enter({ quick: !!msg.quick });
+    if (msg.type === 'konbini:exit') exit();
   });
   if (window.parent !== window) {
     // Page code may register after this frame loads, so knock a few times.
@@ -1500,7 +1503,8 @@ const CONFIG = {
 
     const insideAt = Number(session.get('kb:inside'));
     session.del('kb:inside');
-    const returning = CONFIG.rememberInside && insideAt && Date.now() - insideAt < RETURN_WINDOW;
+    const returning = params.get('view') === 'fridge'     // the page was opened at its konbini address
+      || (CONFIG.rememberInside && insideAt && Date.now() - insideAt < RETURN_WINDOW);
 
     const pick = [params.get('season'), session.get('kb:season'), CONFIG.defaultSeason]
       .find((k) => k && CONFIG.seasons[k]) || seasonFromCalendar();
