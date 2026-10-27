@@ -1070,27 +1070,44 @@ const CONFIG = {
   // its top is in view, and fit the storefront into that.
   let visibleH = 0;
   let lastReportedH = 0;
-  // ?fit=crop: stay full width and make the scene shorter (cropping sky and pavement, never
-  // the doors) until everything fits the screen; only shrink if even that isn't enough.
+  // ?fit=crop: make the scene shorter (cropping a little sky and pavement, never the doors) until
+  // everything fits the screen. Past MAX_CROP, the scene, sentence and note get narrower instead
+  // (centred, sentence still lined up with the scene); only shrink everything if even that isn't enough.
   // ?fit=width: always full width at full height. Default: shrink everything to fit.
   const FIT_MODE = params.get('fit') || 'scale';
   const SHORT_SCREEN = 500;          // below this window height, don't fit the screen at all
   let pageHeight = 0;                // the page's window height (sent by the page)
-  const MIN_SCENE_AR = 2.4;          // the widest crop allowed (width ÷ height)
+  const MAX_CROP = .11;              // ✏️ the most of the video's height the scene may hide
+  const MIN_CARD_W = 560;            // ✏️ narrowest the scene gets before everything shrinks instead
   let fitting = false;
   function fitStore() {
     if (storeView.hidden || !storeFit.offsetHeight || fitting) return;
     fitting = true;
     const room = visibleH && visibleH < storeView.clientHeight - 1 ? visibleH - 16 : storeView.clientHeight;
     card.style.height = '';
+    storeView.style.removeProperty('--card-w');
     const natural = storeFit.offsetHeight;                // at the scene's full 16:9 (or phone) shape
     // Phones held sideways / very short windows: show the konbini at its normal size and let
     // visitors scroll, instead of squeezing everything onto one short screen.
     const mode = pageHeight && pageHeight < SHORT_SCREEN ? 'width' : FIT_MODE;
     if (mode === 'crop' && natural > room) {
-      const sceneH = card.offsetHeight;
-      const minH = card.offsetWidth / Math.max(MIN_SCENE_AR, card.offsetWidth / sceneH);
-      card.style.height = `${Math.max(minH, sceneH - (natural - room))}px`;
+      const fullW = card.offsetWidth, ar = fullW / card.offsetHeight;
+      const shown = 1 - MAX_CROP;
+      if (natural - room <= card.offsetHeight * MAX_CROP) {
+        card.style.height = `${card.offsetHeight - (natural - room)}px`;
+      } else {
+        // Narrow the scene until it fits at the deepest crop. The sentence may wrap differently
+        // at the new width, so measure again a couple of times.
+        let w = fullW;
+        for (let i = 0; i < 3; i++) {
+          const sceneH = w / ar * shown;
+          card.style.height = `${sceneH}px`;
+          const other = storeFit.offsetHeight - sceneH;
+          w = Math.min(fullW, Math.max(MIN_CARD_W, (room - other) / shown * ar));
+          storeView.style.setProperty('--card-w', `${w}px`);
+        }
+        card.style.height = `${w / ar * shown}px`;
+      }
     }
     fit = mode === 'width' ? 1 : Math.min(1, room / storeFit.offsetHeight);
     storeFit.style.transform = fit < 1 ? `scale(${fit.toFixed(4)})` : '';
