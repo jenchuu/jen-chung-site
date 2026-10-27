@@ -114,7 +114,9 @@
   /* ---- Konbini hero ------------------------------------------------------------- */
   // The hero is its own page (konbini/konbini-hero.html) shown in a frame. It talks to this
   // page with messages: theme, page width, frame height, case-study links and the ↓ scroll.
-  function tellHero(msg) { if (hero.contentWindow) hero.contentWindow.postMessage(msg, '*'); }
+  // (Only the home page has it; everything below is skipped on case studies.)
+  function tellHero(msg) { if (hero && hero.contentWindow) hero.contentWindow.postMessage(msg, '*'); }
+  if (!hero) return;
   const hello = () => tellHero({ type: 'konbini:hello', width: innerWidth, height: innerHeight, theme: theme() });
 
   // Inside the konbini (the fridge) is its own page at #konbini: the rest of the home page

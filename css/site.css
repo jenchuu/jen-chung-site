@@ -252,3 +252,133 @@ a.card:focus-visible .card-cta .arrow { transform: translateX(4px); }
 #archive.is-pinned .grid-archive { overflow: visible; scroll-snap-type: none; will-change: transform; }
 .archive-pin { max-width: none; margin-inline: calc(-1 * var(--gutter)); }                 /* full-bleed: cards slide off the screen edge */
 .archive-stage { padding-inline: var(--gutter); }
+
+/* ---- Case studies ---------------------------------------------------------------------
+   Figma "Portfolio designs 2026" › Cube Boards case study (light 9897:8171, dark 9702:17058).
+   Each section is a title (left, pinned while its section scrolls by) and a 668px column. */
+:root {
+  --cs-heading: #9e81ee;    /* section titles, stat numbers */
+  --cs-meta: #8a8578;       /* ROLE / SUMMARY labels, captions, chip borders */
+  --rule: #cccccc;          /* section dividers */
+  --error: #db4b4c;         /* the red "look here" box on screenshots */
+  --font-ui: "Poppins", system-ui, sans-serif;
+  --cs-pin-top: 24px;       /* ✏️ how far below the top of the screen a pinned title sits */
+}
+:root[data-theme="dark"] {
+  --cs-heading: #d4b5ff;
+  --cs-meta: #a5a08f;
+  --rule: #4e4e4e;
+}
+
+.cs { font-family: var(--font-sans); }
+.cs :where(p, h1, h2, h3, figure, dl, dd, ul) { margin: 0; }
+.cs img { width: 100%; height: auto; }
+
+/* Title + main images */
+.cs-head { padding-top: 56px; }                      /* + the 64px nav = 120px, as in Figma */
+.cs-label { font-family: var(--font-ui); font-size: 24px; line-height: 1.5; color: var(--purple); }
+.cs-title { margin-top: 8px; font-family: var(--font-serif); font-weight: 600; font-size: 56px; line-height: 1.3; }
+.cs-hero { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 32px; }
+.cs-hero img { aspect-ratio: 503 / 358; object-fit: cover; }
+
+/* Sections */
+.cs-body { padding-top: 96px; }
+.cs-section {
+  display: grid; grid-template-columns: 314px minmax(0, 1fr); column-gap: 40px; align-items: start;
+  padding-top: 80px;
+  border-top: 1px solid var(--rule);
+}
+.cs-section + .cs-section { margin-top: 80px; }
+.cs-h2 {
+  position: sticky; top: var(--cs-pin-top);
+  font-family: var(--font-serif); font-weight: 600; font-size: 56px; line-height: 1.3;
+  color: var(--cs-heading);
+}
+.cs-main { display: flex; flex-direction: column; gap: 40px; min-width: 0; }
+.cs-main-tight { gap: 16px; }
+.cs-text { font-size: 18px; line-height: 1.37; }
+.cs-text > p + p { margin-top: 1.37em; }             /* one empty line between paragraphs */
+.cs-text-joined > p + p { margin-top: 0; }
+.cs-text b { font-weight: 700; }
+.cs-text a { color: inherit; text-underline-position: from-font; }
+.cs-text a:hover { color: var(--purple); }
+.cs-lede { margin-bottom: 16px; font-family: var(--font-ui); font-weight: 600; font-size: 24px; line-height: 1.5; }
+
+/* Numbered steps: title, text, then images */
+.cs-step { display: flex; flex-direction: column; gap: 8px; }
+.cs-h3 { font-family: var(--font-ui); font-weight: 600; font-size: 18px; line-height: 1.5; }
+.cs-step > p { font-size: 16px; line-height: 1.37; }
+
+/* Images and captions */
+.cs-figure, .cs-pair figure { display: flex; flex-direction: column; gap: 8px; }
+.cs figcaption { font-size: 16px; line-height: 1.37; color: var(--cs-meta); }
+.cs-shots { display: flex; flex-direction: column; gap: 16px; }
+.cs-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: start; }
+.cs-pair img { aspect-ratio: 326 / 232; object-fit: cover; }
+/* A window onto part of an image: the frame sets the shape, the image's inline style the crop */
+.crop { position: relative; overflow: hidden; }
+.cs .crop img { position: absolute; max-width: none; }
+.mark { position: absolute; top: 16.25%; height: 20%; border: 2px solid var(--error); }
+
+/* Role / timeline / platform / team */
+.cs-meta { display: flex; flex-direction: column; gap: 40px; }
+.cs-meta > div { display: flex; flex-direction: column; gap: 16px; }
+.cs-meta dt, .cs-meta-title { font-family: var(--font-ui); font-weight: 600; font-size: 18px; line-height: 1.5; color: var(--cs-meta); }
+.cs-meta dd { font-size: 18px; line-height: 1.37; }
+.cs-overview .cs-main { gap: 16px; }
+.cs-overview .cs-stats { margin-top: 8px; }          /* 24px below the summary */
+
+/* Outlined cards: stats and use cases */
+.cs-stats, .cs-cards { display: flex; gap: 40px; }
+.cs-stat, .cs-card {
+  flex: 1 1 0; min-width: 0;
+  display: flex; flex-direction: column; gap: 8px;
+  padding: 16px 24px;
+  border: 1px solid #7961c7; border-radius: 16px;
+  font-size: 16px; line-height: 1.37;
+}
+.cs-stat { text-align: center; }
+.cs-stat-num { font-family: var(--font-ui); font-weight: 600; font-size: 24px; line-height: 1.5; color: var(--cs-heading); }
+.cs-card h3 { font-family: var(--font-ui); font-weight: 600; font-size: 18px; line-height: 1.5; color: var(--cs-heading); }
+.chips { display: flex; gap: 8px; padding: 0; list-style: none; }   /* one row, as in Figma (wraps on smaller screens) */
+.chips li { padding: 4px 16px; border: 1px solid var(--cs-meta); border-radius: 80px; font-size: 14px; line-height: 1.37; white-space: nowrap; }
+
+/* Previous / next */
+.cs-pager { margin-top: 132px; }
+.cs-pager > div {
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 24px 40px;
+  padding-block: 80px;
+  border-top: 2px solid var(--rule);
+}
+.cs-pager a {
+  display: inline-flex; align-items: center; gap: 16px;
+  font-family: var(--font-ui); font-weight: 600; font-size: 40px; line-height: 1.5;
+  color: var(--purple); text-decoration: none;
+}
+.cs-pager svg { width: 25px; height: 15px; flex: none; transition: transform .25s var(--ease-out); }
+.cs-pager-prev:hover svg { transform: translateX(-4px); }
+.cs-pager-next { margin-left: auto; }
+.cs-pager-next:hover svg { transform: translateX(4px); }
+
+@media (max-width: 999px) {
+  .cs-section { grid-template-columns: minmax(180px, 30%) minmax(0, 1fr); }
+  .cs-h2, .cs .cs-title { font-size: clamp(40px, 5.2vw, 56px); }
+  .chips { flex-wrap: wrap; }
+}
+@media (max-width: 759px) {
+  .cs-head { padding-top: 32px; }
+  .cs-label { font-size: 20px; }
+  .cs-title { font-size: 40px; }
+  .cs-hero { grid-template-columns: 1fr; margin-top: 24px; }
+  .cs-body { padding-top: 64px; }
+  .cs-section { grid-template-columns: 1fr; row-gap: 24px; padding-top: 56px; }
+  .cs-section + .cs-section { margin-top: 56px; }
+  .cs-h2 { position: static; font-size: 40px; }
+  .cs-stats, .cs-cards { flex-direction: column; gap: 16px; }
+  .cs-pager { margin-top: 80px; }
+  .cs-pager > div { padding-block: 48px; }
+  .cs-pager a { font-size: 24px; }
+}
+@media (max-width: 559px) {
+  .cs-pair { grid-template-columns: 1fr; }
+}

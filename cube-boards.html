@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cube Boards Case Study | Jen Chung</title>
+<meta name="description" content="How Jen Chung led product design for Cube Boards: live financial reporting built into Cube, with 75% adoption across 500 customers in 3 months.">
+<meta name="theme-color" content="#fcf9ef">
+<script>
+  // Set the theme before the page paints (same as the home page).
+  (function () {
+    var t = 'light';
+    try { t = localStorage.getItem('jc-theme') || t; } catch (e) {}
+    document.documentElement.dataset.theme = t === 'dark' ? 'dark' : 'light';
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@600;700&family=Crimson+Text:wght@400;600;700&family=Inter:ital,wght@0,400;0,500;0,700;1,400&family=Poppins:wght@400;600&display=swap">
+<link rel="stylesheet" href="css/site.css">
+</head>
+<body>
+<a class="skip-link" href="#case-study">Skip to case study</a>
+
+<!-- ===== Nav ===== -->
+<header class="nav wrap">
+  <div class="nav-bar">
+    <a class="logo" href="index.html" aria-label="Jen Chung, home">Jen<img src="assets/icons/logo-dash.svg" alt=""></a>
+    <nav class="nav-links" aria-label="Main">
+      <div class="nav-link-list" id="nav-menu">
+        <a href="index.html#work">Work</a>
+        <a href="https://drive.google.com/file/d/1YyUNneKgoWcizkY0iiJYyRAiehRn6xVk/view?usp=sharing" target="_blank" rel="noopener">Resume</a>
+        <a href="https://www.jen-chung.com/about">About</a>   <!-- TODO Phase 4: about.html -->
+        <a href="mailto:hello@jen-chung.com">Connect</a>
+      </div>
+      <div class="nav-tools">
+        <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Dark mode" aria-pressed="false">
+          <img class="is-light" src="assets/icons/sun-filled.svg" alt=""><img class="is-light" src="assets/icons/moon-outlined.svg" alt="">
+          <img class="is-dark" src="assets/icons/sun-outlined.svg" alt=""><img class="is-dark" src="assets/icons/moon-filled.svg" alt="">
+        </button>
+        <button class="menu-btn" id="menu-btn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav-menu">
+          <svg viewBox="0 0 28 28" aria-hidden="true"><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><line class="line l1" x1="4" y1="8" x2="24" y2="8"/><line class="line l2" x1="4" y1="14" x2="24" y2="14"/><line class="line l3" x1="4" y1="20" x2="24" y2="20"/></g></svg>
+        </button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<!-- Design source: Figma "Portfolio designs 2026" › Cube Boards case study (light 9897:8171, dark 9702:17058).
+     ✏️ Images live in assets/cube-boards/. Each section's title (left) stays pinned while you scroll its section. -->
+<main class="cs" id="case-study">
+
+  <!-- ===== Title + the two main images ===== -->
+  <header class="cs-head wrap">
+    <div>
+      <p class="cs-label">CUBE: BOARDS</p>
+      <h1 class="cs-title">Live financial reporting, built into Cube.</h1>
+      <!-- ✏️ The two main images (you may swap these for GIFs: just change the file names) -->
+      <div class="cs-hero">
+        <img src="assets/cube-boards/hero-executive-view.webp" alt="A Board in View Mode: an executive storyboard with key metrics, a budget donut chart and revenue charts" width="1006" height="715">
+        <img src="assets/cube-boards/hero-edit-data.webp" alt="The split preview modal: data settings on the left, a live budget vs actuals chart and its table on the right" width="1006" height="715">
+      </div>
+    </div>
+  </header>
+
+  <div class="cs-body wrap">
+    <div>
+
+      <!-- ===== Role + summary ===== -->
+      <section class="cs-section cs-overview" aria-label="Overview">
+        <dl class="cs-meta">
+          <div><dt>ROLE</dt><dd>Lead Product Designer</dd></div>
+          <div><dt>TIMELINE</dt><dd>2025-2026, released in phases</dd></div>
+          <div><dt>PLATFORM</dt><dd>Web app</dd></div>
+          <div><dt>TEAM</dt><dd>1 Product Manager<br>3 FE Engineers<br>1 Visual Designer<br>1 Product Designer (me)</dd></div>
+        </dl>
+        <div class="cs-main">
+          <h2 class="cs-meta-title">SUMMARY</h2>
+          <div class="cs-text">
+            <p>Cube is an FP&amp;A platform for finance teams. Its dashboarding experience, powered by a third-party BI tool, "didn't feel like Cube": reports were confusing to build, data went stale between refreshes, and even basic charts often needed hands-on support. I led product design for Boards, bringing reporting into Cube so teams could build interactive reports on live data and share them with budget owners and executives.</p>
+            <p>As the sole product designer, I partnered with Product and Engineering across multiple releases. My work spanned relative-time shortcuts, widget building and editing, stakeholder sharing, and an AI flow that turns a plain-English prompt into a chart, balancing familiar finance workflows with what engineering could ship.</p>
+            <p>Boards replaced the third-party reporting tool with a native workspace connected to Cube's financial data.</p>
+          </div>
+          <div class="cs-stats">
+            <div class="cs-stat"><p class="cs-stat-num">75%</p><p>adoption across 500 customers within 3 months</p></div>
+            <div class="cs-stat"><p class="cs-stat-num">98%</p><p>CSAT across the 500 customers</p></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== The problem ===== -->
+      <section class="cs-section">
+        <h2 class="cs-h2">The problem</h2>
+        <div class="cs-main">
+          <div class="cs-text">
+            <p>Cube’s reporting experience relied on a third-party BI tool that customers said “<b>didn’t feel like Cube.</b>” Building reports was <b>confusing</b>, and keeping them current meant manual exports or scheduled refreshes.</p>
+          </div>
+          <div class="cs-shots">
+            <div class="crop" style="aspect-ratio: 668 / 344"><img src="assets/cube-boards/problem-old-dashboard.webp" alt="The old third-party dashboard: a row of filters above revenue charts" width="1368" height="770" loading="lazy" style="width: 102.13%; height: 111.57%; left: -1.12%; top: -11.36%"></div>
+            <div class="crop" style="aspect-ratio: 668 / 312"><img src="assets/cube-boards/problem-old-editor.webp" alt="The old dashboard editor: a bar and line chart with query settings" width="1364" height="721" loading="lazy" style="width: 101.96%; height: 115.3%; left: -1.26%; top: -14.69%"></div>
+          </div>
+          <div class="cs-text">
+            <p>My job was to design something finance could actually build and report in, while making its hardest interactions usable and buildable.</p>
+            <p>Two use cases drove most decisions: recurring budget vs actuals reviews and YTD reporting. Both followed the same shape: build once, reuse every period, and share with someone outside finance.</p>
+          </div>
+          <div class="cs-cards">
+            <div class="cs-card">
+              <h3>1. Recurring Budget v Actuals</h3>
+              <ul class="chips"><li>Finance</li><li>Budget Owners</li></ul>
+              <p>Finance builds a board, shares it with stakeholders, and has recurring monthly results reviews.</p>
+            </div>
+            <div class="cs-card">
+              <h3>2. YTD Reporting</h3>
+              <ul class="chips"><li>Finance</li><li>C-Suite</li><li>Investors</li></ul>
+              <p>Finance builds a board and gives leadership and investors access to track progress at any time.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== Solving time shortcuts ===== -->
+      <section class="cs-section">
+        <h2 class="cs-h2">Solving time shortcuts</h2>
+        <div class="cs-main">
+          <div class="cs-text">
+            <p>Finance teams needed familiar shortcuts like “year to date” and “last three months.” The early design used explicit dates, which meant users had to update filters for each reporting period.</p>
+            <p>Relative dates were already on the roadmap, but customer feedback calls reinforced the need to ship this earlier.</p>
+            <p>The tricky part was making shortcuts work across rows, columns, and filters. I explored several versions with the PM and front-end engineering, working through menu structure, selection behavior, and feasibility:</p>
+          </div>
+          <figure class="cs-figure">
+            <div class="cs-shots">
+              <!-- one tall image, shown as four crops -->
+              <div class="crop" style="aspect-ratio: 668 / 210"><img src="assets/cube-boards/shortcuts-iterations.webp" alt="V1: a chip with shortcut buttons inside the Time menu" width="1336" height="2097" loading="lazy" style="width: 100.03%; height: 499.52%; left: -.01%; top: -4.76%"></div>
+              <div class="crop" style="aspect-ratio: 668 / 248"><img src="assets/cube-boards/shortcuts-iterations.webp" alt="V2: a secondary menu of shortcuts" width="1336" height="2097" loading="lazy" style="width: 100.03%; height: 422.98%; left: -.01%; top: -89.11%"></div>
+              <div class="crop" style="aspect-ratio: 668 / 250"><img src="assets/cube-boards/shortcuts-iterations.webp" alt="V3: a tertiary menu for trailing months" width="1336" height="2097" loading="lazy" style="width: 100.03%; height: 419.6%; left: -.01%; top: -188.4%"></div>
+              <div class="crop" style="aspect-ratio: 668 / 310"><img src="assets/cube-boards/shortcuts-iterations.webp" alt="V4: a drill-in secondary menu" width="1336" height="2097" loading="lazy" style="width: 100.03%; height: 338.39%; left: -.01%; top: -233.87%"></div>
+            </div>
+            <figcaption>The explorations: from a V1 chip, to a tertiary menu, to a secondary drill-in menu.</figcaption>
+          </figure>
+          <div class="cs-text">
+            <p>We considered letting users enter any number of months, but that increased scope. The PM and I decided on presets of 3, 6, 9, and 12 months for the first release. I designed the shortcut menu around those choices, with the selection(s) shown in the field.</p>
+          </div>
+          <figure class="cs-figure">
+            <img src="assets/cube-boards/shortcuts-final.webp" alt="The shipped Time menu: a Shortcuts drill-in with trailing 3, 6, 9 and 12 months" width="1336" height="607" loading="lazy">
+            <figcaption>The shipped design: a "Shortcuts" drill-in menu with the shortcut added to the end of the chip in the Time field.</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- ===== Designing the builder ===== -->
+      <section class="cs-section">
+        <h2 class="cs-h2">Designing the builder</h2>
+        <div class="cs-main cs-main-loose">
+          <div class="cs-text">
+            <p>Boards had to feel like the spreadsheet tools finance already trusts, and be practical for engineering to ship. These were the calls that got us there:</p>
+          </div>
+          <div class="cs-step">
+            <h3 class="cs-h3">1. Building a widget</h3>
+            <p>I reused Cube’s spreadsheet range builder so configuring Columns, Rows, and Filters to build widgets felt familiar.</p>
+            <div class="cs-pair">
+              <figure><img src="assets/cube-boards/builder-spreadsheet.webp" alt="Cube's spreadsheet add-on with the range builder panel" width="652" height="464" loading="lazy"><figcaption>SPREADSHEET APP</figcaption></figure>
+              <figure><img src="assets/cube-boards/builder-boards.webp" alt="Adding a widget in Boards with the same Columns, Rows and Filters builder" width="652" height="464" loading="lazy"><figcaption>BOARDS</figcaption></figure>
+            </div>
+          </div>
+          <div class="cs-step">
+            <h3 class="cs-h3">2. Split preview modal</h3>
+            <p>Editing, styling, and formatting sat beside a live preview, with a Table View toggle to sanity-check the chart as a pivot table, the format they’re familiar with and trust most.</p>
+            <img src="assets/cube-boards/builder-preview-modal.webp" alt="The preview modal: widget settings on the left, the live chart with Table View turned on at the right" width="1336" height="950" loading="lazy">
+          </div>
+          <div class="cs-step">
+            <h3 class="cs-h3">3. Text widget editing: right drawer → inline toolbar</h3>
+            <p>Some familiar patterns needed rethinking. My first text widget design used a right drawer, until Engineering and I realized it could cover the very widget being edited. I proposed a toolbar above the board instead.</p>
+            <div class="cs-pair">
+              <figure><img src="assets/cube-boards/text-widget-before.webp" alt="Before: text settings in a right drawer" width="652" height="464" loading="lazy"><figcaption>BEFORE</figcaption></figure>
+              <figure><img src="assets/cube-boards/text-widget-after.webp" alt="After: a text toolbar above the board" width="652" height="464" loading="lazy"><figcaption>AFTER</figcaption></figure>
+            </div>
+          </div>
+          <div class="cs-step">
+            <h3 class="cs-h3">4. Widget interaction: hover → click</h3>
+            <p>I also changed widget actions from hover to click after front-end engineers flagged the hover behavior as finicky. The goal stayed the same; the interaction became more practical to build.</p>
+            <div class="cs-pair">
+              <figure><img src="assets/cube-boards/widget-hover-before.webp" alt="Before: widget actions shown on hover" width="652" height="463" loading="lazy"><figcaption>BEFORE</figcaption></figure>
+              <figure><img src="assets/cube-boards/widget-click-after.webp" alt="After: widget actions shown on click" width="652" height="463" loading="lazy"><figcaption>AFTER</figcaption></figure>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== Building with AI ===== -->
+      <section class="cs-section">
+        <h2 class="cs-h2">Building with AI</h2>
+        <div class="cs-main cs-main-tight">
+          <div class="cs-text">
+            <p>To make widget-building faster, I designed Build with AI. Users describe a chart in plain English (“revenue by quarter for each entity, in millions”) and the Visualization Agent generates a fully editable widget.</p>
+          </div>
+          <div class="cs-pair">
+            <figure><img src="assets/cube-boards/ai-describe.webp" alt="Describing a chart to the AI in the Build with AI panel" width="652" height="464" loading="lazy"><figcaption>1. Describe it</figcaption></figure>
+            <figure><img src="assets/cube-boards/ai-widget.webp" alt="The generated bar chart, ready to edit" width="652" height="464" loading="lazy"><figcaption>2. Get an editable widget</figcaption></figure>
+          </div>
+          <div class="cs-text">
+            <p>Rather than invent a new AI pattern, I adapted Cube’s existing AI Analyst chat into a Chat/Build split: refine the widget with follow-up prompts in Chat, or switch to the manual editor for precise control in Build. Both edit the same widget, so AI speeds people up without locking them out of the details.</p>
+            <p>I later designed Cube Decks, carrying this AI build flow and Board widgets into PowerPoint and Google Slides as live, refreshable visuals.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== Bringing sharing back into focus ===== -->
+      <section class="cs-section">
+        <h2 class="cs-h2">Bringing sharing back into focus</h2>
+        <div class="cs-main">
+          <div class="cs-text">
+            <p>I’d focused so much on the building experience that View Mode emphasized adding widgets. But the workflow doesn’t end when finance finishes building a board.</p>
+            <p>The next step is sharing it with someone who needs to see the numbers: like a marketing lead filtering a budget vs actuals board to their department during a monthly review.</p>
+            <p>I reorganized its actions to make Share primary, matching the recurring reporting workflow and shifting View Mode’s emphasis from building the report to getting it into stakeholders’ hands.</p>
+          </div>
+          <figure class="cs-figure">
+            <!-- the red box marks the actions (top right); its position is a % of the image -->
+            <div class="crop" style="aspect-ratio: 668 / 240"><img src="assets/cube-boards/viewmode-before.webp" alt="View Mode before: Edit Mode and +Widget buttons at the top right" width="1336" height="950" loading="lazy" style="width: 100%; height: 197.93%; left: 0; top: 0"><span class="mark" style="left: 78.29%; width: 21.56%"></span></div>
+            <figcaption>View Mode with “+Widget” as initial primary action (top right).</figcaption>
+          </figure>
+          <figure class="cs-figure">
+            <div class="crop" style="aspect-ratio: 668 / 240"><img src="assets/cube-boards/viewmode-after.webp" alt="View Mode after: a Share button as the primary action at the top right" width="1336" height="950" loading="lazy" style="width: 100%; height: 197.93%; left: 0; top: 0"><span class="mark" style="left: 81.89%; width: 17.96%"></span></div>
+            <figcaption>Updated View Mode with “Share” promoted as the primary action (top right).</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- ===== The details underneath ===== -->
+      <section class="cs-section">
+        <h2 class="cs-h2">The details underneath</h2>
+        <div class="cs-main cs-main-tight">
+          <div class="cs-text">
+            <p>Beyond the big flows, a few smaller decisions did a lot to make Boards feel like the spreadsheets finance already works in, and set up patterns we could reuse later.</p>
+          </div>
+          <div class="cs-step">
+            <h3 class="cs-h3">1. Calculated columns</h3>
+            <p>Calculated columns needed more room than an in-cell interaction allowed, so I moved formula entry above the table, familiar to any spreadsheet user and a foundation we could scale (with suggested-formula logic and dimension chips later). I also designed a confirmation for instances when deleting a column would delete a dependent calculation.</p>
+            <div class="cs-pair">
+              <img src="assets/cube-boards/calc-columns.webp" alt="Adding a calculated column with the formula above the table" width="652" height="464" loading="lazy">
+              <img src="assets/cube-boards/calc-columns-delete.webp" alt="A confirmation before deleting a column that a calculation depends on" width="652" height="464" loading="lazy">
+            </div>
+          </div>
+          <div class="cs-step">
+            <h3 class="cs-h3">2. Formatting</h3>
+            <p>For formatting, expandable cards let users format and reorder individual data points. “Use same format for all” applied shared formatting while keeping individual colors and ordering available. The chart icons and color-theme drawer were later reused in Decks.</p>
+            <div class="cs-pair">
+              <img src="assets/cube-boards/formatting-cards.webp" alt="Expandable formatting cards for each data point" width="652" height="464" loading="lazy">
+              <img src="assets/cube-boards/formatting-chart-types.webp" alt="The chart type icons and the color theme drawer" width="326" height="232" loading="lazy">
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== What shipped ===== -->
+      <section class="cs-section">
+        <h2 class="cs-h2">What shipped</h2>
+        <div class="cs-main cs-main-tight">
+          <img src="assets/cube-boards/what-shipped.webp" alt="The Boards home page: a grid of board thumbnails" width="668" height="475" loading="lazy">
+          <!-- ✏️ TODO: link and wording from Figma placeholder -->
+          <p class="cs-text"><a href="#">{link to more info about Cube Boards}</a></p>
+        </div>
+      </section>
+
+      <!-- ===== Feedback and impact ===== -->
+      <section class="cs-section">
+        <h2 class="cs-h2">Feedback and impact</h2>
+        <div class="cs-main">
+          <div class="cs-text">
+            <h3 class="cs-lede">Boards became a native, trusted way to report</h3>
+            <p>Shayan, Head of Product, and I walked four customers through chart building, styling, formatting, filters, and relative dates. Their feedback reinforced the value of connected data and reusable reporting.</p>
+            <p>Boards shipped through multiple releases, replacing the previous third-party reporting workflow with 75% adoption within three months and a 98% CSAT score.</p>
+          </div>
+          <div class="cs-stats">
+            <div class="cs-stat"><p class="cs-stat-num">75%</p><p>adoption across 500 customers within 3 months</p></div>
+            <div class="cs-stat"><p class="cs-stat-num">98%</p><p>CSAT across the 500 customers</p></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== What I'd do differently ===== -->
+      <section class="cs-section">
+        <h2 class="cs-h2">What I’d do differently</h2>
+        <div class="cs-main">
+          <div class="cs-text cs-text-joined">
+            <p>I’d build more customer check-ins into each release and stay closer to Product on how those releases were landing.</p>
+            <p>Leading Boards sharpened how I explore options, spot the real constraint, and bring Product and Engineering into decisions earlier, so we can weigh the tradeoffs and keep moving quickly.</p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- ===== Previous / next case study ===== -->
+  <nav class="cs-pager wrap" aria-label="More case studies">
+    <div>
+      <!-- ✏️ TODO: which case study comes before Boards? ("Case Study" is the Figma placeholder) -->
+      <a class="cs-pager-prev" href="index.html#work"><svg viewBox="0 0 25 14.73" width="25" height="15" aria-hidden="true"><path fill="currentColor" d="M1 7.36396V8.36396H25V7.36396V6.36396H1V7.36396ZM0.292893 6.65685C-0.0976311 7.04738 -0.0976311 7.68054 0.292893 8.07107L6.65685 14.435C7.04738 14.8256 7.68054 14.8256 8.07107 14.435C8.46159 14.0445 8.46159 13.4113 8.07107 13.0208L2.41421 7.36396L8.07107 1.70711C8.46159 1.31658 8.46159 0.683418 8.07107 0.292893C7.68054 -0.097631 7.04738 -0.097631 6.65685 0.292893L0.292893 6.65685Z"/></svg>Case Study</a>
+      <!-- still the live Wix page until Parts Management is rebuilt here -->
+      <a class="cs-pager-next" href="https://www.jen-chung.com/parts-management">Parts Management<svg viewBox="0 0 25 14.73" width="25" height="15" aria-hidden="true"><path fill="currentColor" transform="matrix(-1 0 0 1 25 0)" d="M1 7.36396V8.36396H25V7.36396V6.36396H1V7.36396ZM0.292893 6.65685C-0.0976311 7.04738 -0.0976311 7.68054 0.292893 8.07107L6.65685 14.435C7.04738 14.8256 7.68054 14.8256 8.07107 14.435C8.46159 14.0445 8.46159 13.4113 8.07107 13.0208L2.41421 7.36396L8.07107 1.70711C8.46159 1.31658 8.46159 0.683418 8.07107 0.292893C7.68054 -0.097631 7.04738 -0.097631 6.65685 0.292893L0.292893 6.65685Z"/></svg></a>
+    </div>
+  </nav>
+</main>
+
+<!-- ===== Footer ===== -->
+<footer class="footer" id="connect">
+  <div class="connect">
+    <h2 class="connect-title">Let’s connect <img src="assets/icons/connect-line.svg" alt=""></h2>
+    <div class="socials">
+      <a href="mailto:hello@jen-chung.com" aria-label="Email Jen">
+        <svg viewBox="0 0 40 32" aria-hidden="true"><path fill="currentColor" d="M33.6667 8.00004C33.6667 6.53337 32.4667 5.33337 31 5.33337H9.66667C8.2 5.33337 7 6.53337 7 8.00004V24C7 25.4667 8.2 26.6667 9.66667 26.6667H31C32.4667 26.6667 33.6667 25.4667 33.6667 24V8.00004ZM31 8.00004L20.3333 14.6667L9.66667 8.00004H31ZM31 24H9.66667V10.6667L20.3333 17.3334L31 10.6667V24Z"/></svg>
+      </a>
+      <a href="https://www.linkedin.com/in/jennifer-chung/" target="_blank" rel="noopener" aria-label="Jen on LinkedIn">
+        <svg viewBox="0 0 40 32" aria-hidden="true"><path fill="currentColor" d="M14.7006 26.8802H10.3469V12.9395H14.7006V26.8802ZM12.5214 11.0379C11.1292 11.0379 10 9.89131 10 8.50703C10 7.84212 10.2656 7.20443 10.7385 6.73426C11.2114 6.26409 11.8527 5.99995 12.5214 5.99995C13.1901 5.99995 13.8315 6.26409 14.3043 6.73426C14.7772 7.20443 15.0428 7.84212 15.0428 8.50703C15.0428 9.89131 13.9131 11.0379 12.5214 11.0379ZM30.9953 26.8802H26.6509V20.0939C26.6509 18.4766 26.6181 16.4025 24.3873 16.4025C22.1237 16.4025 21.7769 18.1597 21.7769 19.9774V26.8802H17.4278V12.9395H21.6034V14.8412H21.6644C22.2456 13.7458 23.6655 12.59 25.7838 12.59C30.19 12.59 31 15.475 31 19.2224V26.8802H30.9953Z"/></svg>
+      </a>
+    </div>
+  </div>
+  <p class="colophon">Jen Chung © 2026. Designed + AI coded by me with care &amp; <span class="colophon-end">matcha<span class="colophon-icons" aria-hidden="true"><img src="assets/icons/matcha.png" alt="" width="12" height="15"><svg viewBox="0 0 11.35 10.86" width="11" height="10"><path d="M5.676 10.375S13.243 4.082 10.294 1.138C7.984-1.168 5.676 2.488 5.676 2.488S3.365-1.168 1.056 1.138C-1.891 4.082 5.676 10.375 5.676 10.375Z" fill="none" stroke="currentColor" stroke-width=".75"/></svg></span></span></p>
+</footer>
+
+<script src="js/site.js"></script>
+</body>
+</html>

@@ -693,7 +693,7 @@ const CONFIG = {
   caseStudies: {
     beacon:      'https://www.jen-chung.com/parts-management',
     venmo:       'https://www.jen-chung.com/venmo',
-    cube:        'https://www.jen-chung.com/cube-boards',
+    cube:        '../cube-boards.html',   // rebuilt here; the rest still point at the live Wix pages
     switchchord: 'https://www.jen-chung.com/switchchord-splits',
   },
 
@@ -1351,7 +1351,7 @@ const CONFIG = {
         if (CONFIG.rememberInside) session.set('kb:inside', String(Date.now()));
         let path = href;
         try { path = new URL(href).pathname; } catch (err) {}
-        window.parent.postMessage({ type: 'konbini:navigate', url: href, path }, '*');
+        window.parent.postMessage({ type: 'konbini:navigate', url: a.href, path }, '*');   // a.href: resolved, so relative links work too
       });
       meals.append(a);
     });
