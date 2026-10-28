@@ -73,14 +73,15 @@
   }
 
   /* ---- Archive: horizontal scroll ------------------------------------------------- */
-  // The archive is a row of cards. The section pins while you scroll down and the row
-  // slides left, at every screen size. With reduced motion, or on very short screens
-  // (phones held sideways), it's a row you swipe instead.
+  // The archive is a row of cards. When the title + row reach the middle of the screen they stay
+  // put and the row slides left as you scroll down, at every screen size; the page keeps its normal
+  // spacing above and below. With reduced motion, or on very short screens (phones held sideways),
+  // it's a row you swipe instead.
   const archive = document.getElementById('archive');
   if (archive) {
     const row = archive.querySelector('.grid-archive');
     const canPin = () => innerHeight >= SHORT_SCREEN && !matchMedia('(prefers-reduced-motion: reduce)').matches;
-    let pinned = false, maxShift = 0, raf = 0;
+    let pinned = false, maxShift = 0, stickTop = 0, raf = 0;
     const content = archive.firstElementChild;                  // h2 + row
     const pin = Object.assign(document.createElement('div'), { className: 'archive-pin' });
     const stage = Object.assign(document.createElement('div'), { className: 'archive-stage' });
@@ -97,15 +98,17 @@
         const r = row.getBoundingClientRect(), last = row.lastElementChild.getBoundingClientRect();
         const margin = parseFloat(getComputedStyle(row).paddingRight) || 0;
         maxShift = Math.max(0, Math.ceil(last.right - r.left + margin - row.clientWidth));
-        pin.style.height = `${maxShift + innerHeight}px`;     // one pixel down = one pixel sideways
+        const vh = document.documentElement.clientHeight || innerHeight;
+        stickTop = Math.max(0, (vh - stage.offsetHeight) / 2);  // title + row centered on screen while it slides
+        stage.style.top = `${stickTop}px`;
+        pin.style.height = `${stage.offsetHeight + maxShift}px`;   // one pixel down = one pixel sideways
       }
       update();
     }
     function update() {
       raf = 0;
       if (pinned) {
-        const r = pin.getBoundingClientRect();
-        const p = Math.min(1, Math.max(0, -r.top / Math.max(1, r.height - innerHeight)));
+        const p = Math.min(1, Math.max(0, (stickTop - pin.getBoundingClientRect().top) / Math.max(1, maxShift)));
         row.style.transform = `translate3d(${-p * maxShift}px, 0, 0)`;
       }
     }
@@ -114,6 +117,7 @@
     row.addEventListener('scroll', queue, { passive: true });
     addEventListener('resize', layout);
     window.addEventListener('load', layout);
+    if (document.fonts) document.fonts.ready.then(layout);
     layout();
   }
 
@@ -334,7 +338,7 @@
     // % numbers: digits flip through random numbers, then settle left to right (once, in view)
     const nums = [...cs.querySelectorAll('.cs-stat-num')];
     if (nums.length && 'IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      const FLIP_MS = 50, SETTLE_MS = 1200, EACH_MS = 350;       // ✏️ flip speed, when the first digit settles, then each next
+      const FLIP_MS = 50, SETTLE_MS = 1000, EACH_MS = 350;       // ✏️ flip speed, when the first digit settles, then each next
       nums.forEach((el) => {
         const final = el.textContent.trim();
         el.textContent = '';
