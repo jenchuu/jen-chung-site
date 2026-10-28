@@ -347,9 +347,9 @@ a.card:focus-visible .card-cta .arrow { transform: translateX(4px); }
 .chips li { padding: 4px 10px; border: 1px solid var(--cs-meta); border-radius: 80px; font-size: 14px; line-height: 1.37; white-space: nowrap; }
 
 /* Gated part (everything after the summary) */
-.cs-body .cs-gated { margin-top: 80px; }
-.cs-is-locked .cs-gated { display: none; }
-.cs-is-locked .cs { padding-bottom: 40px; }          /* summary → footer, as in the locked Figma frame */
+.cs-body .cs-lock { position: relative; margin-top: 80px; }
+.cs-is-locked .cs-lock { max-height: max(1100px, 100vh + 240px); overflow: clip; }  /* ✏️ how much blurred page shows */
+.cs-is-locked .cs-pager { display: none; }
 
 /* Previous / next */
 .cs-pager { margin-top: 132px; }
@@ -391,56 +391,70 @@ a.card:focus-visible .card-cta .arrow { transform: translateX(4px); }
   .cs-pair { grid-template-columns: 1fr; }
 }
 
-/* ---- Password modal (Figma 10162:34459) ------------------------------------------------
-   Same dark modal in both themes, over a blurred 90% charcoal overlay. */
-.gate { position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; padding: 16px; }
-.gate[hidden] { display: none; }
-.gate-overlay { position: absolute; inset: 0; background: rgba(34, 34, 34, .9); -webkit-backdrop-filter: blur(2.5px); backdrop-filter: blur(2.5px); }
-.gate-modal {
-  position: relative;
-  width: min(450px, 100%);
-  display: flex; flex-direction: column; gap: 16px;
-  padding: 24px 40px 48px;
-  border-radius: 8px;
-  background: linear-gradient(to bottom, #333333, #2b2b2b 50%);
-  color: #f2f2f2;
-  font-family: var(--font-sans);
-  animation: gate-in .35s var(--ease-out);
+/* ---- Password (Figma: light 10208:46019, dark 10204:37010) --------------------------------
+   A veil of the page colour (95%, blurred) over the start of the hidden part. The form has no box:
+   it sits 91px into the veil and stays centered on screen while the veil scrolls by. */
+:root {
+  --gate-veil: rgba(252, 249, 239, .95);
+  --gate-line: #4e4e4e;
+  --gate-error: #e52022;
+  --gate-btn-text: #f2f2f2;
+  --gate-btn-hover: #6432ad;
 }
-@keyframes gate-in { from { opacity: 0; transform: translateY(12px); } }
-.gate-x { align-self: flex-end; width: 32px; height: 32px; color: #4e4e4e; border-radius: 6px; transition: color .2s ease; }
-.gate-x:hover { color: #a5a08f; }
-.gate-x svg { width: 32px; height: 32px; }
-.gate-title { margin: 0; font-family: var(--font-serif); font-weight: 600; font-size: 40px; line-height: 1.3; }
-.gate-desc { margin: 0; font-size: 16px; line-height: 22px; }
+:root[data-theme="dark"] {
+  --gate-veil: rgba(34, 34, 34, .95);
+  --gate-line: #cccccc;
+  --gate-error: #db4b4c;
+  --gate-btn-text: #222222;
+  --gate-btn-hover: #b39cf2;
+}
+.gate { display: none; }
+.cs-is-locked .gate {
+  display: block; position: absolute; inset: 0; z-index: 5;
+  background: var(--gate-veil);
+  -webkit-backdrop-filter: blur(15px); backdrop-filter: blur(15px);
+  transition: opacity .4s ease;
+}
+.gate.is-opening { opacity: 0; }
+.gate-card {
+  position: sticky; top: max(24px, calc(50vh - 190px));   /* half the form's height: centered on screen */
+  width: min(450px, 100%); margin: 91px auto 0;
+  display: flex; flex-direction: column; gap: 24px;
+  padding: 24px 40px 48px;
+  color: var(--ink);
+  font-family: var(--font-sans);
+}
+.gate-title { font-family: var(--font-serif); font-weight: 600; font-size: 40px; line-height: 1.3; }
+.gate-desc { font-size: 16px; line-height: 22px; }
 .gate-form { display: flex; flex-direction: column; gap: 16px; }
-.gate-field { display: flex; flex-direction: column; gap: 6px; font-size: 14px; line-height: 19px; color: #a5a08f; }
+.gate-field { display: flex; flex-direction: column; gap: 6px; }
+.gate-field label { font-size: 14px; line-height: 19px; color: var(--cs-meta); }
 .gate-field input {
   width: 100%; padding: 10px 0;
-  border: 0; border-bottom: 1px solid #cccccc; border-radius: 0;
-  background: transparent; color: #f2f2f2;
+  border: 0; border-bottom: 1px solid var(--gate-line); border-radius: 0;
+  background: transparent; color: var(--ink);
   font: 16px/22px var(--font-sans);
   outline: none;
   transition: border-color .2s ease;
 }
-.gate-field input:focus { border-bottom-color: #9e81ee; }
-.gate.is-wrong .gate-field input { border-bottom-color: var(--error); }
-.gate-error { margin: -8px 0 0; min-height: 0; font-size: 14px; line-height: 19px; color: #ff8a8b; }
+.gate-field input:focus { border-bottom-color: var(--purple); }
+.gate.is-wrong .gate-field input { border-bottom-color: var(--gate-error); }
+.gate-error { font-size: 12px; line-height: 17px; color: var(--gate-error); }
 .gate-error:empty { display: none; }
 .gate-btn {
   align-self: flex-start;
   padding: 13px 32px; border-radius: 40px;
-  background: #9e81ee; color: #222222;
+  background: var(--purple); color: var(--gate-btn-text);
   font-family: var(--font-sans); font-weight: 500; font-size: 16px; line-height: 1.37;
   transition: background-color .2s ease;
 }
-.gate-btn:hover { background: #b39cf2; }
-.gate-btn:focus-visible, .gate-x:focus-visible { outline-color: #f2f2f2; }
-.gate-note { margin: 0; font-style: italic; font-size: 14px; line-height: 19px; color: #a5a08f; }
-.gate-note a { text-underline-position: from-font; text-decoration-skip-ink: none; }
-.gate-note a:hover { color: #f2f2f2; }
-.gate.is-wrong .gate-modal { animation: gate-shake .35s ease; }
+.gate-btn:hover { background: var(--gate-btn-hover); }
+.gate-note { font-size: 14px; line-height: 19px; color: var(--cs-meta); }
+.gate-note a { color: inherit; text-decoration: none; }                  /* light: plain, as in Figma */
+:root[data-theme="dark"] .gate-note { font-style: italic; }
+:root[data-theme="dark"] .gate-note a { text-decoration: underline; text-underline-position: from-font; text-decoration-skip-ink: none; }
+.gate-note a:hover { color: var(--ink); }
+.gate.is-wrong .gate-card { animation: gate-shake .35s ease; }
 @keyframes gate-shake { 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
-html.gate-open { overflow: hidden; }
-@media (max-width: 559px) { .gate-modal { padding: 16px 24px 32px; } .gate-title { font-size: 32px; } }
-@media (prefers-reduced-motion: reduce) { .gate-modal, .gate.is-wrong .gate-modal { animation: none; } }
+@media (max-width: 559px) { .gate-card { padding: 24px 8px 32px; margin-top: 56px; } .gate-title { font-size: 32px; } }
+@media (prefers-reduced-motion: reduce) { .gate, .gate.is-wrong .gate-card { transition: none; animation: none; } }

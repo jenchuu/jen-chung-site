@@ -51,7 +51,7 @@
 
 <!-- Design source: Figma "Portfolio designs 2026" › Cube Boards case study (light 9897:8171, dark 9702:17058).
      ✏️ Images live in assets/cube-boards/. Each section's title (left) stays pinned while you scroll its section. -->
-<!-- ✏️ Password gate: everything inside .cs-gated stays hidden until the visitor enters the password.
+<!-- ✏️ Password gate: everything inside .cs-gated stays locked (blurred, then cut off) until the visitor enters the password.
      data-gate-hash is the SHA-256 of the password (so the password itself isn't in the page). To change it,
      run in Terminal:  printf '%s' 'NewPassword' | shasum -a 256   and paste the result here. -->
 <main class="cs" id="case-study" data-gate="cube-boards" data-gate-hash="cca13fae17f94d28e2c2e93363e945c2908c99a50e78844ddb1de5e239f8bec9">
@@ -93,9 +93,8 @@
           </div>
         </div>
       </section>
-      <div class="cs-gate-sentinel" aria-hidden="true"></div>
-
       <!-- ===== Everything below is behind the password ===== -->
+      <div class="cs-lock">
       <div class="cs-gated" id="cs-gated">
 
       <!-- ===== The problem ===== -->
@@ -299,6 +298,26 @@
       </section>
 
       </div><!-- /.cs-gated -->
+
+      <!-- ===== Password (Figma: light 10208:46019 / 10208:47355 / 10208:47990, dark 10204:37010 / 10204:37833 / 10208:44579).
+           While locked, the start of the hidden part shows blurred under this veil. The form scrolls up
+           with the page, then stays centered on screen. Typing the right password unlocks it right away. ===== -->
+      <div class="gate" id="gate">
+        <div class="gate-card">
+          <h2 class="gate-title" id="gate-title">Enter password</h2>
+          <p class="gate-desc" id="gate-desc">The rest of this case study is confidential.</p>
+          <form class="gate-form" id="gate-form" aria-labelledby="gate-title" aria-describedby="gate-desc">
+            <div class="gate-field">
+              <label for="gate-input">Password</label>
+              <input type="password" id="gate-input" name="password" autocomplete="current-password" required aria-describedby="gate-error">
+              <p class="gate-error" id="gate-error" role="alert"></p>
+            </div>
+            <button class="gate-btn" type="submit">Enter</button>
+            <p class="gate-note">You can find it on my resume or reach out to me at <a href="mailto:hello@jen-chung.com">hello@jen-chung.com</a></p>
+          </form>
+        </div>
+      </div>
+      </div><!-- /.cs-lock -->
     </div>
   </div>
 
@@ -312,26 +331,6 @@
   </nav>
 </main>
 
-<!-- ===== Password modal (Figma 10162:34459). Opens when the visitor scrolls past the summary. ===== -->
-<div class="gate" id="gate" hidden>
-  <div class="gate-overlay" data-gate-close></div>
-  <div class="gate-modal" role="dialog" aria-modal="true" aria-labelledby="gate-title" aria-describedby="gate-desc">
-    <button class="gate-x" type="button" aria-label="Close" data-gate-close>
-      <svg viewBox="0 0 32 32" width="32" height="32" aria-hidden="true"><path d="M24 8L16 16M16 16L8 24M16 16L8 8M16 16L24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
-    <h2 class="gate-title" id="gate-title">Enter password</h2>
-    <p class="gate-desc" id="gate-desc">The rest of this case study is confidential.</p>
-    <form class="gate-form" id="gate-form">
-      <label class="gate-field">
-        <span>Password</span>
-        <input type="password" id="gate-input" name="password" autocomplete="current-password" required aria-describedby="gate-error">
-      </label>
-      <p class="gate-error" id="gate-error" role="alert"></p>
-      <button class="gate-btn" type="submit">Enter</button>
-    </form>
-    <p class="gate-note">You can find it on my resume or reach out to me at <a href="mailto:hello@jen-chung.com">hello@jen-chung.com</a></p>
-  </div>
-</div>
 
 <!-- ===== Footer ===== -->
 <footer class="footer" id="connect">

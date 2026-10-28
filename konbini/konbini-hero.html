@@ -1131,8 +1131,15 @@ const CONFIG = {
   }
   if ('ResizeObserver' in window) {
     new ResizeObserver(fitStore).observe(storeFit);
-    let spacerW = 0;
-    new ResizeObserver(() => { if (Math.abs(intro.clientWidth - spacerW) > 1) { spacerW = intro.clientWidth; placeSpacer(); } }).observe(intro);
+    // Re-place the spacer when the sentence's width OR its text size changes. (On short screens the
+    // width can stay pinned at MIN_CARD_W while the 899px breakpoint switches the size, and the hidden
+    // word copies resize with the text, so watching them catches that.)
+    let spacerKey = '';
+    const spacerRO = new ResizeObserver(() => {
+      const key = `${Math.round(intro.clientWidth)}|${getComputedStyle(intro).fontSize}`;
+      if (key !== spacerKey) { spacerKey = key; placeSpacer(); }
+    });
+    spacerRO.observe(intro); spacerRO.observe(ghosts);
   }
   addEventListener('resize', fitStore);
   document.addEventListener('visibilitychange', syncPlayback);
