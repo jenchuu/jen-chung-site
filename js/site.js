@@ -14,6 +14,7 @@
   const SHORT_SCREEN = 500;      // windows shorter than this (phones held sideways): hero isn't fit to the screen
   const REVEAL_FIRST_MS = 150;   // first card's delay once its row scrolls into view
   const REVEAL_STEP_MS = 500;    // then each next card, in reading order
+  const ARCHIVE_STEP_MS = 120;   // archive cards: no first delay, and this far apart (they take 0.8s each)
   // (how long each card's own animation takes is --reveal-dur in css/site.css)
   const root = document.documentElement;
   const hero = document.getElementById('hero');
@@ -56,8 +57,13 @@
         .sort((a, b) => (a.target.compareDocumentPosition(b.target) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1))
         .forEach((e) => {
           const card = e.target, grid = card.parentElement, now = performance.now();
-          const start = Math.max(now + REVEAL_FIRST_MS, nextStart.get(grid) || 0);
-          nextStart.set(grid, start + REVEAL_STEP_MS);
+          const fast = grid.classList.contains('grid-archive');   // archive: no wait, short steps
+          const start = Math.max(now + (fast ? 0 : REVEAL_FIRST_MS), nextStart.get(grid) || 0);
+          nextStart.set(grid, start + (fast ? ARCHIVE_STEP_MS : REVEAL_STEP_MS));
+          // anything before this card that scrolled past too fast to be seen is simply shown
+          for (let c = card.previousElementSibling; c; c = c.previousElementSibling) {
+            if (c.classList.contains('reveal') && !c.classList.contains('is-in')) { c.classList.add('is-in'); io.unobserve(c); }
+          }
           card.style.setProperty('--reveal-delay', `${Math.round(start - now)}ms`);
           card.classList.add('is-in');
           io.unobserve(card);
@@ -166,8 +172,9 @@
 
   /* ---- Enlarged visuals (case studies) ----------------------------------------- */
   // Every image in a case study opens full screen. A side-by-side pair (.cs-pair) opens side by
-  // side; below 760px wide it shows one at a time with ← → (or swipe) to switch. The enlarged
-  // copy keeps each image's crop. ✕, a click on the veil, or Esc closes it.
+  // side; below 760px wide, and for the V1–V4 row (.cs-scroller) always, they open one at a time
+  // in a sideways strip (scroll, swipe, ← → or arrow keys). The enlarged copy keeps each image's
+  // crop. ✕, a click on the veil, or Esc closes it.
   const cs = document.querySelector('main.cs');
   if (cs) {
     const X_ICON = '<svg viewBox="0 0 32 32" width="32" height="32" aria-hidden="true"><path d="M24 8L16 16M16 16L8 24M16 16L8 8M16 16L24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
@@ -199,41 +206,54 @@
       v.setAttribute('aria-label', `Enlarge image: ${img.alt}`);
     });
     const groupFor = (v) => {
-      const pair = v.closest('.cs-pair');
-      const members = pair ? [...pair.children].map((c) => visualOf(c.matches('img') ? c : c.querySelector('img'))) : [v];
-      return { list: members.map((el) => ({ el, caption: captionOf(el) })), at: Math.max(0, members.indexOf(v)) };
+      const set = v.closest('.cs-pair, .cs-scroller');
+      const members = set ? [...set.children].filter((c) => c.querySelector('img') || c.matches('img')).map((c) => visualOf(c.matches('img') ? c : c.querySelector('img'))) : [v];
+      return { list: members.map((el) => ({ el, caption: captionOf(el) })), at: Math.max(0, members.indexOf(v)), strip: !!(set && set.matches('.cs-scroller')) };
     };
 
+    // Pairs sit side by side on wide screens. Small screens, and the V1–V4 row everywhere, get a
+    // "gallery": one at a time in a sideways strip (scroll, swipe, ← → buttons or arrow keys).
+    let strip = false;
     const single = () => innerWidth < 760;
-    function render() {
-      const shown = single() ? [items[index]] : items;
-      lb.classList.toggle('is-single', single());
-      lb.classList.toggle('has-many', items.length > 1);
+    const gallery = () => strip || single();
+    const stepBtns = { prev: lb.querySelector('.lb-prev'), next: lb.querySelector('.lb-next') };
+    function syncCount() {
       count.textContent = `${index + 1} / ${items.length}`;
-      const hasCap = shown.some((it) => it.caption);
+      if (gallery()) { stepBtns.prev.disabled = index === 0; stepBtns.next.disabled = index === items.length - 1; }
+    }
+    function render() {
+      const g = gallery();
+      lb.classList.toggle('is-gallery', g);
+      lb.classList.toggle('has-many', items.length > 1);
+      const hasCap = items.some((it) => it.caption);
       const gap = 24;
       const padX = single() ? 16 : 72, padY = single() ? 72 : 64;
-      const navH = single() && items.length > 1 ? 60 : 0;
-      const availW = innerWidth - padX * 2 - gap * (shown.length - 1);
+      const navH = g && items.length > 1 ? 60 : 0;
       const availH = innerHeight - padY * 2 - (hasCap ? 30 : 0) - navH;
-      const ratios = shown.map((it) => { const r = it.el.getBoundingClientRect(); return r.width / r.height || 1.4; });
-      const h = Math.min(availH, availW / ratios.reduce((a, b) => a + b, 0));
-      stage.replaceChildren(...shown.map((it, i) => {
+      const ratios = items.map((it) => { const r = it.el.getBoundingClientRect(); return r.width / r.height || 1.4; });
+      // gallery: each one fits the screen on its own; side by side: one shared height
+      const heights = g
+        ? ratios.map((r) => Math.min(availH, (innerWidth - padX * 2) / r))
+        : ratios.map(() => Math.min(availH, (innerWidth - padX * 2 - gap * (items.length - 1)) / ratios.reduce((a, b) => a + b, 0)));
+      stage.replaceChildren(...items.map((it, i) => {
         const fig = document.createElement('figure');
         fig.className = 'lb-item';
         const copy = it.el.cloneNode(true);
         copy.classList.remove('cs-zoom'); copy.removeAttribute('tabindex'); copy.removeAttribute('role'); copy.removeAttribute('aria-label');
         (copy.matches('img') ? [copy] : [...copy.querySelectorAll('img')]).forEach((img) => { img.loading = 'eager'; });
-        copy.style.width = `${Math.round(h * ratios[i])}px`; copy.style.height = `${Math.round(h)}px`;
-        copy.style.aspectRatio = 'auto';
+        const w = Math.round(heights[i] * ratios[i]);
+        copy.style.width = `${w}px`; copy.style.height = `${Math.round(heights[i])}px`;
+        copy.style.aspectRatio = 'auto'; copy.style.flex = 'none';
         fig.append(copy);
-        if (it.caption) fig.append(Object.assign(document.createElement('figcaption'), { textContent: it.caption }));
+        if (it.caption) fig.append(Object.assign(document.createElement('figcaption'), { textContent: it.caption, style: `width: ${w}px` }));
         return fig;
       }));
+      if (g) stage.scrollLeft = index * stage.clientWidth;
+      syncCount();
     }
     function open(v) {
       const g = groupFor(v);
-      items = g.list; index = g.at;
+      items = g.list; index = g.at; strip = g.strip;
       lastFocus = document.activeElement;
       lb.hidden = false;
       root.classList.add('lb-open');
@@ -246,7 +266,48 @@
       stage.replaceChildren();
       if (lastFocus) lastFocus.focus({ preventScroll: true });
     }
-    const step = (d) => { if (items.length > 1 && single()) { index = (index + d + items.length) % items.length; render(); } };
+    const smooth = () => (matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth');
+    const step = (d) => {
+      if (!gallery() || items.length < 2) return;
+      const to = Math.min(items.length - 1, Math.max(0, index + d));
+      if (to !== index) stage.scrollTo({ left: to * stage.clientWidth, behavior: smooth() });
+    };
+    stage.addEventListener('scroll', () => {
+      if (!gallery()) return;
+      const i = Math.round(stage.scrollLeft / Math.max(1, stage.clientWidth));
+      if (i !== index) { index = i; syncCount(); }
+    }, { passive: true });
+    // a mouse wheel (up/down) also steps through the gallery; sideways trackpad scrolling just scrolls
+    let wheelLock = 0;
+    lb.addEventListener('wheel', (e) => {
+      if (!gallery() || items.length < 2 || Math.abs(e.deltaX) >= Math.abs(e.deltaY)) return;
+      e.preventDefault();
+      if (performance.now() < wheelLock || Math.abs(e.deltaY) < 8) return;
+      wheelLock = performance.now() + 600;
+      step(e.deltaY > 0 ? 1 : -1);
+    }, { passive: false });
+
+    // V1–V4 row on the page: ← → buttons under it, greyed out at the ends
+    cs.querySelectorAll('.cs-scroller').forEach((row) => {
+      const nav = document.createElement('div');
+      nav.className = 'cs-scroller-nav';
+      nav.innerHTML = `<button type="button" aria-label="Previous exploration">${ARROW('M12.5 4L6.5 10L12.5 16')}</button><button type="button" aria-label="Next exploration">${ARROW('M7.5 4L13.5 10L7.5 16')}</button>`;
+      row.after(nav);
+      const [prev, next] = nav.querySelectorAll('button');
+      const slide = () => row.firstElementChild.getBoundingClientRect().width + 16;
+      const sync = () => {
+        prev.disabled = row.scrollLeft < 4;
+        next.disabled = row.scrollLeft > row.scrollWidth - row.clientWidth - 4;
+        // the row is as tall as the one in view, so a short one doesn't leave a gap under it
+        const i = next.disabled ? row.children.length - 1 : Math.round(row.scrollLeft / slide());
+        row.style.height = `${row.children[Math.min(i, row.children.length - 1)].offsetHeight}px`;
+      };
+      prev.addEventListener('click', () => row.scrollBy({ left: -slide(), behavior: smooth() }));
+      next.addEventListener('click', () => row.scrollBy({ left: slide(), behavior: smooth() }));
+      row.addEventListener('scroll', sync, { passive: true });
+      addEventListener('resize', sync);
+      sync();
+    });
 
     cs.addEventListener('click', (e) => { const v = e.target.closest('.cs-zoom'); if (v) open(v); });
     cs.addEventListener('keydown', (e) => {
@@ -256,7 +317,7 @@
     lb.addEventListener('click', (e) => {
       if (e.target.closest('.lb-prev')) step(-1);
       else if (e.target.closest('.lb-next')) step(1);
-      else if (e.target.closest('.lb-x') || !e.target.closest('.lb-item, .lb-nav')) close();   // ✕ or the veil
+      else if (e.target.closest('.lb-x') || !e.target.closest('.lb-item > .crop, .lb-item > img, .lb-item figcaption, .lb-nav')) close();   // ✕ or the veil
     });
     lb.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') close();
@@ -268,13 +329,6 @@
         if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
         else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
       }
-    });
-    let touchX = null;
-    lb.addEventListener('touchstart', (e) => { touchX = e.touches[0].clientX; }, { passive: true });
-    lb.addEventListener('touchend', (e) => {
-      if (touchX == null) return;
-      const dx = e.changedTouches[0].clientX - touchX; touchX = null;
-      if (Math.abs(dx) > 50) step(dx < 0 ? 1 : -1);
     });
     addEventListener('resize', () => { if (!lb.hidden) render(); });
   }
