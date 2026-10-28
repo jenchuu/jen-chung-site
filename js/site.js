@@ -287,27 +287,107 @@
       step(e.deltaY > 0 ? 1 : -1);
     }, { passive: false });
 
-    // V1–V4 row on the page: ← → buttons under it, greyed out at the ends
+    // V1–V4 row on the page. Like the home page Archive: when it reaches the middle of the screen
+    // it stays put and slides sideways as you scroll down (one pixel down = one pixel sideways).
+    // With reduced motion or on very short screens it's a row you swipe, with ← → under it.
     cs.querySelectorAll('.cs-scroller').forEach((row) => {
+      const figure = row.closest('figure');
       const nav = document.createElement('div');
       nav.className = 'cs-scroller-nav';
       nav.innerHTML = `<button type="button" aria-label="Previous exploration">${ARROW('M12.5 4L6.5 10L12.5 16')}</button><button type="button" aria-label="Next exploration">${ARROW('M7.5 4L13.5 10L7.5 16')}</button>`;
       row.after(nav);
       const [prev, next] = nav.querySelectorAll('button');
       const slide = () => row.firstElementChild.getBoundingClientRect().width + 16;
-      const sync = () => {
+      const pin = Object.assign(document.createElement('div'), { className: 'cs-scroll-pin' });
+      const canPin = () => innerHeight >= 500 && !matchMedia('(prefers-reduced-motion: reduce)').matches;
+      let pinned = null, shift = 0, stickTop = 0, raf = 0, lastW = 0;
+      function sync() {                                          // swipe mode: buttons + height
+        if (pinned) return;
         prev.disabled = row.scrollLeft < 4;
         next.disabled = row.scrollLeft > row.scrollWidth - row.clientWidth - 4;
         // the row is as tall as the one in view, so a short one doesn't leave a gap under it
         const i = next.disabled ? row.children.length - 1 : Math.round(row.scrollLeft / slide());
         row.style.height = `${row.children[Math.min(i, row.children.length - 1)].offsetHeight}px`;
-      };
+      }
+      function layout() {
+        const want = canPin();
+        if (want !== pinned) {
+          pinned = want;
+          row.classList.toggle('is-pinned', pinned);
+          if (pinned) { figure.before(pin); pin.append(figure); row.scrollLeft = 0; row.style.height = ''; }
+          else if (pin.isConnected) { pin.before(figure); pin.remove(); row.style.transform = ''; figure.style.top = ''; }
+        }
+        lastW = row.clientWidth;
+        if (pinned) {
+          const last = row.lastElementChild;
+          shift = Math.max(0, Math.ceil(last.offsetLeft + last.offsetWidth - row.clientWidth));
+          stickTop = Math.max(16, (innerHeight - figure.offsetHeight) / 2);   // centered on screen
+          figure.style.top = `${stickTop}px`;
+          pin.style.height = `${figure.offsetHeight + shift}px`;
+          update();
+        } else sync();
+      }
+      function update() {
+        raf = 0;
+        if (!pinned) return;
+        const p = Math.min(1, Math.max(0, (stickTop - pin.getBoundingClientRect().top) / Math.max(1, shift)));
+        row.style.transform = `translate3d(${-p * shift}px, 0, 0)`;
+      }
       prev.addEventListener('click', () => row.scrollBy({ left: -slide(), behavior: smooth() }));
       next.addEventListener('click', () => row.scrollBy({ left: slide(), behavior: smooth() }));
       row.addEventListener('scroll', sync, { passive: true });
-      addEventListener('resize', sync);
-      sync();
+      addEventListener('scroll', () => { if (pinned && !raf) raf = requestAnimationFrame(update); }, { passive: true });
+      addEventListener('resize', layout);
+      // (also re-measure if the column changes width, e.g. after the password unlocks the page)
+      if ('ResizeObserver' in window) new ResizeObserver(() => { if (Math.abs(row.clientWidth - lastW) > 1) layout(); }).observe(row);
+      layout();
     });
+
+    // Main images: rise in once both have loaded
+    const heroImgs = [...cs.querySelectorAll('.cs-hero img')];
+    if (heroImgs.length && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      cs.querySelector('.cs-hero').classList.add('will-rise');
+      heroImgs[0].getBoundingClientRect();                       // start from the hidden state, even if they're already loaded
+      const loaded = heroImgs.map((img) => (img.complete ? Promise.resolve() : new Promise((res) => { img.addEventListener('load', res, { once: true }); img.addEventListener('error', res, { once: true }); })));
+      const go = () => requestAnimationFrame(() => requestAnimationFrame(() => heroImgs.forEach((img) => img.classList.add('is-in'))));
+      Promise.all(loaded).then(go);
+      setTimeout(go, 2500);                                      // don't wait forever on a slow connection
+    }
+
+    // % numbers: digits flip through random numbers, then settle left to right (once, in view)
+    const nums = [...cs.querySelectorAll('.cs-stat-num')];
+    if (nums.length && 'IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const FLIP_MS = 45, SETTLE_MS = 700, EACH_MS = 220;        // ✏️ flip speed, when the first digit settles, then each next
+      nums.forEach((el) => {
+        const final = el.textContent.trim();
+        el.textContent = '';
+        el.append(Object.assign(document.createElement('span'), { className: 'sr-only', textContent: final }),
+          Object.assign(document.createElement('span'), { className: 'scramble', textContent: final }));
+        el.lastChild.setAttribute('aria-hidden', 'true');
+      });
+      const scramble = (el) => {
+        const out = el.querySelector('.scramble');
+        const final = out.textContent;
+        const digits = [...final].map((ch, i) => (/\d/.test(ch) ? i : -1)).filter((i) => i >= 0);
+        const t0 = performance.now();
+        const tick = () => {
+          const t = performance.now() - t0;
+          let done = true;
+          out.textContent = [...final].map((ch, i) => {
+            const k = digits.indexOf(i);
+            if (k < 0 || t >= SETTLE_MS + k * EACH_MS) return ch;
+            done = false;
+            return String(Math.floor(Math.random() * 10));
+          }).join('');
+          if (!done) setTimeout(tick, FLIP_MS);
+        };
+        tick();
+      };
+      const io = new IntersectionObserver((entries) => entries.forEach((e) => {
+        if (e.isIntersecting) { io.unobserve(e.target); scramble(e.target); }
+      }), { threshold: 0.6 });
+      nums.forEach((el) => io.observe(el));
+    }
 
     cs.addEventListener('click', (e) => { const v = e.target.closest('.cs-zoom'); if (v) open(v); });
     cs.addEventListener('keydown', (e) => {
@@ -319,14 +399,16 @@
       else if (e.target.closest('.lb-next')) step(1);
       else if (e.target.closest('.lb-x') || !e.target.closest('.lb-item > .crop, .lb-item > img, .lb-item figcaption, .lb-nav')) close();   // ✕ or the veil
     });
-    lb.addEventListener('keydown', (e) => {
+    // keys work as soon as it's open, wherever focus is
+    document.addEventListener('keydown', (e) => {
+      if (lb.hidden) return;
       if (e.key === 'Escape') close();
-      else if (e.key === 'ArrowLeft') step(-1);
-      else if (e.key === 'ArrowRight') step(1);
+      else if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') { e.preventDefault(); step(e.key === 'ArrowLeft' ? -1 : 1); }
       else if (e.key === 'Tab') {                                // keep focus inside
-        const btns = [...lb.querySelectorAll('button')].filter((b) => b.offsetParent);
+        const btns = [...lb.querySelectorAll('button')].filter((b) => b.offsetParent && !b.disabled);
         const first = btns[0], last = btns[btns.length - 1];
-        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        if (!lb.contains(document.activeElement)) { e.preventDefault(); first.focus(); }
+        else if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
         else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
       }
     });
