@@ -319,25 +319,6 @@ a.card:focus-visible .card-cta .arrow { transform: translateX(4px); }
 .cs-figure, .cs-pair figure { display: flex; flex-direction: column; gap: 8px; }
 .cs figcaption { font-size: 16px; line-height: 1.37; color: var(--cs-meta); }
 .cs-shots { display: flex; flex-direction: column; gap: 16px; }
-/* V1–V4: a sideways row (snaps to each one; ← → below) */
-.cs-scroller {
-  display: flex; align-items: flex-start; gap: 16px;
-  overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain;
-  scroll-snap-type: x mandatory; scrollbar-width: none;
-  transition: height .3s var(--ease-out);           /* height follows the one in view (set by JS) */
-}
-.cs-scroller::-webkit-scrollbar { display: none; }
-.cs-scroller > .crop { flex: 0 0 86%; scroll-snap-align: start; }   /* ✏️ 86% so the next one peeks in */
-.cs-scroller-nav { display: flex; align-items: center; justify-content: flex-end; gap: 16px; font-size: 14px; color: var(--cs-meta); }
-/* Pinned (set by JS, like the home page Archive): the text just above the row, the row and the text
-   just below it stay put together, centered on screen, while the row slides sideways as you scroll
-   down; then the page carries on. (Text that doesn't fit on a short screen is left out of the block.) */
-.cs-scroll-pin { position: relative; }
-.cs-scroll-block { position: sticky; display: flex; flex-direction: column; gap: 40px; }
-.cs-scroll-block > .cs-figure { overflow: hidden; }
-.cs-scroller.is-pinned { overflow: visible; scroll-snap-type: none; align-items: flex-start; height: auto; transition: none; will-change: transform; }
-.cs-scroller.is-pinned + .cs-scroller-nav { display: none; }
-
 /* The two main images rise in on load (once both have loaded, the second a beat later) */
 .cs-hero.will-rise img { opacity: 0; transform: translateY(40px); }
 .cs-hero.will-rise img.is-in {
@@ -348,7 +329,7 @@ a.card:focus-visible .card-cta .arrow { transform: translateX(4px); }
 
 /* Soft rise: titles, paragraphs, images and cards fade in and rise 16px as they scroll into view,
    a beat apart when several arrive together (js/site.js adds .is-in). Same easing as the main images. */
-.cs-rise-ready :is(.cs-label, .cs-title, .cs-h2, .cs-meta > div, .cs-meta-title, .cs-text > *, .cs-main > :not(.cs-text, .cs-scroll-pin)):not(.is-in) {
+.cs-rise-ready :is(.cs-label, .cs-title, .cs-h2, .cs-meta > div, .cs-meta-title, .cs-text > *, .cs-main > :not(.cs-text)):not(.is-in) {
   opacity: 0; transform: translateY(16px);              /* ✏️ how far it rises */
 }
 .cs-rise-ready .is-in {
@@ -471,11 +452,11 @@ html.cs-is-locked { overflow-x: clip; }              /* the veil is full-width; 
 .lb-x:hover { color: var(--purple); }
 .lb-nav { display: none; align-items: center; justify-content: center; gap: 24px; margin-top: 8px; font-family: var(--font-sans); font-size: 14px; color: var(--cs-meta); }
 .lb.is-gallery.has-many .lb-nav { display: flex; }
-.lb-nav button, .cs-scroller-nav button { width: 44px; height: 44px; display: grid; place-items: center; color: var(--ink); border-radius: 50%; border: 1px solid var(--rule); transition: opacity .2s ease, color .2s ease, border-color .2s ease; }
-.lb-nav button:hover:not(:disabled), .cs-scroller-nav button:hover:not(:disabled) { color: var(--purple); border-color: var(--purple); }
-.lb-nav button:disabled, .cs-scroller-nav button:disabled { opacity: .35; cursor: default; }
-.lb-nav svg, .cs-scroller-nav svg { width: 20px; height: 20px; }
-.lb-x:focus-visible, .lb-nav button:focus-visible, .cs-scroller-nav button:focus-visible { outline: 2px solid var(--purple); outline-offset: 2px; }
+.lb-nav button { width: 44px; height: 44px; display: grid; place-items: center; color: var(--ink); border-radius: 50%; border: 1px solid var(--rule); transition: opacity .2s ease, color .2s ease, border-color .2s ease; }
+.lb-nav button:hover:not(:disabled) { color: var(--purple); border-color: var(--purple); }
+.lb-nav button:disabled { opacity: .35; cursor: default; }
+.lb-nav svg { width: 20px; height: 20px; }
+.lb-x:focus-visible, .lb-nav button:focus-visible { outline: 2px solid var(--purple); outline-offset: 2px; }
 /* one at a time, side by side in a sideways strip you can scroll, swipe or step through */
 .lb.is-gallery .lb-stage { width: 100vw; gap: 0; align-items: center; justify-content: flex-start; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scrollbar-width: none; }
 .lb.is-gallery .lb-stage::-webkit-scrollbar { display: none; }
