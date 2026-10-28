@@ -329,11 +329,13 @@ a.card:focus-visible .card-cta .arrow { transform: translateX(4px); }
 .cs-scroller::-webkit-scrollbar { display: none; }
 .cs-scroller > .crop { flex: 0 0 86%; scroll-snap-align: start; }   /* ✏️ 86% so the next one peeks in */
 .cs-scroller-nav { display: flex; align-items: center; justify-content: flex-end; gap: 16px; font-size: 14px; color: var(--cs-meta); }
-/* Pinned (set by JS, like the home page Archive): when the row reaches the middle of the screen it
-   stays put and slides sideways as you scroll down, then the page carries on. */
+/* Pinned (set by JS, like the home page Archive): the text just above the row, the row and the text
+   just below it stay put together, centered on screen, while the row slides sideways as you scroll
+   down; then the page carries on. (Text that doesn't fit on a short screen is left out of the block.) */
 .cs-scroll-pin { position: relative; }
-.cs-scroll-pin > .cs-figure { position: sticky; overflow: hidden; }
-.cs-scroller.is-pinned { overflow: visible; scroll-snap-type: none; align-items: center; height: auto; transition: none; will-change: transform; }
+.cs-scroll-block { position: sticky; display: flex; flex-direction: column; gap: 40px; }
+.cs-scroll-block > .cs-figure { overflow: hidden; }
+.cs-scroller.is-pinned { overflow: visible; scroll-snap-type: none; align-items: flex-start; height: auto; transition: none; will-change: transform; }
 .cs-scroller.is-pinned + .cs-scroller-nav { display: none; }
 
 /* The two main images rise in on load (once both have loaded, the second a beat later) */

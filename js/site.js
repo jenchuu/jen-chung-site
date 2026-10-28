@@ -287,11 +287,15 @@
       step(e.deltaY > 0 ? 1 : -1);
     }, { passive: false });
 
-    // V1–V4 row on the page. Like the home page Archive: when it reaches the middle of the screen
-    // it stays put and slides sideways as you scroll down (one pixel down = one pixel sideways).
-    // With reduced motion or on very short screens it's a row you swipe, with ← → under it.
+    // V1–V4 row on the page. Like the home page Archive: the text just above it, the row and the
+    // text just below it stay put together (centered on screen) while the row slides sideways as you
+    // scroll down (one pixel down = one pixel sideways). On a short screen, text that doesn't fit is
+    // left out of that block. With reduced motion or on very short screens it's a row you swipe,
+    // with ← → under it.
     cs.querySelectorAll('.cs-scroller').forEach((row) => {
       const figure = row.closest('figure');
+      const sib = (el) => (el && el.matches('.cs-text') ? el : null);
+      const above = sib(figure.previousElementSibling), below = sib(figure.nextElementSibling);
       const nav = document.createElement('div');
       nav.className = 'cs-scroller-nav';
       nav.innerHTML = `<button type="button" aria-label="Previous exploration">${ARROW('M12.5 4L6.5 10L12.5 16')}</button><button type="button" aria-label="Next exploration">${ARROW('M7.5 4L13.5 10L7.5 16')}</button>`;
@@ -299,8 +303,9 @@
       const [prev, next] = nav.querySelectorAll('button');
       const slide = () => row.firstElementChild.getBoundingClientRect().width + 16;
       const pin = Object.assign(document.createElement('div'), { className: 'cs-scroll-pin' });
+      const block = Object.assign(document.createElement('div'), { className: 'cs-scroll-block' });
       const canPin = () => innerHeight >= 500 && !matchMedia('(prefers-reduced-motion: reduce)').matches;
-      let pinned = null, shift = 0, stickTop = 0, raf = 0, lastW = 0;
+      let pinned = false, shift = 0, stickTop = 0, raf = 0, lastW = 0;
       function sync() {                                          // swipe mode: buttons + height
         if (pinned) return;
         prev.disabled = row.scrollLeft < 4;
@@ -309,23 +314,39 @@
         const i = next.disabled ? row.children.length - 1 : Math.round(row.scrollLeft / slide());
         row.style.height = `${row.children[Math.min(i, row.children.length - 1)].offsetHeight}px`;
       }
+      function unpin() {
+        if (pin.isConnected) { pin.before(...block.children); pin.remove(); }
+        row.classList.remove('is-pinned'); row.style.transform = ''; block.style.top = '';
+        pinned = false;
+      }
       function layout() {
-        const want = canPin();
-        if (want !== pinned) {
-          pinned = want;
-          row.classList.toggle('is-pinned', pinned);
-          if (pinned) { figure.before(pin); pin.append(figure); row.scrollLeft = 0; row.style.height = ''; }
-          else if (pin.isConnected) { pin.before(figure); pin.remove(); row.style.transform = ''; figure.style.top = ''; }
-        }
+        const y = scrollY;
+        unpin();
         lastW = row.clientWidth;
-        if (pinned) {
-          const last = row.lastElementChild;
-          shift = Math.max(0, Math.ceil(last.offsetLeft + last.offsetWidth - row.clientWidth));
-          stickTop = Math.max(16, (innerHeight - figure.offsetHeight) / 2);   // centered on screen
-          figure.style.top = `${stickTop}px`;
-          pin.style.height = `${figure.offsetHeight + shift}px`;
-          update();
-        } else sync();
+        if (!canPin()) { sync(); return; }
+        pinned = true;
+        row.classList.add('is-pinned'); row.scrollLeft = 0; row.style.height = '';
+        // the row first, then the text above, then the text below, as long as they fit the screen
+        const vh = document.documentElement.clientHeight || innerHeight;   // (steadier than innerHeight while a phone page loads)
+        const GAP = 40, room = vh - 48;
+        const parts = [figure];
+        let h = figure.offsetHeight;
+        for (const [el, add] of [[above, (e) => parts.unshift(e)], [below, (e) => parts.push(e)]]) {
+          if (el && h + GAP + el.offsetHeight <= room) { add(el); h += GAP + el.offsetHeight; }
+        }
+        parts[0].before(pin); pin.append(block); block.append(...parts);
+        // (check again now they're together: drop the text below, then above, until it fits)
+        while (block.offsetHeight > room && block.children.length > 1) {
+          if (block.lastElementChild !== figure) pin.after(block.lastElementChild);
+          else pin.before(block.firstElementChild);
+        }
+        const last = row.lastElementChild;
+        shift = Math.max(0, Math.ceil(last.offsetLeft + last.offsetWidth - row.clientWidth));
+        stickTop = Math.max(24, (vh - block.offsetHeight) / 2);            // centered on screen
+        block.style.top = `${stickTop}px`;
+        pin.style.height = `${block.offsetHeight + shift}px`;
+        if (Math.abs(scrollY - y) > 1) scrollTo({ top: y, behavior: 'instant' });
+        update();
       }
       function update() {
         raf = 0;
@@ -337,10 +358,14 @@
       next.addEventListener('click', () => row.scrollBy({ left: slide(), behavior: smooth() }));
       row.addEventListener('scroll', sync, { passive: true });
       addEventListener('scroll', () => { if (pinned && !raf) raf = requestAnimationFrame(update); }, { passive: true });
-      addEventListener('resize', layout);
+      let resizeT = 0;
+      addEventListener('resize', () => { clearTimeout(resizeT); resizeT = setTimeout(layout, 100); });
       // (also re-measure if the column changes width, e.g. after the password unlocks the page)
       if ('ResizeObserver' in window) new ResizeObserver(() => { if (Math.abs(row.clientWidth - lastW) > 1) layout(); }).observe(row);
       layout();
+      // and once the fonts are in (text gets a little taller) and the page has loaded
+      if (document.fonts) document.fonts.ready.then(layout);
+      addEventListener('load', layout);
     });
 
     // Soft rise (the hidden starting state is in css/site.css, switched on by the page's head script)
