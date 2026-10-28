@@ -159,7 +159,7 @@
       e.preventDefault();
       if (await matches()) { unlock(); return; }
       gate.classList.remove('is-wrong'); void gate.offsetWidth; gate.classList.add('is-wrong');
-      error.textContent = 'Password incorrect. Try again.';
+      error.textContent = 'Incorrect password. Try again.';
       input.select();
     });
   }

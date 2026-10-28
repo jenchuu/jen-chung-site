@@ -348,7 +348,8 @@ a.card:focus-visible .card-cta .arrow { transform: translateX(4px); }
 
 /* Gated part (everything after the summary) */
 .cs-body .cs-lock { position: relative; margin-top: 80px; }
-.cs-is-locked .cs-lock { max-height: max(1100px, 100vh + 240px); overflow: clip; }  /* ✏️ how much blurred page shows */
+.cs-is-locked .cs-lock { max-height: max(1100px, 100vh + 240px); overflow-x: visible; overflow-y: clip; }  /* ✏️ how much blurred page shows */
+html.cs-is-locked { overflow-x: clip; }              /* the veil is full-width; never let it add sideways scroll */
 .cs-is-locked .cs-pager { display: none; }
 
 /* Previous / next */
@@ -392,17 +393,17 @@ a.card:focus-visible .card-cta .arrow { transform: translateX(4px); }
 }
 
 /* ---- Password (Figma: light 10208:46019, dark 10204:37010) --------------------------------
-   A veil of the page colour (95%, blurred) over the start of the hidden part. The form has no box:
+   A veil of the page colour (90%, blurred) over the start of the hidden part. The form has no box:
    it sits 91px into the veil and stays centered on screen while the veil scrolls by. */
 :root {
-  --gate-veil: rgba(252, 249, 239, .95);
+  --gate-veil: rgba(252, 249, 239, .9);
   --gate-line: #4e4e4e;
   --gate-error: #e52022;
   --gate-btn-text: #f2f2f2;
   --gate-btn-hover: #6432ad;
 }
 :root[data-theme="dark"] {
-  --gate-veil: rgba(34, 34, 34, .95);
+  --gate-veil: rgba(34, 34, 34, .9);
   --gate-line: #cccccc;
   --gate-error: #db4b4c;
   --gate-btn-text: #222222;
@@ -410,7 +411,7 @@ a.card:focus-visible .card-cta .arrow { transform: translateX(4px); }
 }
 .gate { display: none; }
 .cs-is-locked .gate {
-  display: block; position: absolute; inset: 0; z-index: 5;
+  display: block; position: absolute; inset: 0 calc(50% - 50vw); z-index: 5;   /* full width, so the blur fades past the column */
   background: var(--gate-veil);
   -webkit-backdrop-filter: blur(15px); backdrop-filter: blur(15px);
   transition: opacity .4s ease;
@@ -449,10 +450,8 @@ a.card:focus-visible .card-cta .arrow { transform: translateX(4px); }
   transition: background-color .2s ease;
 }
 .gate-btn:hover { background: var(--gate-btn-hover); }
-.gate-note { font-size: 14px; line-height: 19px; color: var(--cs-meta); }
-.gate-note a { color: inherit; text-decoration: none; }                  /* light: plain, as in Figma */
-:root[data-theme="dark"] .gate-note { font-style: italic; }
-:root[data-theme="dark"] .gate-note a { text-decoration: underline; text-underline-position: from-font; text-decoration-skip-ink: none; }
+.gate-note { font-style: italic; font-size: 14px; line-height: 19px; color: var(--cs-meta); }
+.gate-note a { color: inherit; text-decoration: underline; text-underline-position: from-font; text-decoration-skip-ink: none; }
 .gate-note a:hover { color: var(--ink); }
 .gate.is-wrong .gate-card { animation: gate-shake .35s ease; }
 @keyframes gate-shake { 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
