@@ -21,6 +21,7 @@
   --content: 1022px;        /* content column at 1280 (129px each side) */
   --gutter: 16px;
   --nav-h: 64px;
+  --radius-visual: 8px;    /* ✏️ corners on case study images and video */
   --hero-gap: 40px;         /* nav → intro sentence */
   --ease-out: cubic-bezier(.2, .8, .2, 1);
   --reveal-dur: 2s;         /* ✏️ how long each card's entrance takes */
@@ -289,6 +290,9 @@ a.card:active .card-cta, .cs-pager a:active { color: var(--purple-hover); }
 .cs :where(p, h1, h2, h3, figure, dl, dd, ul) { margin: 0; }
 .cs img { width: 100%; height: auto; }
 .cs-video { display: block; width: 100%; height: auto; background: var(--panel); }
+/* Rounded corners on every visual (a crop frame is rounded instead of the image inside it) */
+.cs :is(img:not(.crop img), .crop, .cs-video),
+.lb-item > :is(img, .crop) { border-radius: var(--radius-visual); }
 
 /* Title + main images */
 .cs-head { padding-top: 56px; }                      /* + the 64px nav = 120px, as in Figma */
