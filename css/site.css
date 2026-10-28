@@ -278,6 +278,7 @@ a.card:focus-visible .card-cta .arrow { transform: translateX(4px); }
 .cs { font-family: var(--font-sans); }
 .cs :where(p, h1, h2, h3, figure, dl, dd, ul) { margin: 0; }
 .cs img { width: 100%; height: auto; }
+.cs-video { display: block; width: 100%; height: auto; background: var(--panel); }
 
 /* Title + main images */
 .cs-head { padding-top: 56px; }                      /* + the 64px nav = 120px, as in Figma */

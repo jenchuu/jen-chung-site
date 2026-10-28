@@ -267,7 +267,10 @@
       <section class="cs-section">
         <h2 class="cs-h2">What shipped</h2>
         <div class="cs-main cs-main-tight">
-          <img src="assets/cube-boards/what-shipped.webp" alt="The Boards home page: a grid of board thumbnails" width="668" height="475" loading="lazy">
+          <!-- ✏️ Plays (muted, on a loop) while it's on screen and pauses when it isn't; if a visitor pauses it, it stays paused.
+               The controls give play/pause, scrubbing and fullscreen. Made from "Boards designs overview.mov" (1340×954, 2 Mbps). -->
+          <video class="cs-video" src="assets/cube-boards/what-shipped.mp4" poster="assets/cube-boards/what-shipped-poster.webp" width="1340" height="954"
+                 muted loop playsinline controls preload="metadata" aria-label="Walkthrough of the shipped Boards: the Boards home page, building a board, and its widgets"></video>
           <!-- ✏️ TODO: link and wording from Figma placeholder -->
           <p class="cs-text"><a href="#">{link to more info about Cube Boards}</a></p>
         </div>

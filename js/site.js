@@ -324,6 +324,21 @@
       if (document.readyState === 'complete') later(); else addEventListener('load', later, { once: true });
     }
 
+    // Videos: play (muted, looping) while at least 40% is on screen, pause when scrolled away.
+    // If the visitor pauses one themselves, it stays paused. Start loading a screen ahead.
+    cs.querySelectorAll('video.cs-video').forEach((v) => {
+      if (!('IntersectionObserver' in window)) return;
+      const autoplay = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+      let byUs = false, userPaused = false;
+      v.addEventListener('pause', () => { if (!byUs && !v.ended) userPaused = true; byUs = false; });
+      v.addEventListener('play', () => { userPaused = false; });
+      new IntersectionObserver(([e]) => { if (e.isIntersecting) v.preload = 'auto'; }, { rootMargin: '100% 0px' }).observe(v);
+      new IntersectionObserver(([e]) => {
+        if (e.isIntersecting && autoplay && !userPaused) v.play().catch(() => {});
+        else if (!e.isIntersecting && !v.paused) { byUs = true; v.pause(); }
+      }, { threshold: 0.4 }).observe(v);
+    });
+
     // Main images: rise in once both have loaded
     const heroImgs = [...cs.querySelectorAll('.cs-hero img')];
     if (heroImgs.length && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
