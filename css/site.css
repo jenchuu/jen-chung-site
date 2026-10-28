@@ -9,6 +9,7 @@
   --ink: #222222;           /* Charcoal */
   --ink-soft: #4e4e4e;      /* Grey */
   --purple: #7961c7;
+  --purple-hover: #6432ad;  /* ✏️ text buttons + gate button on hover / press */
   --khaki: #a5a08f;
   --panel: #d3c6e6;         /* card image background */
   --toggle-bg: #ffffff;
@@ -28,6 +29,7 @@
   --bg: #222222;
   --ink: #f2f2f2;
   --purple: #9e81ee;
+  --purple-hover: #b39cf2;  /* lighter here, so it keeps contrast on charcoal */
 }
 @media (min-width: 760px)  { :root { --gutter: 24px; } }
 @media (min-width: 1000px) { :root { --gutter: max(24px, calc((100vw - var(--content)) / 2)); } }
@@ -178,11 +180,19 @@ a.card:focus-visible .card-media img { transform: scale(1.06); }   /* slow zoom 
   padding: 8px;
   font-family: var(--font-sans); font-weight: 500; font-size: 16px; line-height: 1.37;
   color: var(--purple);
+  transition: color .15s ease;
 }
 .card-cta .arrow { display: inline-block; transition: transform .25s var(--ease-out); }
 .card-soon { color: var(--khaki); font-weight: 400; font-style: italic; }
 a.card:hover .card-cta .arrow,
 a.card:focus-visible .card-cta .arrow { transform: translateX(4px); }
+/* Text buttons darken on hover; on touch screens that's the brief pressed state instead
+   (hover only where there's a real pointer, so a tap doesn't leave it stuck dark) */
+@media (hover: hover) {
+  a.card:hover .card-cta, .cs-pager a:hover { color: var(--purple-hover); }
+}
+a.card:focus-visible .card-cta, .cs-pager a:focus-visible,
+a.card:active .card-cta, .cs-pager a:active { color: var(--purple-hover); }
 
 /* ---- Entrance: cards drop in from above as they scroll into view (archive: from the left) ----
    Only when JS has marked the page ready (so cards are never hidden without JS).
@@ -386,6 +396,7 @@ html.cs-is-locked { overflow-x: clip; }              /* the veil is full-width; 
   display: inline-flex; align-items: center; gap: 16px;
   font-family: var(--font-ui); font-weight: 600; font-size: 40px; line-height: 1.5;
   color: var(--purple); text-decoration: none;
+  transition: color .15s ease;
 }
 .cs-pager svg { width: 25px; height: 15px; flex: none; transition: transform .25s var(--ease-out); }
 .cs-pager-prev:hover svg { transform: translateX(-4px); }
@@ -473,14 +484,13 @@ html.lb-open { overflow: hidden; }
   --gate-line: #4e4e4e;
   --gate-error: #e52022;
   --gate-btn-text: #f2f2f2;
-  --gate-btn-hover: #6432ad;
+  --gate-btn-hover: var(--purple-hover);
 }
 :root[data-theme="dark"] {
   --gate-veil: rgba(34, 34, 34, .9);
   --gate-line: #cccccc;
   --gate-error: #db4b4c;
   --gate-btn-text: #222222;
-  --gate-btn-hover: #b39cf2;
 }
 .gate { display: none; }
 .cs-is-locked .gate {

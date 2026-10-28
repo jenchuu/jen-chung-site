@@ -4,6 +4,9 @@
 (() => {
   'use strict';
 
+  // iOS Safari only shows :active (the pressed state on text buttons) when the page listens for touches
+  document.addEventListener('touchstart', () => {}, { passive: true });
+
   /* ✏️ Settings ------------------------------------------------------------------- */
   // How the hero fits the screen:
   // 'crop'  = full width; on shorter screens the konbini gets shorter (crops sky/pavement)
