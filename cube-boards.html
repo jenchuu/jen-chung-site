@@ -15,6 +15,8 @@
     // Password gate: hide everything after the summary until it's been unlocked once on this device
     try { if (localStorage.getItem('jc-unlocked-cube-boards') !== '1') document.documentElement.classList.add('cs-is-locked'); }
     catch (e) { document.documentElement.classList.add('cs-is-locked'); }
+    // Soft rise: text and visuals start hidden and rise in as they scroll into view (js/site.js)
+    if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('cs-rise-ready');
   })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">

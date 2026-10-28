@@ -344,6 +344,15 @@ a.card:focus-visible .card-cta .arrow { transform: translateX(4px); }
 }
 .cs-hero.will-rise img + img.is-in { transition-delay: .15s; }
 
+/* Soft rise: titles, paragraphs, images and cards fade in and rise 16px as they scroll into view,
+   a beat apart when several arrive together (js/site.js adds .is-in). Same easing as the main images. */
+.cs-rise-ready :is(.cs-label, .cs-title, .cs-h2, .cs-meta > div, .cs-meta-title, .cs-text > *, .cs-main > :not(.cs-text, .cs-scroll-pin)):not(.is-in) {
+  opacity: 0; transform: translateY(16px);              /* ✏️ how far it rises */
+}
+.cs-rise-ready .is-in {
+  transition: opacity .6s ease var(--rise-delay, 0s), transform .9s cubic-bezier(.16, 1, .3, 1) var(--rise-delay, 0s);
+}
+
 /* % numbers flip through digits once when they come into view (js/site.js) */
 .cs-stat-num { font-variant-numeric: tabular-nums; }
 .cs-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: start; }

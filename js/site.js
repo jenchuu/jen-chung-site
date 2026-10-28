@@ -343,6 +343,25 @@
       layout();
     });
 
+    // Soft rise (the hidden starting state is in css/site.css, switched on by the page's head script)
+    if (root.classList.contains('cs-rise-ready')) {
+      const RISE_STEP_MS = 80;                                   // ✏️ gap between blocks that arrive together
+      let nextAt = 0;
+      const riseIO = new IntersectionObserver((entries) => {
+        entries.filter((e) => e.isIntersecting)
+          .sort((a, b) => (a.target.compareDocumentPosition(b.target) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1))
+          .forEach((e) => {
+            const now = performance.now(), at = Math.max(now, nextAt);
+            nextAt = at + RISE_STEP_MS;
+            e.target.style.setProperty('--rise-delay', `${Math.round(at - now)}ms`);
+            e.target.classList.add('is-in');
+            riseIO.unobserve(e.target);
+          });
+      }, { threshold: 0.15 });
+      cs.querySelectorAll('.cs-label, .cs-title, .cs-h2, .cs-meta > div, .cs-meta-title, .cs-text > *, .cs-main > :not(.cs-text, .cs-scroll-pin)')
+        .forEach((el) => riseIO.observe(el));
+    }
+
     // Main images: rise in once both have loaded
     const heroImgs = [...cs.querySelectorAll('.cs-hero img')];
     if (heroImgs.length && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
