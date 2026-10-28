@@ -164,6 +164,121 @@
     });
   }
 
+  /* ---- Enlarged visuals (case studies) ----------------------------------------- */
+  // Every image in a case study opens full screen. A side-by-side pair (.cs-pair) opens side by
+  // side; below 760px wide it shows one at a time with ← → (or swipe) to switch. The enlarged
+  // copy keeps each image's crop. ✕, a click on the veil, or Esc closes it.
+  const cs = document.querySelector('main.cs');
+  if (cs) {
+    const X_ICON = '<svg viewBox="0 0 32 32" width="32" height="32" aria-hidden="true"><path d="M24 8L16 16M16 16L8 24M16 16L8 8M16 16L24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    const ARROW = (d) => `<svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true"><path d="${d}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+    const lb = document.createElement('div');
+    lb.className = 'lb'; lb.hidden = true;
+    lb.setAttribute('role', 'dialog'); lb.setAttribute('aria-modal', 'true'); lb.setAttribute('aria-label', 'Enlarged image');
+    lb.innerHTML = `<div class="lb-wrap"><div class="lb-stage"></div>
+      <div class="lb-nav"><button type="button" class="lb-prev" aria-label="Previous image">${ARROW('M12.5 4L6.5 10L12.5 16')}</button><span class="lb-count" aria-live="polite"></span><button type="button" class="lb-next" aria-label="Next image">${ARROW('M7.5 4L13.5 10L7.5 16')}</button></div></div>
+      <button type="button" class="lb-x" aria-label="Close">${X_ICON}</button>`;
+    document.body.append(lb);
+    const stage = lb.querySelector('.lb-stage');
+    const count = lb.querySelector('.lb-count');
+    let items = [], index = 0, lastFocus = null;
+
+    // what each clickable visual is: the image (or its crop frame), plus its caption
+    const visualOf = (el) => (el.closest('.crop') || el);
+    const captionOf = (el) => {
+      const fig = el.closest('figure');
+      const cap = fig && [...fig.children].find((c) => c.tagName === 'FIGCAPTION');
+      return cap ? cap.textContent.trim() : '';
+    };
+    const visuals = [...new Set([...cs.querySelectorAll('img')].filter((img) => !img.closest('.gate')).map(visualOf))];
+    visuals.forEach((v) => {
+      const img = v.matches('img') ? v : v.querySelector('img');
+      v.classList.add('cs-zoom');
+      v.tabIndex = 0;
+      v.setAttribute('role', 'button');
+      v.setAttribute('aria-label', `Enlarge image: ${img.alt}`);
+    });
+    const groupFor = (v) => {
+      const pair = v.closest('.cs-pair');
+      const members = pair ? [...pair.children].map((c) => visualOf(c.matches('img') ? c : c.querySelector('img'))) : [v];
+      return { list: members.map((el) => ({ el, caption: captionOf(el) })), at: Math.max(0, members.indexOf(v)) };
+    };
+
+    const single = () => innerWidth < 760;
+    function render() {
+      const shown = single() ? [items[index]] : items;
+      lb.classList.toggle('is-single', single());
+      lb.classList.toggle('has-many', items.length > 1);
+      count.textContent = `${index + 1} / ${items.length}`;
+      const hasCap = shown.some((it) => it.caption);
+      const gap = 24;
+      const padX = single() ? 16 : 72, padY = single() ? 72 : 64;
+      const navH = single() && items.length > 1 ? 60 : 0;
+      const availW = innerWidth - padX * 2 - gap * (shown.length - 1);
+      const availH = innerHeight - padY * 2 - (hasCap ? 30 : 0) - navH;
+      const ratios = shown.map((it) => { const r = it.el.getBoundingClientRect(); return r.width / r.height || 1.4; });
+      const h = Math.min(availH, availW / ratios.reduce((a, b) => a + b, 0));
+      stage.replaceChildren(...shown.map((it, i) => {
+        const fig = document.createElement('figure');
+        fig.className = 'lb-item';
+        const copy = it.el.cloneNode(true);
+        copy.classList.remove('cs-zoom'); copy.removeAttribute('tabindex'); copy.removeAttribute('role'); copy.removeAttribute('aria-label');
+        (copy.matches('img') ? [copy] : [...copy.querySelectorAll('img')]).forEach((img) => { img.loading = 'eager'; });
+        copy.style.width = `${Math.round(h * ratios[i])}px`; copy.style.height = `${Math.round(h)}px`;
+        copy.style.aspectRatio = 'auto';
+        fig.append(copy);
+        if (it.caption) fig.append(Object.assign(document.createElement('figcaption'), { textContent: it.caption }));
+        return fig;
+      }));
+    }
+    function open(v) {
+      const g = groupFor(v);
+      items = g.list; index = g.at;
+      lastFocus = document.activeElement;
+      lb.hidden = false;
+      root.classList.add('lb-open');
+      render();
+      lb.querySelector('.lb-x').focus();
+    }
+    function close() {
+      lb.hidden = true;
+      root.classList.remove('lb-open');
+      stage.replaceChildren();
+      if (lastFocus) lastFocus.focus({ preventScroll: true });
+    }
+    const step = (d) => { if (items.length > 1 && single()) { index = (index + d + items.length) % items.length; render(); } };
+
+    cs.addEventListener('click', (e) => { const v = e.target.closest('.cs-zoom'); if (v) open(v); });
+    cs.addEventListener('keydown', (e) => {
+      const v = e.target.closest && e.target.closest('.cs-zoom');
+      if (v && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); open(v); }
+    });
+    lb.addEventListener('click', (e) => {
+      if (e.target.closest('.lb-prev')) step(-1);
+      else if (e.target.closest('.lb-next')) step(1);
+      else if (e.target.closest('.lb-x') || !e.target.closest('.lb-item, .lb-nav')) close();   // ✕ or the veil
+    });
+    lb.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') close();
+      else if (e.key === 'ArrowLeft') step(-1);
+      else if (e.key === 'ArrowRight') step(1);
+      else if (e.key === 'Tab') {                                // keep focus inside
+        const btns = [...lb.querySelectorAll('button')].filter((b) => b.offsetParent);
+        const first = btns[0], last = btns[btns.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    });
+    let touchX = null;
+    lb.addEventListener('touchstart', (e) => { touchX = e.touches[0].clientX; }, { passive: true });
+    lb.addEventListener('touchend', (e) => {
+      if (touchX == null) return;
+      const dx = e.changedTouches[0].clientX - touchX; touchX = null;
+      if (Math.abs(dx) > 50) step(dx < 0 ? 1 : -1);
+    });
+    addEventListener('resize', () => { if (!lb.hidden) render(); });
+  }
+
   /* ---- Konbini hero ------------------------------------------------------------- */
   // The hero is its own page (konbini/konbini-hero.html) shown in a frame. It talks to this
   // page with messages: theme, page width, frame height, case-study links and the ↓ scroll.

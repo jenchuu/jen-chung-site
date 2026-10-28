@@ -87,12 +87,12 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 :root[data-theme="dark"] .theme-toggle .is-light,
 :root:not([data-theme="dark"]) .theme-toggle .is-dark { display: none; }
 
+/* ☰ turns into the same ✕ as the case-study close buttons (they swap with a quick fade + turn) */
 .menu-btn { display: none; width: 32px; height: 32px; place-items: center; }
-.menu-btn svg { width: 28px; height: 28px; }
-.menu-btn .line { transition: transform .25s var(--ease-out), opacity .2s ease; transform-origin: center; }
-.nav.is-open .menu-btn .l1 { transform: translateY(6px) rotate(45deg); }
-.nav.is-open .menu-btn .l2 { opacity: 0; }
-.nav.is-open .menu-btn .l3 { transform: translateY(-6px) rotate(-45deg); }
+.menu-btn svg { grid-area: 1 / 1; transition: opacity .2s ease, transform .25s var(--ease-out); }
+.menu-close { opacity: 0; transform: rotate(-45deg); }
+.nav.is-open .menu-open { opacity: 0; transform: rotate(45deg); }
+.nav.is-open .menu-close { opacity: 1; transform: none; }
 .nav-tools { display: flex; align-items: center; gap: 16px; }
 
 @media (max-width: 759px) {
@@ -258,7 +258,7 @@ a.card:focus-visible .card-cta .arrow { transform: translateX(4px); }
    Each section is a title (left, pinned while its section scrolls by) and a 668px column. */
 :root {
   --cs-title: #6432ad;      /* ✏️ section titles (The problem, Solving time shortcuts…) */
-  --cs-heading: #9e81ee;    /* stat numbers, use-case card titles */
+  --cs-heading: #6432ad;    /* ✏️ stat numbers, use-case card titles (same as section titles) */
   --cs-meta: #8a8578;       /* ROLE / SUMMARY labels, captions, chip borders */
   --rule: #cccccc;          /* section dividers */
   --error: #db4b4c;         /* the red "look here" box on screenshots */
@@ -383,14 +383,59 @@ html.cs-is-locked { overflow-x: clip; }              /* the veil is full-width; 
   .cs-section { grid-template-columns: 1fr; row-gap: 24px; padding-top: 56px; }
   .cs-section + .cs-section { margin-top: 56px; }
   .cs-h2 { position: static; font-size: 40px; }
-  .cs-stats, .cs-cards { flex-direction: column; gap: 16px; }
+  /* Role + Timeline on the left, Platform + Team on the right */
+  .cs-meta { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: auto auto; grid-auto-flow: column; gap: 32px 24px; }
+  .cs-stats { gap: 24px; }                         /* % cards + use-case cards stay side by side; they stack on phones */
   .cs-pager { margin-top: 80px; }
   .cs-pager > div { padding-block: 48px; }
   .cs-pager a { font-size: 24px; }
 }
 @media (max-width: 559px) {
   .cs-pair { grid-template-columns: 1fr; }
+  .cs-meta { display: flex; }
+  .cs-stats, .cs-cards { flex-direction: column; gap: 16px; }
 }
+
+/* ---- Enlarged visuals ----------------------------------------------------------------
+   Click any case-study image to see it full screen over a veil of the page colour. Side-by-side
+   pairs open side by side; on smaller screens they open one at a time with ← → to switch.
+   ✕ (top right), the veil or Esc goes back to the case study. */
+.cs-zoom { cursor: zoom-in; }
+.cs-zoom:focus-visible { outline: 2px solid var(--purple); outline-offset: 4px; }
+.lb {
+  position: fixed; inset: 0; z-index: 90;
+  display: grid; place-items: center;
+  background: var(--lb-veil);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+  animation: lb-in .25s ease;
+}
+.lb[hidden] { display: none; }
+:root { --lb-veil: rgba(252, 249, 239, .92); }
+:root[data-theme="dark"] { --lb-veil: rgba(34, 34, 34, .92); }
+@keyframes lb-in { from { opacity: 0; } }
+.lb-stage { display: flex; align-items: flex-start; justify-content: center; gap: 24px; animation: lb-grow .3s var(--ease-out); }
+@keyframes lb-grow { from { transform: scale(.97); } }
+.lb-item { display: flex; flex-direction: column; gap: 8px; margin: 0; }
+.lb-item > .crop, .lb-item > img { display: block; box-shadow: 0 8px 40px rgba(0, 0, 0, .12); background: var(--bg); }
+.lb-item > img { object-fit: cover; }
+.lb-item .crop img { position: absolute; max-width: none; }
+.lb-item figcaption { font-family: var(--font-sans); font-size: 16px; line-height: 1.37; color: var(--cs-meta); }
+.lb-x {
+  position: fixed; top: 16px; right: 16px;
+  width: 44px; height: 44px; display: grid; place-items: center;
+  color: var(--ink); border-radius: 8px;
+}
+.lb-x svg { width: 32px; height: 32px; }
+.lb-x:hover { color: var(--purple); }
+.lb-nav { display: none; align-items: center; justify-content: center; gap: 24px; margin-top: 8px; font-family: var(--font-sans); font-size: 14px; color: var(--cs-meta); }
+.lb.is-single.has-many .lb-nav { display: flex; }
+.lb-nav button { width: 44px; height: 44px; display: grid; place-items: center; color: var(--ink); border-radius: 50%; border: 1px solid var(--rule); }
+.lb-nav button:hover { color: var(--purple); border-color: var(--purple); }
+.lb-nav svg { width: 20px; height: 20px; }
+.lb-x:focus-visible, .lb-nav button:focus-visible { outline: 2px solid var(--purple); outline-offset: 2px; }
+.lb-wrap { display: flex; flex-direction: column; align-items: center; }
+html.lb-open { overflow: hidden; }
+@media (prefers-reduced-motion: reduce) { .lb, .lb-stage { animation: none; } }
 
 /* ---- Password (Figma: light 10208:46019, dark 10204:37010) --------------------------------
    A veil of the page colour (90%, blurred) over the start of the hidden part. The form has no box:
