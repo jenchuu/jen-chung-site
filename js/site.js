@@ -111,6 +111,86 @@
     layout();
   }
 
+  /* ---- Case study password gate --------------------------------------------------- */
+  // On a case study with data-gate, everything after the summary stays hidden (the page's
+  // head script adds .cs-is-locked). Scrolling past the summary opens the password modal; the
+  // right password reveals the rest and is remembered on this device. The page only stores
+  // the password's SHA-256, so the password itself isn't readable in the source.
+  // (This keeps casual visitors out; it isn't real security. Anyone who reads the source can
+  // still see the hidden text and images.)
+  const gated = document.querySelector('main[data-gate]');
+  const gate = document.getElementById('gate');
+  if (gated && gate) {
+    const KEY = `jc-unlocked-${gated.dataset.gate}`;
+    const sentinel = document.querySelector('.cs-gate-sentinel');
+    const form = document.getElementById('gate-form');
+    const input = document.getElementById('gate-input');
+    const error = document.getElementById('gate-error');
+    const locked = () => root.classList.contains('cs-is-locked');
+    let armed = true;          // after closing, the modal waits until you scroll back up and past again
+    let lastFocus = null;
+
+    const sha256 = async (text) => {
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+      return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, '0')).join('');
+    };
+    function openGate() {
+      if (!gate.hidden) return;
+      lastFocus = document.activeElement;
+      gate.hidden = false;
+      root.classList.add('gate-open');
+      input.value = ''; error.textContent = ''; gate.classList.remove('is-wrong');
+      setTimeout(() => input.focus(), 50);
+    }
+    function closeGate() {
+      gate.hidden = true;
+      root.classList.remove('gate-open');
+      armed = false;
+      if (lastFocus) lastFocus.focus({ preventScroll: true });
+    }
+    function check() {
+      if (!locked() || !gate.hidden || !sentinel) return;
+      const top = sentinel.getBoundingClientRect().top;
+      if (top > innerHeight) armed = true;                      // summary's end is below the screen again
+      // (scrollY > 0: they scrolled. On a screen tall enough to show the whole summary there's
+      // nothing to scroll, so a scroll attempt — wheel or swipe — counts too.)
+      else if (armed && top < innerHeight - 40 && (scrollY > 0 || tried)) openGate();
+    }
+    let tried = false;
+    const attempt = () => { if (document.documentElement.scrollHeight <= innerHeight + 1) { tried = true; check(); } };
+    addEventListener('wheel', attempt, { passive: true });
+    addEventListener('touchmove', attempt, { passive: true });
+    addEventListener('scroll', check, { passive: true });
+    addEventListener('resize', check);
+
+    gate.addEventListener('click', (e) => { if (e.target.closest('[data-gate-close]')) closeGate(); });
+    gate.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeGate();
+      if (e.key === 'Tab') {                                     // keep focus inside the modal
+        const items = [...gate.querySelectorAll('button, input, a[href]')];
+        const first = items[0], last = items[items.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    });
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      let ok = false;
+      try { ok = (await sha256(input.value.trim())) === gated.dataset.gateHash; } catch (err) {}
+      if (!ok) {
+        gate.classList.remove('is-wrong'); void gate.offsetWidth; gate.classList.add('is-wrong');
+        error.textContent = 'That password isn’t right. Try again?';
+        input.select();
+        return;
+      }
+      try { localStorage.setItem(KEY, '1'); } catch (err) {}
+      root.classList.remove('cs-is-locked');
+      gate.hidden = true;
+      root.classList.remove('gate-open');
+      document.getElementById('cs-gated').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    });
+  }
+
   /* ---- Konbini hero ------------------------------------------------------------- */
   // The hero is its own page (konbini/konbini-hero.html) shown in a frame. It talks to this
   // page with messages: theme, page width, frame height, case-study links and the ↓ scroll.

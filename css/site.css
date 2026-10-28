@@ -257,7 +257,8 @@ a.card:focus-visible .card-cta .arrow { transform: translateX(4px); }
    Figma "Portfolio designs 2026" › Cube Boards case study (light 9897:8171, dark 9702:17058).
    Each section is a title (left, pinned while its section scrolls by) and a 668px column. */
 :root {
-  --cs-heading: #9e81ee;    /* section titles, stat numbers */
+  --cs-title: #6432ad;      /* ✏️ section titles (The problem, Solving time shortcuts…) */
+  --cs-heading: #9e81ee;    /* stat numbers, use-case card titles */
   --cs-meta: #8a8578;       /* ROLE / SUMMARY labels, captions, chip borders */
   --rule: #cccccc;          /* section dividers */
   --error: #db4b4c;         /* the red "look here" box on screenshots */
@@ -265,6 +266,7 @@ a.card:focus-visible .card-cta .arrow { transform: translateX(4px); }
   --cs-pin-top: 24px;       /* ✏️ how far below the top of the screen a pinned title sits */
 }
 :root[data-theme="dark"] {
+  --cs-title: #d4b5ff;      /* #6432ad is too dark to read on charcoal */
   --cs-heading: #d4b5ff;
   --cs-meta: #a5a08f;
   --rule: #4e4e4e;
@@ -282,7 +284,7 @@ a.card:focus-visible .card-cta .arrow { transform: translateX(4px); }
 .cs-hero img { aspect-ratio: 503 / 358; object-fit: cover; }
 
 /* Sections */
-.cs-body { padding-top: 96px; }
+.cs-body { padding-top: 80px; }
 .cs-section {
   display: grid; grid-template-columns: 314px minmax(0, 1fr); column-gap: 40px; align-items: start;
   padding-top: 80px;
@@ -292,7 +294,7 @@ a.card:focus-visible .card-cta .arrow { transform: translateX(4px); }
 .cs-h2 {
   position: sticky; top: var(--cs-pin-top);
   font-family: var(--font-serif); font-weight: 600; font-size: 56px; line-height: 1.3;
-  color: var(--cs-heading);
+  color: var(--cs-title);
 }
 .cs-main { display: flex; flex-direction: column; gap: 40px; min-width: 0; }
 .cs-main-tight { gap: 16px; }
@@ -330,6 +332,7 @@ a.card:focus-visible .card-cta .arrow { transform: translateX(4px); }
 
 /* Outlined cards: stats and use cases */
 .cs-stats, .cs-cards { display: flex; gap: 40px; }
+.cs-cards { gap: 24px; }
 .cs-stat, .cs-card {
   flex: 1 1 0; min-width: 0;
   display: flex; flex-direction: column; gap: 8px;
@@ -341,7 +344,12 @@ a.card:focus-visible .card-cta .arrow { transform: translateX(4px); }
 .cs-stat-num { font-family: var(--font-ui); font-weight: 600; font-size: 24px; line-height: 1.5; color: var(--cs-heading); }
 .cs-card h3 { font-family: var(--font-ui); font-weight: 600; font-size: 18px; line-height: 1.5; color: var(--cs-heading); }
 .chips { display: flex; gap: 8px; padding: 0; list-style: none; }   /* one row, as in Figma (wraps on smaller screens) */
-.chips li { padding: 4px 16px; border: 1px solid var(--cs-meta); border-radius: 80px; font-size: 14px; line-height: 1.37; white-space: nowrap; }
+.chips li { padding: 4px 10px; border: 1px solid var(--cs-meta); border-radius: 80px; font-size: 14px; line-height: 1.37; white-space: nowrap; }
+
+/* Gated part (everything after the summary) */
+.cs-body .cs-gated { margin-top: 80px; }
+.cs-is-locked .cs-gated { display: none; }
+.cs-is-locked .cs { padding-bottom: 40px; }          /* summary → footer, as in the locked Figma frame */
 
 /* Previous / next */
 .cs-pager { margin-top: 132px; }
@@ -382,3 +390,57 @@ a.card:focus-visible .card-cta .arrow { transform: translateX(4px); }
 @media (max-width: 559px) {
   .cs-pair { grid-template-columns: 1fr; }
 }
+
+/* ---- Password modal (Figma 10162:34459) ------------------------------------------------
+   Same dark modal in both themes, over a blurred 90% charcoal overlay. */
+.gate { position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; padding: 16px; }
+.gate[hidden] { display: none; }
+.gate-overlay { position: absolute; inset: 0; background: rgba(34, 34, 34, .9); -webkit-backdrop-filter: blur(2.5px); backdrop-filter: blur(2.5px); }
+.gate-modal {
+  position: relative;
+  width: min(450px, 100%);
+  display: flex; flex-direction: column; gap: 16px;
+  padding: 24px 40px 48px;
+  border-radius: 8px;
+  background: linear-gradient(to bottom, #333333, #2b2b2b 50%);
+  color: #f2f2f2;
+  font-family: var(--font-sans);
+  animation: gate-in .35s var(--ease-out);
+}
+@keyframes gate-in { from { opacity: 0; transform: translateY(12px); } }
+.gate-x { align-self: flex-end; width: 32px; height: 32px; color: #4e4e4e; border-radius: 6px; transition: color .2s ease; }
+.gate-x:hover { color: #a5a08f; }
+.gate-x svg { width: 32px; height: 32px; }
+.gate-title { margin: 0; font-family: var(--font-serif); font-weight: 600; font-size: 40px; line-height: 1.3; }
+.gate-desc { margin: 0; font-size: 16px; line-height: 22px; }
+.gate-form { display: flex; flex-direction: column; gap: 16px; }
+.gate-field { display: flex; flex-direction: column; gap: 6px; font-size: 14px; line-height: 19px; color: #a5a08f; }
+.gate-field input {
+  width: 100%; padding: 10px 0;
+  border: 0; border-bottom: 1px solid #cccccc; border-radius: 0;
+  background: transparent; color: #f2f2f2;
+  font: 16px/22px var(--font-sans);
+  outline: none;
+  transition: border-color .2s ease;
+}
+.gate-field input:focus { border-bottom-color: #9e81ee; }
+.gate.is-wrong .gate-field input { border-bottom-color: var(--error); }
+.gate-error { margin: -8px 0 0; min-height: 0; font-size: 14px; line-height: 19px; color: #ff8a8b; }
+.gate-error:empty { display: none; }
+.gate-btn {
+  align-self: flex-start;
+  padding: 13px 32px; border-radius: 40px;
+  background: #9e81ee; color: #222222;
+  font-family: var(--font-sans); font-weight: 500; font-size: 16px; line-height: 1.37;
+  transition: background-color .2s ease;
+}
+.gate-btn:hover { background: #b39cf2; }
+.gate-btn:focus-visible, .gate-x:focus-visible { outline-color: #f2f2f2; }
+.gate-note { margin: 0; font-style: italic; font-size: 14px; line-height: 19px; color: #a5a08f; }
+.gate-note a { text-underline-position: from-font; text-decoration-skip-ink: none; }
+.gate-note a:hover { color: #f2f2f2; }
+.gate.is-wrong .gate-modal { animation: gate-shake .35s ease; }
+@keyframes gate-shake { 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+html.gate-open { overflow: hidden; }
+@media (max-width: 559px) { .gate-modal { padding: 16px 24px 32px; } .gate-title { font-size: 32px; } }
+@media (prefers-reduced-motion: reduce) { .gate-modal, .gate.is-wrong .gate-modal { animation: none; } }

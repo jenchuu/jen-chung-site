@@ -12,6 +12,9 @@
     var t = 'light';
     try { t = localStorage.getItem('jc-theme') || t; } catch (e) {}
     document.documentElement.dataset.theme = t === 'dark' ? 'dark' : 'light';
+    // Password gate: hide everything after the summary until it's been unlocked once on this device
+    try { if (localStorage.getItem('jc-unlocked-cube-boards') !== '1') document.documentElement.classList.add('cs-is-locked'); }
+    catch (e) { document.documentElement.classList.add('cs-is-locked'); }
   })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -48,7 +51,10 @@
 
 <!-- Design source: Figma "Portfolio designs 2026" › Cube Boards case study (light 9897:8171, dark 9702:17058).
      ✏️ Images live in assets/cube-boards/. Each section's title (left) stays pinned while you scroll its section. -->
-<main class="cs" id="case-study">
+<!-- ✏️ Password gate: everything inside .cs-gated stays hidden until the visitor enters the password.
+     data-gate-hash is the SHA-256 of the password (so the password itself isn't in the page). To change it,
+     run in Terminal:  printf '%s' 'NewPassword' | shasum -a 256   and paste the result here. -->
+<main class="cs" id="case-study" data-gate="cube-boards" data-gate-hash="cca13fae17f94d28e2c2e93363e945c2908c99a50e78844ddb1de5e239f8bec9">
 
   <!-- ===== Title + the two main images ===== -->
   <header class="cs-head wrap">
@@ -87,6 +93,10 @@
           </div>
         </div>
       </section>
+      <div class="cs-gate-sentinel" aria-hidden="true"></div>
+
+      <!-- ===== Everything below is behind the password ===== -->
+      <div class="cs-gated" id="cs-gated">
 
       <!-- ===== The problem ===== -->
       <section class="cs-section">
@@ -288,19 +298,40 @@
         </div>
       </section>
 
+      </div><!-- /.cs-gated -->
     </div>
   </div>
 
-  <!-- ===== Previous / next case study ===== -->
-  <nav class="cs-pager wrap" aria-label="More case studies">
+  <!-- ===== Next case study ===== -->
+  <!-- (Boards is the first case study, so there's no "previous" link; later ones get ← previous on the left) -->
+  <nav class="cs-pager wrap cs-gated" aria-label="More case studies">
     <div>
-      <!-- ✏️ TODO: which case study comes before Boards? ("Case Study" is the Figma placeholder) -->
-      <a class="cs-pager-prev" href="index.html#work"><svg viewBox="0 0 25 14.73" width="25" height="15" aria-hidden="true"><path fill="currentColor" d="M1 7.36396V8.36396H25V7.36396V6.36396H1V7.36396ZM0.292893 6.65685C-0.0976311 7.04738 -0.0976311 7.68054 0.292893 8.07107L6.65685 14.435C7.04738 14.8256 7.68054 14.8256 8.07107 14.435C8.46159 14.0445 8.46159 13.4113 8.07107 13.0208L2.41421 7.36396L8.07107 1.70711C8.46159 1.31658 8.46159 0.683418 8.07107 0.292893C7.68054 -0.097631 7.04738 -0.097631 6.65685 0.292893L0.292893 6.65685Z"/></svg>Case Study</a>
       <!-- still the live Wix page until Parts Management is rebuilt here -->
       <a class="cs-pager-next" href="https://www.jen-chung.com/parts-management">Parts Management<svg viewBox="0 0 25 14.73" width="25" height="15" aria-hidden="true"><path fill="currentColor" transform="matrix(-1 0 0 1 25 0)" d="M1 7.36396V8.36396H25V7.36396V6.36396H1V7.36396ZM0.292893 6.65685C-0.0976311 7.04738 -0.0976311 7.68054 0.292893 8.07107L6.65685 14.435C7.04738 14.8256 7.68054 14.8256 8.07107 14.435C8.46159 14.0445 8.46159 13.4113 8.07107 13.0208L2.41421 7.36396L8.07107 1.70711C8.46159 1.31658 8.46159 0.683418 8.07107 0.292893C7.68054 -0.097631 7.04738 -0.097631 6.65685 0.292893L0.292893 6.65685Z"/></svg></a>
     </div>
   </nav>
 </main>
+
+<!-- ===== Password modal (Figma 10162:34459). Opens when the visitor scrolls past the summary. ===== -->
+<div class="gate" id="gate" hidden>
+  <div class="gate-overlay" data-gate-close></div>
+  <div class="gate-modal" role="dialog" aria-modal="true" aria-labelledby="gate-title" aria-describedby="gate-desc">
+    <button class="gate-x" type="button" aria-label="Close" data-gate-close>
+      <svg viewBox="0 0 32 32" width="32" height="32" aria-hidden="true"><path d="M24 8L16 16M16 16L8 24M16 16L8 8M16 16L24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <h2 class="gate-title" id="gate-title">Enter password</h2>
+    <p class="gate-desc" id="gate-desc">The rest of this case study is confidential.</p>
+    <form class="gate-form" id="gate-form">
+      <label class="gate-field">
+        <span>Password</span>
+        <input type="password" id="gate-input" name="password" autocomplete="current-password" required aria-describedby="gate-error">
+      </label>
+      <p class="gate-error" id="gate-error" role="alert"></p>
+      <button class="gate-btn" type="submit">Enter</button>
+    </form>
+    <p class="gate-note">You can find it on my resume or reach out to me at <a href="mailto:hello@jen-chung.com">hello@jen-chung.com</a></p>
+  </div>
+</div>
 
 <!-- ===== Footer ===== -->
 <footer class="footer" id="connect">
