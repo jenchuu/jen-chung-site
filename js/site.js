@@ -48,6 +48,31 @@
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && nav.classList.contains('is-open')) { setMenu(false); menuBtn.focus(); } });
   document.addEventListener('click', (e) => { if (nav.classList.contains('is-open') && !nav.contains(e.target)) setMenu(false); });
 
+  /* ---- Case studies: nav hides while scrolling down ---------------------------- */
+  // Scrolling down fades the nav away; scrolling up brings it back, and so does reaching the end
+  // of the case study (the next case study links) or tabbing into the nav. Never while the menu is open.
+  if (nav.classList.contains('nav-auto')) {
+    const NAV_SHOW_AFTER = 8;    // ✏️ px of scrolling up before it comes back (so a tiny jiggle doesn't flicker it)
+    const pager = document.querySelector('.cs-pager');
+    const footer = document.querySelector('.footer');
+    const setHidden = (h) => root.classList.toggle('nav-hidden', h);
+    const atEnd = () => {
+      const end = pager && pager.offsetParent ? pager : footer;   // the pager is hidden while the case study is locked
+      return (end && end.getBoundingClientRect().top < innerHeight) || innerHeight + scrollY >= root.scrollHeight - 2;
+    };
+    let lastY = scrollY, upBy = 0, queued = false;
+    const update = () => {
+      queued = false;
+      const y = scrollY, dy = y - lastY;
+      lastY = y;
+      if (y <= nav.offsetHeight || atEnd() || nav.classList.contains('is-open')) { upBy = 0; setHidden(false); }
+      else if (dy > 0) { upBy = 0; setHidden(true); }
+      else if (dy < 0 && (upBy -= dy) > NAV_SHOW_AFTER) setHidden(false);
+    };
+    addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(update); } }, { passive: true });
+    nav.addEventListener('focusin', () => setHidden(false));
+  }
+
   /* ---- Card entrance ------------------------------------------------------------ */
   // Each card reveals once, when a fifth of it is on screen — whether visitors scroll,
   // click Work in the nav, or click the ↓ in the konbini. Cards always come in reading
