@@ -21,7 +21,7 @@
   --text-heading: #6432ad;               /* case study section titles, stat numbers, card titles */
   --accent-default: #7961c7;
   --accent-hover: #6432ad;               /* text buttons + password button on hover / press */
-  --border-card: linear-gradient(to left, #d4b5ff, #7961c7 33%, #d4b5ff 67%);   /* dark mode's gradient, inverted */
+  --border-card: linear-gradient(#7961c7, #7961c7);   /* solid for now; an image, so it can become a gradient */
   --border-rule: #cccccc;
   --border-input: #4e4e4e;
   --status-error: #d62022;               /* 4.9:1 on the page */

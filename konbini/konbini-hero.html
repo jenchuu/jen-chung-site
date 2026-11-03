@@ -150,7 +150,7 @@ img { display: block; }
   position: absolute; left: 50%; top: calc(100% + 2px);
   transform: translateX(var(--aside-nudge, 0px)) rotate(-6deg); transform-origin: left top;
   font-size: .75em; line-height: 1.31;      /* 24px next to the 32px sentence */
-  color: #8a8578; white-space: nowrap;      /* light mode: 3.5:1 on #FCF9EF */
+  color: #75705e; white-space: nowrap;      /* light mode: 4.7:1 on #FCF9EF (site text/secondary) */
   pointer-events: none;
 }
 :root[data-theme="dark"] .aside { color: #a5a08f; }         /* dark mode: 6.1:1 on #222 */
@@ -729,7 +729,7 @@ const CONFIG = {
     { cell: 'cube',        title: 'Cube Boards',             x: 108.58, y: 480.83, w: 161.851, h: 121.389, tag: [38.42, 45.17], z: 3 },
     { cell: 'switchchord', title: 'Switchchord Splits',      x: 271.3,  y: 493.92, w: 164.126, h: 101.082, tag: [37.7, 16.08], twoLine: true, z: 2 },
   ];
-  const SHELF_TAG = { text: 'Experience', cx: 269.5, y: 583 };
+  const SHELF_TAG = { text: 'Work', cx: 269.5, y: 583 };
   const FW = 540, FH = 810;
 
   const SEASONS = ['spring', 'summer', 'fall', 'winter'];
@@ -1037,7 +1037,11 @@ const CONFIG = {
     const hideLater = () => { clearTimeout(asideTimer); asideTimer = setTimeout(() => { if (!asideHover) typeTo(0, 22); }, 1500); };
     people.addEventListener('pointerenter', (e) => { if (e.pointerType !== 'mouse') return; asideHover = true; show(); });
     people.addEventListener('pointerleave', (e) => { if (e.pointerType !== 'mouse') return; asideHover = false; hideLater(); });
-    people.addEventListener('click', (e) => { if (e.pointerType === 'mouse') return; show(); hideLater(); });
+    // A tap shows it too. Go by the pointerdown's type: iPhone Safari reports the click after a
+    // tap as a "mouse" click, so the click's own pointerType can't be trusted.
+    let downType = '';
+    people.addEventListener('pointerdown', (e) => { downType = e.pointerType; });
+    people.addEventListener('click', () => { const t = downType; downType = ''; if (t === 'mouse') return; show(); hideLater(); });
     people.addEventListener('focus', show);
     people.addEventListener('blur', hideLater);
   }
