@@ -229,7 +229,7 @@
       const cap = fig && [...fig.children].find((c) => c.tagName === 'FIGCAPTION');
       return cap ? cap.textContent.trim() : '';
     };
-    const visuals = [...new Set([...cs.querySelectorAll('img')].filter((img) => !img.closest('.gate')).map(visualOf))];
+    const visuals = [...new Set([...cs.querySelectorAll('img')].filter((img) => !img.closest('.gate, .theme-toggle')).map(visualOf))];
     visuals.forEach((v) => {
       const img = v.matches('img') ? v : v.querySelector('img');
       v.classList.add('cs-zoom');
@@ -439,6 +439,38 @@
     addEventListener('resize', () => { if (!lb.hidden) render(); });
   }
 
+  /* ---- Design system page: color swatches ---------------------------------------- */
+  // Each .ds-color row gets a light and a dark swatch drawn with the token itself, the value read
+  // back from css/site.css, and for text colors the contrast ratio (WCAG AA is 4.5:1).
+  const dsColors = document.getElementById('ds-colors');
+  if (dsColors) {
+    const rgbOf = (str) => str.match(/[\d.]+/g).slice(0, 3).map(Number);
+    const lum = (rgb) => rgb.map((v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; })
+      .reduce((sum, v, i) => sum + v * [0.2126, 0.7152, 0.0722][i], 0);
+    const ratio = (a, b) => { const [hi, lo] = [lum(a), lum(b)].sort((m, n) => n - m); return (hi + 0.05) / (lo + 0.05); };
+    const pretty = (raw) => {
+      raw = raw.trim();
+      const veil = raw.match(/rgb\((\d+) (\d+) (\d+) \/ ([\d.]+)\)/);
+      if (veil) return '#' + veil.slice(1, 4).map((n) => (+n).toString(16).padStart(2, '0')).join('').toUpperCase() + ` at ${Math.round(veil[4] * 100)}%`;
+      const hexes = (raw.match(/#[0-9a-f]{6}/gi) || []).map((h) => h.toUpperCase());
+      return hexes.length ? hexes.filter((h, i) => h !== hexes[i - 1]).join(' → ') : raw;   // a gradient lists its stops
+    };
+    dsColors.querySelectorAll('.ds-color').forEach((row) => {
+      const token = row.dataset.token, isText = 'text' in row.dataset, on = row.dataset.on || 'bg-page';
+      const chip = isText ? `color:var(--${token});background:var(--${on})` : `background:var(--${token})`;
+      row.innerHTML = `<p class="ds-token"><b>${token.replace('-', '/')}</b><span>${row.dataset.use}</span></p>` + ['light', 'dark'].map((mode) =>
+        `<div class="ds-swatch" data-theme="${mode}"><span class="ds-chip-color" style="${chip}">${isText ? 'Aa' : ''}</span><span class="ds-hex"></span></div>`).join('');
+      row.querySelectorAll('.ds-swatch').forEach((sw) => {
+        let html = pretty(getComputedStyle(sw).getPropertyValue(`--${token}`));
+        if (isText) {
+          const st = getComputedStyle(sw.firstElementChild), r = ratio(rgbOf(st.color), rgbOf(st.backgroundColor));
+          html += `<span class="ds-ratio">${r.toFixed(1)}:1${r >= 4.5 ? ' · AA' : ''}</span>`;
+        }
+        sw.lastElementChild.innerHTML = html;
+      });
+    });
+  }
+
   /* ---- Konbini hero ------------------------------------------------------------- */
   // The hero is its own page (konbini/konbini-hero.html) shown in a frame. It talks to this
   // page with messages: theme, page width, frame height, case-study links and the ↓ scroll.
@@ -483,7 +515,6 @@
     hero.style.height = `${!fitToContent ? room : (HERO_FIT === 'width' || short) ? natural : Math.min(fold, natural)}px`;
   }
   addEventListener('resize', () => { sizeHero(); hello(); });
-
   addEventListener('message', (e) => {
     if (e.source !== hero.contentWindow) return;
     const msg = e.data || {};

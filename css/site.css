@@ -9,8 +9,9 @@
    below. ✏️ To change a color everywhere, change it here.
    Icons are Heroicons v2 (heroicons.com), outline style with a 1.5 stroke, solid for the active
    light/dark icon. The one exception is the LinkedIn logo (Font Awesome brands). */
-:root {
-  /* Color, light mode */
+/* Color, light mode. [data-theme] on any element (not just the page) switches what's inside it,
+   which is how the design system page shows both modes side by side. */
+:root, [data-theme="light"] {
   --bg-page: #fcf9ef;
   --bg-image: #d3c6e6;                   /* behind images and the video while they load */
   --bg-toggle: #ffffff;
@@ -26,7 +27,8 @@
   --border-input: #4e4e4e;
   --status-error: #d62022;               /* 4.9:1 on the page */
   --status-highlight: #d62022;           /* red "look here" boxes (screenshots look the same in both modes) */
-
+}
+:root {
   /* Type */
   --font-serif: "Crimson Text", Georgia, "Times New Roman", serif;   /* headings */
   --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;   /* body, labels, buttons */
@@ -51,7 +53,7 @@
   --hero-gap: 40px;         /* nav → intro sentence */
   --reveal-dur: 2s;         /* ✏️ how long each card's entrance takes */
 }
-:root[data-theme="dark"] {
+[data-theme="dark"] {
   --bg-page: #222222;
   --bg-veil: rgb(34 34 34 / .9);
   --text-primary: #f2f2f2;
@@ -563,3 +565,80 @@ html.lb-open { overflow: hidden; }
 @keyframes gate-shake { 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
 @media (max-width: 559px) { .gate-card { padding: 24px 8px 32px; margin-top: 56px; } .gate-title { font-size: 32px; } }
 @media (prefers-reduced-motion: reduce) { .gate, .gate.is-wrong .gate-card { transition: none; animation: none; } }
+
+/* ---- Design system page (design-system.html) -------------------------------------------
+   Uses the case study layout (.cs-*). The swatches are filled in by js/site.js. */
+.ds-intro { margin-top: 16px; max-width: 668px; font-size: 18px; line-height: 1.37; }
+.colophon a { color: inherit; text-underline-position: from-font; }
+.colophon a:hover { color: var(--accent-default); }
+
+/* Color table: token, then a light and a dark swatch */
+.ds-colors-head, .ds-color {
+  display: grid; grid-template-columns: minmax(0, 1.1fr) repeat(2, minmax(0, 1fr)); gap: 12px; align-items: center;
+  padding-block: 10px; border-bottom: 1px solid var(--border-rule);
+}
+.ds-colors-head { padding-top: 0; font-size: 14px; line-height: 1.37; font-weight: 600; color: var(--text-secondary); }
+.ds-colors-head span:not(:first-child) { padding-left: 8px; }
+.ds-token b { display: block; font-weight: 600; font-size: 16px; line-height: 1.37; }
+.ds-token span { display: block; font-size: 14px; line-height: 1.37; color: var(--text-secondary); }
+.ds-swatch {
+  display: flex; align-items: center; gap: 12px; min-width: 0;
+  padding: 8px; border-radius: var(--radius-s);
+  background: var(--bg-page); color: var(--text-primary);   /* each swatch sits on its own mode's page color */
+}
+.ds-chip-color {
+  flex: none; display: grid; place-items: center; width: 40px; height: 40px; border-radius: var(--radius-s);
+  box-shadow: inset 0 0 0 1px rgb(128 128 128 / .3);
+  font: 600 18px/1 var(--font-serif);
+}
+.ds-hex { min-width: 0; font-size: 14px; line-height: 1.37; overflow-wrap: anywhere; }
+.ds-ratio { display: block; font-size: 12px; color: var(--text-secondary); }
+
+/* Type specimens: --d is the desktop size, --m the phone size */
+.ds-type { display: flex; flex-direction: column; padding: 0; list-style: none; }
+.ds-type li { padding-block: 20px; border-bottom: 1px solid var(--border-rule); }
+.ds-type li:first-child { padding-top: 0; }
+.ds-sample { font-family: var(--font-sans); font-weight: var(--w); font-size: var(--d); line-height: var(--lh); overflow-wrap: anywhere; }
+.ds-serif { font-family: var(--font-serif); }
+.ds-spec { margin-top: 8px !important; font-size: 14px; line-height: 1.37; color: var(--text-secondary); }
+.ds-spec b { font-weight: 600; color: var(--text-primary); }
+
+/* Components, once per mode */
+.ds-modes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.ds-panel {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 20px; min-width: 0;
+  padding: 24px; border: 1px solid var(--border-rule); border-radius: var(--radius-m);
+  background: var(--bg-page); color: var(--text-primary);
+}
+.ds-panel-label { font-size: 14px; line-height: 1.37; font-weight: 600; color: var(--text-secondary); }
+.ds-row { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 24px; }
+.ds-panel .chips { flex-wrap: wrap; }
+.ds-panel .cs-stats, .ds-field { align-self: stretch; }
+.ds-static { display: inline-flex; pointer-events: none; }
+.ds-field-label { font-size: 14px; line-height: 1.37; color: var(--text-secondary); }
+.ds-input { display: block; height: 42px; border-bottom: 1px solid var(--status-error); }   /* the error state */
+.ds-notes { display: grid; gap: 12px; font-size: 16px; line-height: 1.37; }
+.ds-notes div { display: grid; grid-template-columns: 160px minmax(0, 1fr); gap: 16px; }
+.ds-notes dt { font-weight: 600; }
+
+/* Icons and radii */
+.ds-icons, .ds-radii { display: grid; gap: 12px; padding: 0; list-style: none; font-size: 12px; line-height: 1.37; color: var(--text-secondary); }
+.ds-icons { grid-template-columns: repeat(auto-fill, minmax(112px, 1fr)); }
+.ds-icons li {
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  padding: 20px 8px 12px; border: 1px solid var(--border-rule); border-radius: var(--radius-s); text-align: center;
+}
+.ds-icons svg { width: 32px; height: 32px; color: var(--text-primary); }
+.ds-icons .o { fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.ds-icons .s { fill: currentColor; }
+.ds-radii { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px; font-size: 14px; }
+.ds-radii span { display: block; height: 64px; margin-bottom: 8px; border: 1px solid var(--accent-default); }
+.ds-radii b { margin-right: 4px; font-weight: 600; color: var(--text-primary); }
+
+@media (max-width: 559px) {
+  .ds-colors-head, .ds-color { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 8px; }
+  .ds-colors-head span:first-child { display: none; }
+  .ds-token { grid-column: 1 / -1; }
+  .ds-modes { grid-template-columns: 1fr; }
+  .ds-notes div { grid-template-columns: 1fr; gap: 2px; }
+}
