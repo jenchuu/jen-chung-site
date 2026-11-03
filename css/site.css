@@ -568,6 +568,7 @@ html.lb-open { overflow: hidden; }
 
 /* ---- Design system page (design-system.html) -------------------------------------------
    Uses the case study layout (.cs-*). The swatches are filled in by js/site.js. */
+.ds { padding-bottom: 120px; }   /* ✏️ space between the last section and the footer */
 .ds-intro { margin-top: 16px; font-size: 18px; line-height: 1.37; }
 
 /* Color table: token, then a light and a dark swatch */
