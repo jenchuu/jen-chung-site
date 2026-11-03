@@ -209,13 +209,13 @@
   // crop. ✕, a click on the veil, or Esc closes it.
   const cs = document.querySelector('main.cs');
   if (cs) {
-    const X_ICON = '<svg viewBox="0 0 32 32" width="32" height="32" aria-hidden="true"><path d="M24 8L16 16M16 16L8 24M16 16L8 8M16 16L24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-    const ARROW = (d) => `<svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true"><path d="${d}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+    const X_ICON = '<svg viewBox="0 0 24 24" width="32" height="32" aria-hidden="true"><path d="M6 18 18 6M6 6l12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    const ARROW = (d) => `<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="${d}" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
     const lb = document.createElement('div');
     lb.className = 'lb'; lb.hidden = true;
     lb.setAttribute('role', 'dialog'); lb.setAttribute('aria-modal', 'true'); lb.setAttribute('aria-label', 'Enlarged image');
     lb.innerHTML = `<div class="lb-wrap"><div class="lb-stage"></div>
-      <div class="lb-nav"><button type="button" class="lb-prev" aria-label="Previous image">${ARROW('M12.5 4L6.5 10L12.5 16')}</button><span class="lb-count" aria-live="polite"></span><button type="button" class="lb-next" aria-label="Next image">${ARROW('M7.5 4L13.5 10L7.5 16')}</button></div></div>
+      <div class="lb-nav"><button type="button" class="lb-prev" aria-label="Previous image">${ARROW('M15.75 19.5 8.25 12l7.5-7.5')}</button><span class="lb-count" aria-live="polite"></span><button type="button" class="lb-next" aria-label="Next image">${ARROW('m8.25 4.5 7.5 7.5-7.5 7.5')}</button></div></div>
       <button type="button" class="lb-x" aria-label="Close">${X_ICON}</button>`;
     document.body.append(lb);
     const stage = lb.querySelector('.lb-stage');
