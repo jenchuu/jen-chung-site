@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Beacon Parts Management Case Study | Jen Chung</title>
+<meta name="description" content="How Jen Chung designed Beacon’s Parts Management feature, helping aviation professionals manage parts requests to fix planes quickly.">
+<meta name="theme-color" content="#fcf9ef">
+<script>
+  // Set the theme before the page paints (same as the home page).
+  (function () {
+    var t = 'light';
+    try { t = localStorage.getItem('jc-theme') || t; } catch (e) {}
+    document.documentElement.dataset.theme = t === 'dark' ? 'dark' : 'light';
+    // Soft rise: text and visuals start hidden and rise in as they scroll into view (js/site.js)
+    if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('cs-rise-ready');
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap">
+<link rel="stylesheet" href="css/site.css">
+</head>
+<body>
+<a class="skip-link" href="#case-study">Skip to case study</a>
+
+<!-- ===== Nav ===== -->
+<header class="nav nav-auto wrap">
+  <div class="nav-bar">
+    <a class="logo" href="index.html" aria-label="Jen Chung, home">Jen<img src="assets/icons/logo-dash.svg" alt=""></a>
+    <nav class="nav-links" aria-label="Main">
+      <div class="nav-link-list" id="nav-menu">
+        <a href="index.html#work">Work</a>
+        <a href="https://drive.google.com/file/d/1YyUNneKgoWcizkY0iiJYyRAiehRn6xVk/view?usp=sharing" target="_blank" rel="noopener">Resume</a>
+        <a href="https://www.jen-chung.com/about">About</a>   <!-- TODO Phase 4: about.html -->
+        <a href="design-system.html">Design System</a>
+        <a href="mailto:hello@jen-chung.com">Connect</a>
+      </div>
+      <div class="nav-tools">
+        <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Dark mode" aria-pressed="false">
+          <img class="is-light" src="assets/icons/sun-filled.svg" alt=""><img class="is-light" src="assets/icons/moon-outlined.svg" alt="">
+          <img class="is-dark" src="assets/icons/sun-outlined.svg" alt=""><img class="is-dark" src="assets/icons/moon-filled.svg" alt="">
+        </button>
+        <button class="menu-btn" id="menu-btn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav-menu">
+          <svg class="menu-open" viewBox="0 0 24 24" width="32" height="32" aria-hidden="true"><path d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg class="menu-close" viewBox="0 0 24 24" width="32" height="32" aria-hidden="true"><path d="M6 18 18 6M6 6l12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<!-- Content: the live Wix page jen-chung.com/parts-management (Nov 2026), in the Cube Boards case study layout.
+     ✏️ Images live in assets/parts-management/. Each section's title (left) stays pinned while you scroll its section. -->
+<main class="cs" id="case-study">
+
+  <!-- ===== Title + main image ===== -->
+  <header class="cs-head wrap">
+    <div>
+      <p class="cs-label">BEACON: PARTS MANAGEMENT</p>
+      <h1 class="cs-title">Helping aviation professionals manage parts requests to fix planes quickly so they can get back to flying</h1>
+      <div class="cs-hero cs-hero-fit" style="grid-template-columns: 2890fr 1483fr">
+        <img src="assets/parts-management/hero-web.webp" alt="Beacon’s parts requests list on desktop, with color coded status chips" width="1300" height="752">
+        <img src="assets/parts-management/hero-tablet.webp" alt="Beacon’s parts requests on a tablet" width="700" height="785">
+      </div>
+    </div>
+  </header>
+
+  <div class="cs-body wrap">
+    <div>
+
+      <!-- ===== Role + overview ===== -->
+      <section class="cs-section cs-overview" aria-label="Overview">
+        <dl class="cs-meta">
+          <div><dt>ROLE</dt><dd>Product Designer</dd></div>
+          <div><dt>DATE</dt><dd>2023</dd></div>
+          <div><dt>TEAM</dt><dd>Product (3)<br>Engineering (4)</dd></div>
+        </dl>
+        <div class="cs-main">
+          <h2 class="cs-meta-title">OVERVIEW</h2>
+          <div class="cs-text">
+            <p>Beacon is an aviation maintenance coordination and communication web app. Think of it as a “Slack + Ticketing System” for aviation professionals: it tracks aircraft repairs and improves communication to get planes back in service faster.</p>
+            <p>I was the main Product Designer who led the strategy, user testing, and design of the Parts Management feature, addressing prioritization of parts and information architecture challenges.</p>
+            <p>The shipped MVP enabled users to manage, view, and filter parts requests, improving visibility and communication.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== Problem space ===== -->
+      <section class="cs-section">
+        <h2 class="cs-h2">Problem space</h2>
+        <div class="cs-main">
+          <div class="cs-text">
+            <h3 class="cs-lede">To understand better, let’s look at an aviation maintenance user’s journey:</h3>
+          </div>
+          <figure class="cs-figure">
+            <img src="assets/parts-management/journey-map.webp" alt="User journey map for Mike, a materials team member: phases, actions, feelings, pain points and opportunities" width="2044" height="1635" loading="lazy">
+            <figcaption>User journey map: Mike, Materials Team Member.</figcaption>
+          </figure>
+          <div class="cs-text">
+            <p>Through customer feedback we had some data about what customers value and what their challenges are. Some key quotes from our existing research database:</p>
+          </div>
+          <div class="cs-quotes">
+            <blockquote>“I want to have all our parts requests visible in one place”</blockquote>
+            <blockquote>“TRAX users need to open case by case to check parts status”</blockquote>
+            <blockquote>“Parts requests that were ordered to attend a specific case and join the stock, are not reserved for that case, being available to any other event, making it very difficult”</blockquote>
+          </div>
+          <div class="cs-text">
+            <p>As you can see from the user journey map, aviation maintenance involves multiple teams coordinating in high-pressure environments to get planes operational. When a part is needed for a repair, teams rely on emails, calls, and legacy systems like TRAX or AMOS to track parts availability and status.</p>
+            <p>The disjointed process and customer data show there is:</p>
+            <ul><li><b>Inefficient communication</b> between maintenance teams, delaying repairs</li><li><b>Lack of visibility</b> into pending and available parts</li><li><b>Difficulty in tracking orders</b>, leading to confusion about delivery timelines</li></ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== The problem ===== -->
+      <section class="cs-section">
+        <h2 class="cs-h2">The problem</h2>
+        <div class="cs-main">
+          <div class="cs-text">
+            <h3 class="cs-lede">Aviation maintenance professionals lack a centralized system for managing parts requests, leading to inefficiencies in logging, visibility, and communication across multiple platforms.</h3>
+          </div>
+          <div class="cs-card"><h3>How might we…</h3><p>…increase visibility of parts requests and their statuses?</p><p>…make it easier for users to manage parts requests?</p></div>
+        </div>
+      </section>
+
+      <!-- ===== Ideation &amp; testing ===== -->
+      <section class="cs-section">
+        <h2 class="cs-h2">Ideation &amp; testing</h2>
+        <div class="cs-main">
+          <div class="cs-text">
+            <p>I ideated solutions for visibility and management of parts requests and then narrowed down the best solutions through collaborative sessions with our Eng and Product teams. With those designs, I conducted four internal sales sessions and usability testing sessions with users and affinity mapped my findings.</p>
+          </div>
+          <div class="cs-pair cs-pair-fit"><figure><img src="assets/parts-management/usability-testing.webp" alt="A remote usability testing session" width="652" height="350" loading="lazy"><figcaption>USABILITY TESTING</figcaption></figure><figure><img src="assets/parts-management/affinity-map.webp" alt="An affinity map of the testing findings" width="651" height="439" loading="lazy"><figcaption>AFFINITY MAP</figcaption></figure></div>
+        </div>
+      </section>
+
+      <!-- ===== What I improved ===== -->
+      <section class="cs-section">
+        <h2 class="cs-h2">What I improved</h2>
+        <div class="cs-main cs-main-loose">
+          <div class="cs-text">
+            <p>After many meetings with Product, Eng, and Design teams and user testing we made significant changes and improvements. Some key improvements I made were:</p>
+            <ul><li><b>Urgency prioritization</b> through color coded part status chips</li><li><b>Clearer timelines</b> through ETA detail added to part information</li><li><b>Future information architecture</b> through restructuring where the parts feature lives</li></ul>
+          </div>
+          <div class="cs-step">
+            <h3 class="cs-h3">1. Urgency prioritization</h3>
+            <p>I improved parts order status chips, especially “Pending” and “Delayed,” through brighter orange and red colors that match users’ mental models for warning/danger so they will have an easier time understanding which parts order needs attention ASAP.</p>
+            <div class="cs-pair cs-pair-fit" style="grid-template-columns: 323fr 749fr; max-width: 420px"><figure><img src="assets/parts-management/chips-before.webp" alt="Parts order status chips before: muted colors" width="323" height="672" loading="lazy"><figcaption>BEFORE</figcaption></figure><figure><img src="assets/parts-management/chips-after.webp" alt="Parts order status chips after: brighter orange for Pending and red for Delayed" width="652" height="584" loading="lazy"><figcaption>AFTER</figcaption></figure></div>
+            <div class="cs-pair cs-pair-fit"><figure><img src="assets/parts-management/modal-before.webp" alt="The parts modal with the old status chips" width="652" height="634" loading="lazy"><figcaption>BEFORE</figcaption></figure><figure><img src="assets/parts-management/modal-after.webp" alt="The parts modal with the new status chips" width="652" height="633" loading="lazy"><figcaption>AFTER</figcaption></figure></div>
+          </div>
+          <div class="cs-step">
+            <h3 class="cs-h3">2. Clearer timelines</h3>
+            <p>Added ETA date to part information so users can better plan/adjust timelines and resources accordingly.</p>
+            <div class="cs-pair cs-pair-fit"><figure><img src="assets/parts-management/eta-before.webp" alt="Part information without an ETA" width="652" height="368" loading="lazy"><figcaption>BEFORE</figcaption></figure><figure><img src="assets/parts-management/eta-after.webp" alt="Part information with the ETA date added" width="652" height="368" loading="lazy"><figcaption>AFTER</figcaption></figure></div>
+          </div>
+          <div class="cs-step">
+            <h3 class="cs-h3">3. Better information architecture (for future)</h3>
+            <p>For a future release, I moved management of parts info under the “Manage” button since info under the pencil edit icon is about editing general details about the case. The Parts feature doesn’t fit well there in terms of IA. It has more details involved, so I decided to move it to the “Manage” area where users can manage people, parts, and GSE.</p>
+            <div class="cs-pair cs-pair-fit"><figure><img src="assets/parts-management/ia-before.webp" alt="Before: parts edited from the case details pencil icon" width="652" height="869" loading="lazy"><figcaption>BEFORE</figcaption></figure><figure><img src="assets/parts-management/ia-after.webp" alt="After: parts managed from a bottom sheet under Manage" width="652" height="869" loading="lazy"><figcaption>AFTER</figcaption></figure></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== Results ===== -->
+      <section class="cs-section">
+        <h2 class="cs-h2">Results</h2>
+        <div class="cs-main cs-main-loose">
+          <div class="cs-text">
+            <h3 class="cs-lede">Beacon successfully launched the first release of the Parts feature, allowing users to manage and track parts requests more efficiently.</h3>
+          </div>
+          <div class="cs-step">
+            <h3 class="cs-h3">Visibility</h3>
+            <img src="assets/parts-management/results-visibility.webp" alt="Filtering parts requests on desktop" width="1000" height="625" loading="lazy">
+          </div>
+          <div class="cs-step">
+            <h3 class="cs-h3">Management</h3>
+            <div class="cs-pair cs-pair-fit"><img src="assets/parts-management/results-management.webp" alt="Managing parts requests in the live prototype on a tablet" width="652" height="869" loading="lazy"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== Reflection ===== -->
+      <section class="cs-section">
+        <h2 class="cs-h2">Reflection</h2>
+        <div class="cs-main">
+          <div class="cs-text">
+            <h3 class="cs-lede">Balancing speed, impact, and feasibility</h3>
+            <p>Delivering meaningful value in a first release while balancing design impact, engineering feasibility, and tight timelines is always a challenge. With a lean team of three designers and a packed roadmap, we often had to quickly shift focus, moving straight from this Parts Management feature to the next feature, Internal Teams, to support backend restructuring. Given more time and resources, I’d advocate for follow-ups with customers and closer collaboration with Product and the rest of the team to track adoption and refine usability.</p>
+            <h3 class="cs-lede">Research learnings</h3>
+            <p>It was exciting to carry out user testing since I advocated for more user feedback! Although we were constrained by group calls, where hierarchical dynamics often prevented candid feedback, it was great to involve customers earlier on in the design process. In future projects, I would work with Product and Sales to explain the importance of user research and best practices to secure buy-in for one-on-one user interviews, ensuring deeper insights into customer pain points.</p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- ===== Previous / next case study ===== -->
+  <nav class="cs-pager wrap" aria-label="More case studies">
+    <div>
+      <a class="cs-pager-prev" href="switchchord-splits.html"><svg viewBox="0 0 24 24" width="32" height="32" aria-hidden="true"><path d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Switchchord Splits</a>
+      <a class="cs-pager-next" href="cube-boards.html">Cube Boards<svg viewBox="0 0 24 24" width="32" height="32" aria-hidden="true"><path d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </div>
+  </nav>
+</main>
+
+
+<!-- ===== Footer ===== -->
+<footer class="footer" id="connect">
+  <div class="connect">
+    <h2 class="connect-title">Let’s connect <img src="assets/icons/connect-line.svg" alt=""></h2>
+    <div class="socials">
+      <a href="mailto:hello@jen-chung.com" aria-label="Email Jen">
+        <svg viewBox="-3 0 30 24" aria-hidden="true"><path d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="https://www.linkedin.com/in/jennifer-chung/" target="_blank" rel="noopener" aria-label="Jen on LinkedIn">
+        <svg viewBox="0 0 40 32" aria-hidden="true"><path fill="currentColor" d="M14.7006 26.8802H10.3469V12.9395H14.7006V26.8802ZM12.5214 11.0379C11.1292 11.0379 10 9.89131 10 8.50703C10 7.84212 10.2656 7.20443 10.7385 6.73426C11.2114 6.26409 11.8527 5.99995 12.5214 5.99995C13.1901 5.99995 13.8315 6.26409 14.3043 6.73426C14.7772 7.20443 15.0428 7.84212 15.0428 8.50703C15.0428 9.89131 13.9131 11.0379 12.5214 11.0379ZM30.9953 26.8802H26.6509V20.0939C26.6509 18.4766 26.6181 16.4025 24.3873 16.4025C22.1237 16.4025 21.7769 18.1597 21.7769 19.9774V26.8802H17.4278V12.9395H21.6034V14.8412H21.6644C22.2456 13.7458 23.6655 12.59 25.7838 12.59C30.19 12.59 31 15.475 31 19.2224V26.8802H30.9953Z"/></svg>
+      </a>
+    </div>
+  </div>
+  <p class="colophon">Jen Chung © 2026. Designed + AI coded by me with care &amp; <span class="colophon-end">matcha<span class="colophon-icons" aria-hidden="true"><img src="assets/icons/matcha.png" alt="" width="12" height="15"><svg viewBox="0 0 11.35 10.86" width="11" height="10"><path d="M5.676 10.375S13.243 4.082 10.294 1.138C7.984-1.168 5.676 2.488 5.676 2.488S3.365-1.168 1.056 1.138C-1.891 4.082 5.676 10.375 5.676 10.375Z" fill="none" stroke="currentColor" stroke-width=".75"/></svg></span></span></p>
+</footer>
+
+<script src="js/site.js"></script>
+</body>
+</html>

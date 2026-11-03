@@ -419,6 +419,23 @@ a.card:active .card-cta, .cs-pager a:active { color: var(--accent-hover); }
 .chips { display: flex; gap: 8px; padding: 0; list-style: none; }   /* one row, as in Figma (wraps on smaller screens) */
 .chips li { padding: 4px 10px; border: 1px solid var(--text-secondary); border-radius: var(--radius-pill); font-size: 14px; line-height: 1.37; white-space: nowrap; }
 
+/* Pieces the other case studies add to the Boards template */
+.cs-hero-fit img { aspect-ratio: auto; object-fit: initial; }   /* images keep their own shape; columns set per page (style="grid-template-columns: …") */
+.cs-hero-single { grid-template-columns: 1fr; }
+.cs-pair-fit img { aspect-ratio: auto; object-fit: initial; }   /* a pair whose images keep their own shape */
+.cs-pair .cs-video { width: 100%; }
+/* phone screenshots in a row: --n across (desktop), --n-phone across on phones */
+.cs-phones { display: grid; grid-template-columns: repeat(var(--n, 4), minmax(0, 1fr)); gap: 16px; align-items: start; }
+.cs-text ul { padding-left: 1.2em; }
+.cs-text > * + ul { margin-top: .6em; }
+.cs-text li + li { margin-top: .4em; }
+.cs-quotes { display: flex; flex-direction: column; gap: 16px; }
+.cs-quotes blockquote {
+  margin: 0; padding-left: 16px; border-left: 2px solid var(--accent-default);
+  font-family: var(--font-serif); font-weight: 600; font-size: 20px; line-height: 1.37;
+}
+.cs-card p + p { margin-top: 4px; }
+
 /* Gated part (everything after the summary) */
 .cs-body .cs-lock { position: relative; margin-top: 80px; }
 .cs-is-locked .cs-lock { max-height: max(1100px, 100vh + 240px); overflow-x: visible; overflow-y: clip; }  /* ✏️ how much blurred page shows */
@@ -466,6 +483,8 @@ html.cs-is-locked { overflow-x: clip; }              /* the veil is full-width; 
 }
 @media (max-width: 559px) {
   .cs-pair { grid-template-columns: 1fr; }
+  .cs-phones { grid-template-columns: repeat(var(--n-phone, 2), minmax(0, 1fr)); }
+  .cs-hero-fit { grid-template-columns: 1fr !important; }
   .cs-meta { display: flex; }
   .cs-stats, .cs-cards { flex-direction: column; gap: 16px; }
 }
