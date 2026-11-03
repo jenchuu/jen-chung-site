@@ -568,7 +568,7 @@ html.lb-open { overflow: hidden; }
 
 /* ---- Design system page (design-system.html) -------------------------------------------
    Uses the case study layout (.cs-*). The swatches are filled in by js/site.js. */
-.ds-intro { margin-top: 16px; max-width: 668px; font-size: 18px; line-height: 1.37; }
+.ds-intro { margin-top: 16px; font-size: 18px; line-height: 1.37; }
 .colophon a { color: inherit; text-underline-position: from-font; }
 .colophon a:hover { color: var(--accent-default); }
 
