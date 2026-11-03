@@ -432,7 +432,7 @@ html.cs-is-locked { overflow-x: clip; }              /* the veil is full-width; 
 }
 .cs-pager a {
   display: inline-flex; align-items: center; gap: 16px;
-  font-family: var(--font-serif); font-weight: 600; font-size: 40px; line-height: 1.5;
+  font-family: var(--font-serif); font-weight: 600; font-size: 40px; line-height: 1.2;
   color: var(--accent-default); text-decoration: none;
   transition: color .15s ease;
 }
@@ -531,7 +531,7 @@ html.lb-open { overflow: hidden; }
   color: var(--text-primary);
   font-family: var(--font-sans);
 }
-.gate-title { font-family: var(--font-serif); font-weight: 600; font-size: 40px; line-height: 1.3; }
+.gate-title { font-family: var(--font-serif); font-weight: 600; font-size: 40px; line-height: 1.2; }
 .gate-desc { font-size: 16px; line-height: 1.37; }
 .gate-form { display: flex; flex-direction: column; gap: 16px; }
 .gate-field { display: flex; flex-direction: column; gap: 6px; }
