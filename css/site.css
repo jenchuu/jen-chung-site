@@ -556,7 +556,7 @@ html.lb-open { overflow: hidden; }
 }
 .gate.is-opening { opacity: 0; }
 .gate-card {
-  position: sticky; top: max(24px, calc(50vh - 190px));   /* half the form's height: centered on screen */
+  position: sticky; top: max(24px, calc(50vh - 176px));   /* half the form's height: centered on screen */
   width: min(450px, 100%); margin: 91px auto 0;
   display: flex; flex-direction: column; gap: 24px;
   padding: 24px 40px 48px;
@@ -665,7 +665,6 @@ html.lb-open { overflow: hidden; }
 .ds-panel .chips { flex-wrap: wrap; }
 .ds-panel .cs-stats, .ds-field { align-self: stretch; }
 .ds-static { display: inline-flex; pointer-events: none; }
-.ds-field-label { font-size: 14px; line-height: 1.37; color: var(--text-secondary); }
 .ds-input { display: block; height: 42px; border-bottom: 1px solid var(--status-error); }   /* the error state */
 .ds-notes { display: grid; gap: 12px; font-size: 16px; line-height: 1.37; }
 .ds-notes div { display: grid; grid-template-columns: 160px minmax(0, 1fr); gap: 16px; }

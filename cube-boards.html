@@ -313,7 +313,7 @@
           <p class="gate-desc" id="gate-desc">The rest of this case study is confidential.</p>
           <form class="gate-form" id="gate-form" aria-labelledby="gate-title" aria-describedby="gate-desc">
             <div class="gate-field">
-              <label for="gate-input">Password</label>
+              <label class="sr-only" for="gate-input">Password</label>   <!-- Input "Label=Off" in Figma: hidden, but screen readers still read it -->
               <input type="password" id="gate-input" name="password" autocomplete="current-password" required aria-describedby="gate-error">
               <p class="gate-error" id="gate-error" role="alert"></p>
             </div>
