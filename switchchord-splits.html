@@ -30,10 +30,10 @@
     <a class="logo" href="index.html" aria-label="Jen Chung, home">Jen<img src="assets/icons/logo-dash.svg" alt=""></a>
     <nav class="nav-links" aria-label="Main">
       <div class="nav-link-list" id="nav-menu">
-        <a href="index.html#work">Work</a>
-        <a href="https://drive.google.com/file/d/1YyUNneKgoWcizkY0iiJYyRAiehRn6xVk/view?usp=sharing" target="_blank" rel="noopener">Resume</a>
+        <a aria-current="page" href="index.html#work">Work</a>
+        <a href="design-system.html">Design system</a>
         <a href="https://www.jen-chung.com/about">About</a>   <!-- TODO Phase 4: about.html -->
-        <a href="design-system.html">Design System</a>
+        <a href="https://drive.google.com/file/d/1YyUNneKgoWcizkY0iiJYyRAiehRn6xVk/view?usp=sharing" target="_blank" rel="noopener">Resume</a>
         <a href="mailto:hello@jen-chung.com">Connect</a>
       </div>
       <div class="nav-tools">
@@ -98,7 +98,7 @@
           <div class="cs-text">
             <p>This is where I came in. My job for Sprint 3 was to reframe and design a solution for messy split conversations, while working within constraints.</p>
           </div>
-          <div class="cs-card"><h3>The opportunity</h3><p>Help collaborators agree on splits before release, without it feeling like a confrontation or contract.</p></div>
+          <div class="cs-card cs-card-big"><h3>The opportunity</h3><p>Help collaborators agree on splits before release, without it feeling like a confrontation or contract.</p></div>
         </div>
       </section>
 
@@ -110,8 +110,8 @@
             <h3 class="cs-lede">Total creative freedom, but inside constraints</h3>
             <p>The CEO and PM gave me a rare gift: go as far and wild as you want to make splits conversation feel less scary. But the freedom sat inside hard constraints I had to design around from day one.</p>
           </div>
-          <div class="cs-cards"><div class="cs-card"><h3>Reuse web app</h3><p>A web Workspace already existed. I had to reuse components and backend where possible: a light UI refresh, not a rebuild.</p></div><div class="cs-card"><h3>Cross-platform parity</h3><p>Collaborators might be iOS users or guests on the web. The experience had to hold up in both without a second design language.</p></div></div>
-          <div class="cs-cards"><div class="cs-card"><h3>Match Sprints 1 and 2</h3><p>Whatever I made had to feel cohesive with the identity and catalog flows I’d already shipped.</p></div><div class="cs-card"><h3>MVP scope, real deadline</h3><p>A TestFlight beta target meant every “wouldn’t it be cool” idea got weighed against what one Engineer could build in time.</p></div></div>
+          <div class="cs-cards"><div class="cs-card"><h3 data-scramble>Reuse web app</h3><p>A web Workspace already existed. I had to reuse components and backend where possible: a light UI refresh, not a rebuild.</p></div><div class="cs-card"><h3 data-scramble>Cross-platform parity</h3><p>Collaborators might be iOS users or guests on the web. The experience had to hold up in both without a second design language.</p></div></div>
+          <div class="cs-cards"><div class="cs-card"><h3 data-scramble>Match Sprints 1 and 2</h3><p>Whatever I made had to feel cohesive with the identity and catalog flows I’d already shipped.</p></div><div class="cs-card"><h3 data-scramble>MVP scope, real deadline</h3><p>A TestFlight beta target meant every “wouldn’t it be cool” idea got weighed against what one Engineer could build in time.</p></div></div>
         </div>
       </section>
 
@@ -125,20 +125,20 @@
           </div>
           <div class="cs-step">
             <h3 class="cs-h3">1. Ownership as a pizza or spinny vinyl record</h3>
-            <img src="assets/switchchord-splits/sketch-pizza-vinyl.webp" alt="Sketches of a split shown as pizza slices and as a spinning vinyl record" width="1056" height="748" loading="lazy">
             <p>Each slice a collaborator’s share, so the math reads at a glance instead of as a spreadsheet. Since Switchchord is a music rights company, I thought playing music in celebration of a successful split would be a nice touch.</p>
+            <img src="assets/switchchord-splits/sketch-pizza-vinyl.webp" alt="Sketches of a split shown as pizza slices and as a spinning vinyl record" width="1056" height="748" loading="lazy">
           </div>
           <div class="cs-step">
             <h3 class="cs-h3">2. Pizza time bomb</h3>
-            <img src="assets/switchchord-splits/sketch-pizza-time-bomb.webp" alt="Sketches of a pizza with a countdown timer" width="1148" height="748" loading="lazy">
             <p>A playful ideation emphasizing time of the decision, dramatizing the real stakes of holding out on a fraction of a percent, to nudge the group toward closure.</p>
+            <img src="assets/switchchord-splits/sketch-pizza-time-bomb.webp" alt="Sketches of a pizza with a countdown timer" width="1148" height="748" loading="lazy">
           </div>
           <div class="cs-step">
             <h3 class="cs-h3">3. Voting rounds</h3>
-            <img src="assets/switchchord-splits/sketch-voting-rounds.webp" alt="Sketches of blurred splits and voting rounds" width="1145" height="748" loading="lazy">
             <p>Splits submitted blurred or as ranges until everyone is in. AI proposes “fairest” split options from the reasoning given, the group votes, and then it has to be unanimous or it goes to round 2.</p>
+            <img src="assets/switchchord-splits/sketch-voting-rounds.webp" alt="Sketches of blurred splits and voting rounds" width="1145" height="748" loading="lazy">
           </div>
-          <div class="cs-card"><h3>Going wide wasn’t wasted</h3><p>The ideas reframed what the feature could be, opened the CEO and PM up to a less formal direction, and left two concepts that stuck:</p><p>1) casual, conversational language and<br>2) “locking in” a split together.</p></div>
+          <div class="cs-card"><h3 data-scramble>Going wide wasn’t wasted</h3><p>The ideas reframed what the feature could be, opened the CEO and PM up to a less formal direction, and left two concepts that stuck:</p><p>1) casual, conversational language and<br>2) “locking in” a split together.</p></div>
         </div>
       </section>
 
@@ -150,10 +150,10 @@
             <h3 class="cs-lede">The splits workspace: a conversation, not a form</h3>
             <p>Although we didn’t go with the pizza bomb or the spinning record, the explorations helped us brainstorm and led us in a new focused direction: to make splits a chat.</p>
           </div>
-          <figure class="cs-figure">
-            <div class="cs-phones" data-gallery style="--n: 2; --n-phone: 2"><img src="assets/switchchord-splits/splits-chat.webp" alt="The splits chat with each person’s percentage pinned at the top" width="652" height="1411" loading="lazy"><img src="assets/switchchord-splits/splits-locked-in.webp" alt="Everyone locked in, with confetti" width="652" height="1411" loading="lazy"></div>
-            <figcaption>The workspace leads with conversation in plain, casual language. Each person’s percentage stays pinned and live at the top and when everyone agrees, they “lock in,” with a little confetti to celebrate it.</figcaption>
-          </figure>
+          <div class="cs-phones" data-gallery data-zoom="2,2" style="--n: 2; --n-phone: 2"><img src="assets/switchchord-splits/splits-chat.webp" alt="The splits chat with each person’s percentage pinned at the top" width="750" height="1624" loading="lazy"><img src="assets/switchchord-splits/splits-locked-in.webp" alt="Everyone locked in, with confetti" width="750" height="1624" loading="lazy"></div>
+          <div class="cs-text">
+            <p>The workspace leads with conversation in plain, casual language. Each person’s percentage stays pinned and live at the top and when everyone agrees, they “lock in,” with a little confetti to celebrate it.</p>
+          </div>
         </div>
       </section>
 
@@ -166,11 +166,11 @@
             <p>This wasn’t a blank canvas design. A web Workspace already existed and I was asked to reference and reuse it where possible, so I kept what worked and rebuilt the rest for mobile, which is exactly the constraint that made the design work interesting.</p>
           </div>
           <figure class="cs-figure">
-            <div class="cs-phones" data-gallery style="--n: 5; --n-phone: 3"><img src="assets/switchchord-splits/before-1.webp" alt="The existing web Workspace, screen 1 of 5" width="400" height="812" loading="lazy"><img src="assets/switchchord-splits/before-2.webp" alt="The existing web Workspace, screen 2 of 5" width="400" height="808" loading="lazy"><img src="assets/switchchord-splits/before-3.webp" alt="The existing web Workspace, screen 3 of 5" width="400" height="810" loading="lazy"><img src="assets/switchchord-splits/before-4.webp" alt="The existing web Workspace, screen 4 of 5" width="400" height="810" loading="lazy"><img src="assets/switchchord-splits/before-5.webp" alt="The existing web Workspace, screen 5 of 5" width="400" height="810" loading="lazy"></div>
+            <div class="cs-phones" data-gallery data-zoom="5,3" style="--n: 5; --n-phone: 3"><img src="assets/switchchord-splits/before-1.webp" alt="The existing web Workspace, screen 1 of 5" width="886" height="1800" loading="lazy"><img src="assets/switchchord-splits/before-2.webp" alt="The existing web Workspace, screen 2 of 5" width="890" height="1800" loading="lazy"><img src="assets/switchchord-splits/before-3.webp" alt="The existing web Workspace, screen 3 of 5" width="888" height="1800" loading="lazy"><img src="assets/switchchord-splits/before-4.webp" alt="The existing web Workspace, screen 4 of 5" width="888" height="1800" loading="lazy"><img src="assets/switchchord-splits/before-5.webp" alt="The existing web Workspace, screen 5 of 5" width="888" height="1800" loading="lazy"></div>
             <figcaption>BEFORE: the web app Workspace given starting point with ownership details to fill out only. I carried over the split percentage and the button component layout, then rebuilt the experience for iOS.</figcaption>
           </figure>
           <figure class="cs-figure">
-            <div class="cs-phones" data-gallery style="--n: 5; --n-phone: 3"><img src="assets/switchchord-splits/after-empty-workspace.webp" alt="An empty workspace" width="400" height="866" loading="lazy"><img src="assets/switchchord-splits/after-single-details.webp" alt="A single’s details" width="400" height="866" loading="lazy"><img src="assets/switchchord-splits/after-splits-discussion.webp" alt="The splits discussion" width="400" height="866" loading="lazy"><img src="assets/switchchord-splits/after-split-summary.webp" alt="The split summary" width="400" height="866" loading="lazy"><img src="assets/switchchord-splits/after-workspaces-confirmed.webp" alt="The Confirmed workspaces list" width="400" height="866" loading="lazy"></div>
+            <div class="cs-phones" data-gallery data-zoom="5,3" style="--n: 5; --n-phone: 3"><img src="assets/switchchord-splits/after-empty-workspace.webp" alt="An empty workspace" width="750" height="1624" loading="lazy"><img src="assets/switchchord-splits/after-single-details.webp" alt="A single’s details" width="750" height="1624" loading="lazy"><img src="assets/switchchord-splits/after-splits-discussion.webp" alt="The splits discussion" width="750" height="1624" loading="lazy"><img src="assets/switchchord-splits/after-split-summary.webp" alt="The split summary" width="750" height="1624" loading="lazy"><img src="assets/switchchord-splits/after-workspaces-confirmed.webp" alt="The Confirmed workspaces list" width="750" height="1624" loading="lazy"></div>
             <figcaption>AFTER: conversational splits, a sticky live total, lock in button, and native touch patterns. The same structure, but with a warmer and more approachable feel.</figcaption>
           </figure>
         </div>
@@ -183,10 +183,10 @@
           <div class="cs-text">
             <h3 class="cs-lede">Confirm, but never sign</h3>
           </div>
-          <figure class="cs-figure">
-            <div class="cs-phones" data-gallery style="--n: 4; --n-phone: 2"><img src="assets/switchchord-splits/lock-in-modal.webp" alt="The “Lock in %?” confirmation" width="400" height="866" loading="lazy"><img src="assets/switchchord-splits/splits-chat.webp" alt="The splits chat" width="652" height="1411" loading="lazy"><img src="assets/switchchord-splits/splits-locked-in.webp" alt="Everyone locked in" width="652" height="1411" loading="lazy"><img src="assets/switchchord-splits/summary-loading.webp" alt="Creating the split summary" width="400" height="866" loading="lazy"></div>
-            <figcaption>The team wanted to steer hard away from anything that felt binding, because that’s exactly what scares creators off. So we reframed a split as shared governance of a shared asset, not a contract. When I asked where signing should live, the answer was: it shouldn’t. Once everyone hits the “Lock in %” button on the bottom left, it automatically generates a shareable summary (with NO signatures) that lands in each person’s Confirmed section in their Workspace. The trust comes from transparency and a clear record, not from a legal looking form.</figcaption>
-          </figure>
+          <div class="cs-phones" data-gallery data-zoom="4,2" style="--n: 4; --n-phone: 2"><img src="assets/switchchord-splits/lock-in-modal.webp" alt="The “Lock in %?” confirmation" width="750" height="1624" loading="lazy"><img src="assets/switchchord-splits/splits-chat.webp" alt="The splits chat" width="750" height="1624" loading="lazy"><img src="assets/switchchord-splits/splits-locked-in.webp" alt="Everyone locked in" width="750" height="1624" loading="lazy"><img src="assets/switchchord-splits/summary-loading.webp" alt="Creating the split summary" width="750" height="1624" loading="lazy"></div>
+          <div class="cs-text">
+            <p>The team wanted to steer hard away from anything that felt binding, because that’s exactly what scares creators off. So we reframed a split as shared governance of a shared asset, not a contract. When I asked where signing should live, the answer was: it shouldn’t. Once everyone hits the “Lock in %” button on the bottom left, it automatically generates a shareable summary (with NO signatures) that lands in each person’s Confirmed section in their Workspace. The trust comes from transparency and a clear record, not from a legal looking form.</p>
+          </div>
         </div>
       </section>
 
@@ -201,7 +201,7 @@
             <p>I pushed for the option that protects momentum: let guests collaborate in the workspace via the web app, so no one hits a dead end. To keep pulling toward the native experience, I added a dismissible sticky banner: “Get the Switchchord iOS app: Control your rights, contracts &amp; catalog” and, to hold MVP scope, we consciously cut guest email notifications for launch.</p>
           </div>
           <figure class="cs-figure">
-            <div class="cs-phones" data-gallery style="--n: 2; --n-phone: 2"><img src="assets/switchchord-splits/guest-web-1.webp" alt="A guest joining the workspace on the web, with the app banner" width="652" height="1411" loading="lazy"><img src="assets/switchchord-splits/guest-web-2.webp" alt="A guest in the splits chat on the web" width="652" height="1411" loading="lazy"></div>
+            <div class="cs-phones" data-gallery data-zoom="2,2" style="--n: 2; --n-phone: 2"><img src="assets/switchchord-splits/guest-web-1.webp" alt="A guest joining the workspace on the web, with the app banner" width="750" height="1624" loading="lazy"><img src="assets/switchchord-splits/guest-web-2.webp" alt="A guest in the splits chat on the web" width="750" height="1624" loading="lazy"></div>
             <figcaption>Guest on web: parity for non-app collaborators keeps the split alive, with a gentle banner to nudge guest users toward the native app without blocking anyone.</figcaption>
           </figure>
         </div>
@@ -217,14 +217,14 @@
           </div>
           <div class="cs-step">
             <h3 class="cs-h3">Sprint 1: Identity + the design system</h3>
-            <div class="cs-phones" data-gallery style="--n: 4; --n-phone: 2"><img src="assets/switchchord-splits/sprint1-role.webp" alt="Choosing a role" width="400" height="866" loading="lazy"><img src="assets/switchchord-splits/sprint1-identity-pro.webp" alt="Adding a PRO identity" width="400" height="866" loading="lazy"><img src="assets/switchchord-splits/sprint1-edit-profile.webp" alt="Editing a profile" width="400" height="866" loading="lazy"><img src="assets/switchchord-splits/sprint1-profile.webp" alt="A profile" width="400" height="866" loading="lazy"></div>
-            <img src="assets/switchchord-splits/design-system.webp" alt="Pages of the Switchchord iOS design system in Figma" width="1336" height="1118" loading="lazy">
             <p>I began this project designing Switchchord’s profile/identity flow to establish the refreshed UI from the brand guidelines and build the app’s iOS design system in Figma, since none existed, with documentation so the engineer and incoming contract designer could work from it directly.</p>
+            <div class="cs-phones" data-gallery data-zoom="4,2" style="--n: 4; --n-phone: 2"><img src="assets/switchchord-splits/sprint1-role.webp" alt="Choosing a role" width="750" height="1624" loading="lazy"><img src="assets/switchchord-splits/sprint1-identity-pro.webp" alt="Adding a PRO identity" width="750" height="1624" loading="lazy"><img src="assets/switchchord-splits/sprint1-edit-profile.webp" alt="Editing a profile" width="750" height="1624" loading="lazy"><img src="assets/switchchord-splits/sprint1-profile.webp" alt="A profile" width="750" height="1624" loading="lazy"></div>
+            <img src="assets/switchchord-splits/design-system.webp" alt="Pages of the Switchchord iOS design system in Figma" width="2364" height="1980" loading="lazy">
           </div>
           <div class="cs-step">
             <h3 class="cs-h3">Sprint 2: Catalog + dashboard</h3>
-            <div class="cs-phones" data-gallery style="--n: 3; --n-phone: 2"><img src="assets/switchchord-splits/sprint2-ipi.webp" alt="Entering an IPI number" width="400" height="866" loading="lazy"><img src="assets/switchchord-splits/sprint2-preview-songs.webp" alt="Confirming known songs" width="400" height="866" loading="lazy"><img src="assets/switchchord-splits/sprint2-import-catalog.webp" alt="Importing a catalog" width="400" height="866" loading="lazy"><img src="assets/switchchord-splits/sprint2-flag-split.webp" alt="Flagging a split" width="400" height="866" loading="lazy"><img src="assets/switchchord-splits/sprint2-dashboard-todo.webp" alt="The dashboard to-dos" width="400" height="866" loading="lazy"><img src="assets/switchchord-splits/sprint2-dashboard-approvals.webp" alt="The dashboard approvals" width="400" height="866" loading="lazy"></div>
             <p>The heftier build: prove a creator’s identity via their IPI number, confirm a few known song titles, then import their catalog with multi-select (song-by-song or all at once), so a songwriter or producer finally has one place that holds everything that’s theirs, and their manager has a way to help manage it. I added a “Flag Split” action for collaboration, color-coded badges to distinguish between known / flagged / unknown splits at a glance, and a dashboard for catalog, to-dos, and approvals.</p>
+            <div class="cs-phones" data-gallery data-zoom="3,3" style="--n: 3; --n-phone: 2"><img src="assets/switchchord-splits/sprint2-ipi.webp" alt="Entering an IPI number" width="750" height="1624" loading="lazy"><img src="assets/switchchord-splits/sprint2-preview-songs.webp" alt="Confirming known songs" width="750" height="1624" loading="lazy"><img src="assets/switchchord-splits/sprint2-import-catalog.webp" alt="Importing a catalog" width="750" height="1624" loading="lazy"><img src="assets/switchchord-splits/sprint2-flag-split.webp" alt="Flagging a split" width="750" height="1624" loading="lazy"><img src="assets/switchchord-splits/sprint2-dashboard-todo.webp" alt="The dashboard to-dos" width="750" height="1624" loading="lazy"><img src="assets/switchchord-splits/sprint2-dashboard-approvals.webp" alt="The dashboard approvals" width="750" height="1624" loading="lazy"></div>
           </div>
         </div>
       </section>
@@ -239,18 +239,18 @@
           </div>
           <div class="cs-step">
             <h3 class="cs-h3">1. Define: FigJam sessions</h3>
-            <div class="cs-pair cs-pair-fit"><img src="assets/switchchord-splits/figjam-sessions.webp" alt="A FigJam session mapping the splits problem" width="652" height="434" loading="lazy"><img src="assets/switchchord-splits/new-workspace-flow.webp" alt="The new workspace flow in FigJam" width="652" height="888" loading="lazy"></div>
             <p>I mapped the splits problem and flows with the CEO and PM, using my sketches to open up the solution space before committing to the UI.</p>
+            <div class="cs-pair cs-pair-fit"><img src="assets/switchchord-splits/figjam-sessions.webp" alt="A FigJam session mapping the splits problem" width="2400" height="1598" loading="lazy"><img src="assets/switchchord-splits/new-workspace-flow.webp" alt="The new workspace flow in FigJam" width="1600" height="2180" loading="lazy"></div>
           </div>
           <div class="cs-step">
             <h3 class="cs-h3">2. Design: Questions and options</h3>
-            <div class="cs-pair cs-pair-fit"><img src="assets/switchchord-splits/questions.webp" alt="Open questions written next to the designs" width="652" height="918" loading="lazy"><img src="assets/switchchord-splits/options.webp" alt="Several design options side by side" width="652" height="586" loading="lazy"></div>
             <p>My approach was asking a lot of questions and putting multiple concrete options on the table, which is how the creative direction got unlocked.</p>
+            <div class="cs-pair cs-pair-fit"><img src="assets/switchchord-splits/questions.webp" alt="Open questions written next to the designs" width="578" height="814" loading="lazy"><img src="assets/switchchord-splits/options.webp" alt="Several design options side by side" width="2204" height="1982" loading="lazy"></div>
           </div>
           <div class="cs-step">
             <h3 class="cs-h3">3. Deliver: Annotated async handoff</h3>
-            <img src="assets/switchchord-splits/handoff.webp" alt="The annotated Sprint 2 handoff in Figma" width="1336" height="693" loading="lazy">
             <p>Labeled main flows, annotated interaction and dev notes on flows, and linked clickable prototypes so Engineering could verify intent without me on call.</p>
+            <img src="assets/switchchord-splits/handoff.webp" alt="The annotated Sprint 2 handoff in Figma" width="2400" height="1246" loading="lazy">
           </div>
         </div>
       </section>
@@ -263,8 +263,9 @@
             <h3 class="cs-lede">Launch videos, cut for each audience</h3>
             <p>I also produced Switchchord’s beta launch promo videos: static designs in Figma, prototyped and screen-recorded, then edited with intros and transition screens. I cut them by audience: one for Managers/Rightsholders and one for Songwriters/Producers, so prospects saw the value framed in their own language, each ending on the PM’s contact details. The team used them to build hype with leads.</p>
           </div>
-          <!-- ✏️ Each plays (muted, on a loop) while it’s on screen. From the live site (720×960). -->
-          <div class="cs-pair"><figure><video class="cs-video" src="assets/switchchord-splits/video-managers.mp4" poster="assets/switchchord-splits/video-managers-poster.webp" width="720" height="960" muted loop playsinline controls preload="none" aria-label="Switchchord launch video for managers and rightsholders"></video><figcaption>MANAGERS</figcaption></figure><figure><video class="cs-video" src="assets/switchchord-splits/video-songwriters.mp4" poster="assets/switchchord-splits/video-songwriters-poster.webp" width="720" height="960" muted loop playsinline controls preload="none" aria-label="Switchchord launch video for songwriters and producers"></video><figcaption>SONGWRITERS</figcaption></figure></div>
+          <!-- ✏️ Managers plays (muted) once it’s on screen; when it ends, Songwriters plays (data-autoplay="after").
+               From the live site (720×960). -->
+          <div class="cs-videos"><figure><video class="cs-video" src="assets/switchchord-splits/video-managers.mp4" poster="assets/switchchord-splits/video-managers-poster.webp" width="720" height="960" muted playsinline controls preload="none" aria-label="Switchchord launch video for managers and rightsholders"></video><figcaption>MANAGERS</figcaption></figure><figure><video class="cs-video" src="assets/switchchord-splits/video-songwriters.mp4" poster="assets/switchchord-splits/video-songwriters-poster.webp" width="720" height="960" muted playsinline controls preload="none" data-autoplay="after" aria-label="Switchchord launch video for songwriters and producers"></video><figcaption>SONGWRITERS</figcaption></figure></div>
         </div>
       </section>
 
@@ -275,6 +276,7 @@
           <div class="cs-text">
             <h3 class="cs-lede">Shipped to beta, then the company pivoted</h3>
             <p>The designs were built and released to a TestFlight beta, and the promo videos went out to leads while the team prepped an investor pitch. Unfortunately, it didn’t reach a public launch: the founder redirected the company toward enterprise clients and the legal-contract side of the product.</p>
+            <p>I’m not going to dress this up with metrics that don’t exist. The honest value of this project is the work itself: a genuinely hard 0→1 problem taken from a blank page to a shippable, considered design system and feature set, solo, on a lean async team.</p>
           </div>
         </div>
       </section>

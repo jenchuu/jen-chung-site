@@ -113,6 +113,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   transition: color .2s ease;
 }
 .nav-links a:hover { color: var(--accent-default); }
+.nav-links a[aria-current] { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 6px; }   /* the page you're on (Work on the home page and case studies) */
 
 /* Light/dark switch (Figma 6796:8401) */
 .theme-toggle {
@@ -435,6 +436,13 @@ a.card:active .card-cta, .cs-pager a:active { color: var(--accent-hover); }
   font-family: var(--font-serif); font-weight: 600; font-size: 20px; line-height: 1.37;
 }
 .cs-card p + p { margin-top: 4px; }
+.cs-card-big h3 { font-size: 40px; line-height: 1.2; }               /* heading/section (Switchchord: The opportunity) */
+.cs-card-big { gap: 16px; padding: 24px; }
+/* Card titles that type themselves in: letters flip through random ones, then settle left to right (js/site.js) */
+[data-scramble] .scramble { white-space: pre-wrap; }
+.cs-videos { display: flex; flex-direction: column; gap: 40px; }      /* videos stacked, each full width */
+.cs-videos figure { display: flex; flex-direction: column; gap: 8px; }
+.cs-videos .cs-video { width: 100%; height: auto; }
 
 /* Gated part (everything after the summary) */
 .cs-body .cs-lock { position: relative; margin-top: 80px; }
@@ -480,6 +488,7 @@ html.cs-is-locked { overflow-x: clip; }              /* the veil is full-width; 
   .cs-pager { margin-top: 80px; }
   .cs-pager > div { padding-block: 48px; }
   .cs-pager a { font-size: 24px; }
+  .cs-card-big h3 { font-size: 32px; }
 }
 @media (max-width: 559px) {
   .cs-pair { grid-template-columns: 1fr; }
@@ -504,13 +513,15 @@ html.cs-is-locked { overflow-x: clip; }              /* the veil is full-width; 
 }
 .lb[hidden] { display: none; }
 @keyframes lb-in { from { opacity: 0; } }
-.lb-stage { display: flex; align-items: flex-start; justify-content: center; gap: 24px; animation: lb-grow .3s var(--ease-out); }
+.lb-stage { display: flex; align-items: flex-start; justify-content: center; animation: lb-grow .3s var(--ease-out); }
+.lb-page { display: flex; flex-direction: column; align-items: center; gap: 8px; }      /* one or more images side by side, + a shared caption */
+.lb-row { display: flex; align-items: flex-start; justify-content: center; gap: 24px; }
 @keyframes lb-grow { from { transform: scale(.97); } }
 .lb-item { display: flex; flex-direction: column; gap: 8px; margin: 0; }
 .lb-item > .crop, .lb-item > img { display: block; box-shadow: 0 8px 40px rgba(0, 0, 0, .12); background: var(--bg-page); }
 .lb-item > img { object-fit: cover; }
 .lb-item .crop img { position: absolute; max-width: none; }
-.lb-item figcaption { font-family: var(--font-sans); font-size: 16px; line-height: 1.37; color: var(--text-secondary); }
+.lb-page figcaption { font-family: var(--font-sans); font-size: 16px; line-height: 1.37; color: var(--text-secondary); }
 .lb-x {
   position: fixed; top: 16px; right: 16px;
   width: 44px; height: 44px; display: grid; place-items: center;
@@ -528,7 +539,7 @@ html.cs-is-locked { overflow-x: clip; }              /* the veil is full-width; 
 /* one at a time, side by side in a sideways strip you can scroll, swipe or step through */
 .lb.is-gallery .lb-stage { width: 100vw; gap: 0; align-items: center; justify-content: flex-start; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scrollbar-width: none; }
 .lb.is-gallery .lb-stage::-webkit-scrollbar { display: none; }
-.lb.is-gallery .lb-item { flex: 0 0 100vw; align-items: center; scroll-snap-align: center; }
+.lb.is-gallery .lb-page { flex: 0 0 100vw; scroll-snap-align: center; }
 .lb-wrap { display: flex; flex-direction: column; align-items: center; }
 html.lb-open { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) { .lb, .lb-stage { animation: none; } }

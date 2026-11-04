@@ -203,10 +203,13 @@
   }
 
   /* ---- Enlarged visuals (case studies) ----------------------------------------- */
-  // Every image in a case study opens full screen. A side-by-side pair (.cs-pair) opens side by
-  // side; below 760px wide, and for V1–V4 ([data-gallery]) always, they open one at a time
-  // in a sideways strip (scroll, swipe, ← → or arrow keys). The enlarged copy keeps each image's
-  // crop. ✕, a click on the veil, or Esc closes it.
+  // Every image in a case study opens full screen, together with the rest of its set: a pair
+  // (.cs-pair) or a row of screens ([data-gallery]). A set's data-zoom="wide,medium" says how many
+  // open side by side on wide screens (1200px+) and on medium ones (760–1199px); more than that
+  // and they open a page at a time in a sideways strip (scroll, swipe, ← → or arrow keys). Phones
+  // (under 760px) always get one at a time. Pairs default to "2,2"; a set without data-zoom opens
+  // one at a time everywhere (Boards V1–V4). The enlarged copy keeps each image's crop. ✕, a click
+  // on the veil, or Esc closes it.
   const cs = document.querySelector('main.cs');
   if (cs) {
     const X_ICON = '<svg viewBox="0 0 24 24" width="32" height="32" aria-hidden="true"><path d="M6 18 18 6M6 6l12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
@@ -220,7 +223,7 @@
     document.body.append(lb);
     const stage = lb.querySelector('.lb-stage');
     const count = lb.querySelector('.lb-count');
-    let items = [], index = 0, lastFocus = null;
+    let items = [], pages = [], index = 0, itemAt = 0, zoom = [1, 1], lastFocus = null;
 
     // what each clickable visual is: the image (or its crop frame), plus its caption
     const visualOf = (el) => (el.closest('.crop') || el);
@@ -240,52 +243,74 @@
     const groupFor = (v) => {
       const set = v.closest('.cs-pair, [data-gallery]');
       const members = set ? [...set.children].filter((c) => c.querySelector('img') || c.matches('img')).map((c) => visualOf(c.matches('img') ? c : c.querySelector('img'))) : [v];
-      return { list: members.map((el) => ({ el, caption: captionOf(el) })), at: Math.max(0, members.indexOf(v)), strip: !!(set && set.matches('[data-gallery]')) };
+      const z = set ? (set.dataset.zoom || (set.matches('.cs-pair') ? '2,2' : '1,1')) : '1,1';
+      return { list: members.map((el) => ({ el, caption: captionOf(el) })), at: Math.max(0, members.indexOf(v)), zoom: z.split(',').map(Number) };
     };
 
-    // Pairs sit side by side on wide screens. Small screens, and V1–V4 ([data-gallery]) everywhere, get a
-    // "gallery": one at a time in a sideways strip (scroll, swipe, ← → buttons or arrow keys).
-    let strip = false;
+    // How many open side by side right now; the set is cut into pages of that many. More than one
+    // page makes a "gallery": a sideways strip of pages (scroll, swipe, ← → buttons or arrow keys).
     const single = () => innerWidth < 760;
-    const gallery = () => strip || single();
+    const perPage = () => (single() ? 1 : innerWidth >= 1200 ? zoom[0] : zoom[1]);
+    const gallery = () => pages.length > 1;
     const stepBtns = { prev: lb.querySelector('.lb-prev'), next: lb.querySelector('.lb-next') };
     function syncCount() {
-      count.textContent = `${index + 1} / ${items.length}`;
-      if (gallery()) { stepBtns.prev.disabled = index === 0; stepBtns.next.disabled = index === items.length - 1; }
+      count.textContent = `${index + 1} / ${pages.length}`;
+      if (gallery()) { stepBtns.prev.disabled = index === 0; stepBtns.next.disabled = index === pages.length - 1; }
     }
+    const zoomCopy = (it, w, h) => {
+      const copy = it.el.cloneNode(true);
+      copy.classList.remove('cs-zoom'); copy.removeAttribute('tabindex'); copy.removeAttribute('role'); copy.removeAttribute('aria-label');
+      (copy.matches('img') ? [copy] : [...copy.querySelectorAll('img')]).forEach((img) => { img.loading = 'eager'; });
+      Object.assign(copy.style, { width: `${w}px`, height: `${h}px`, aspectRatio: 'auto', flex: 'none' });
+      return copy;
+    };
     function render() {
+      const per = Math.max(1, perPage());
+      pages = [];
+      for (let i = 0; i < items.length; i += per) pages.push(items.slice(i, i + per));
+      index = Math.min(pages.length - 1, Math.floor(itemAt / per));
       const g = gallery();
       lb.classList.toggle('is-gallery', g);
-      lb.classList.toggle('has-many', items.length > 1);
-      const hasCap = items.some((it) => it.caption);
+      lb.classList.toggle('has-many', g);
       const gap = 24;
       const padX = single() ? 16 : 72, padY = single() ? 72 : 64;
-      const navH = g && items.length > 1 ? 60 : 0;
-      const availH = innerHeight - padY * 2 - (hasCap ? 30 : 0) - navH;
-      const ratios = items.map((it) => { const r = it.el.getBoundingClientRect(); return r.width / r.height || 1.4; });
-      // gallery: each one fits the screen on its own; side by side: one shared height
-      const heights = g
-        ? ratios.map((r) => Math.min(availH, (innerWidth - padX * 2) / r))
-        : ratios.map(() => Math.min(availH, (innerWidth - padX * 2 - gap * (items.length - 1)) / ratios.reduce((a, b) => a + b, 0)));
-      stage.replaceChildren(...items.map((it, i) => {
-        const fig = document.createElement('figure');
-        fig.className = 'lb-item';
-        const copy = it.el.cloneNode(true);
-        copy.classList.remove('cs-zoom'); copy.removeAttribute('tabindex'); copy.removeAttribute('role'); copy.removeAttribute('aria-label');
-        (copy.matches('img') ? [copy] : [...copy.querySelectorAll('img')]).forEach((img) => { img.loading = 'eager'; });
-        const w = Math.round(heights[i] * ratios[i]);
-        copy.style.width = `${w}px`; copy.style.height = `${Math.round(heights[i])}px`;
-        copy.style.aspectRatio = 'auto'; copy.style.flex = 'none';
-        fig.append(copy);
-        if (it.caption) fig.append(Object.assign(document.createElement('figcaption'), { textContent: it.caption, style: `width: ${w}px` }));
-        return fig;
+      const W = innerWidth - padX * 2;
+      const navH = g ? 60 : 0;
+      const capLines = (text, width) => (text ? Math.ceil((text.length * 8.4) / Math.max(120, width)) : 0);   // ~8.4px a character at 16px
+      stage.replaceChildren(...pages.map((page) => {
+        const ratios = page.map((it) => { const r = it.el.getBoundingClientRect(); return r.width / r.height || 1.4; });
+        const sum = ratios.reduce((a, b) => a + b, 0);
+        const gaps = gap * (page.length - 1);
+        // screens from one figure share its caption: it's shown once, under the whole row
+        const shared = page.length > 1 && page[0].caption && page.every((it) => it.caption === page[0].caption) ? page[0].caption : '';
+        const capW = (rowW) => (shared ? Math.min(W, Math.max(rowW, 640)) : rowW / page.length);
+        const capH = (rowW) => Math.max(...page.map((it) => capLines(shared || it.caption, capW(rowW)))) * 22 + (page.some((it) => it.caption) ? 8 : 0);
+        // one shared height for the row: as tall as fits the screen, caption and ← → included
+        let h = Math.min(innerHeight - padY * 2 - navH - capH(W), (W - gaps) / sum);
+        h = Math.min(h, innerHeight - padY * 2 - navH - capH(h * sum + gaps));
+        const rowW = Math.round(h * sum + gaps);
+        const pg = document.createElement('div');
+        pg.className = 'lb-page';
+        const row = document.createElement('div');
+        row.className = 'lb-row';
+        row.append(...page.map((it, i) => {
+          const fig = document.createElement('figure');
+          fig.className = 'lb-item';
+          const w = Math.round(h * ratios[i]);
+          fig.append(zoomCopy(it, w, Math.round(h)));
+          if (it.caption && !shared) fig.append(Object.assign(document.createElement('figcaption'), { textContent: it.caption, style: `width: ${w}px` }));
+          return fig;
+        }));
+        pg.append(row);
+        if (shared) pg.append(Object.assign(document.createElement('figcaption'), { textContent: shared, style: `width: ${Math.round(capW(rowW))}px` }));
+        return pg;
       }));
       if (g) stage.scrollLeft = index * stage.clientWidth;
       syncCount();
     }
     function open(v) {
       const g = groupFor(v);
-      items = g.list; index = g.at; strip = g.strip;
+      items = g.list; itemAt = g.at; zoom = g.zoom;
       lastFocus = document.activeElement;
       lb.hidden = false;
       root.classList.add('lb-open');
@@ -300,19 +325,19 @@
     }
     const smooth = () => (matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth');
     const step = (d) => {
-      if (!gallery() || items.length < 2) return;
-      const to = Math.min(items.length - 1, Math.max(0, index + d));
+      if (!gallery()) return;
+      const to = Math.min(pages.length - 1, Math.max(0, index + d));
       if (to !== index) stage.scrollTo({ left: to * stage.clientWidth, behavior: smooth() });
     };
     stage.addEventListener('scroll', () => {
       if (!gallery()) return;
       const i = Math.round(stage.scrollLeft / Math.max(1, stage.clientWidth));
-      if (i !== index) { index = i; syncCount(); }
+      if (i !== index) { index = i; itemAt = i * Math.max(1, perPage()); syncCount(); }
     }, { passive: true });
     // a mouse wheel (up/down) also steps through the gallery; sideways trackpad scrolling just scrolls
     let wheelLock = 0;
     lb.addEventListener('wheel', (e) => {
-      if (!gallery() || items.length < 2 || Math.abs(e.deltaX) >= Math.abs(e.deltaY)) return;
+      if (!gallery() || Math.abs(e.deltaX) >= Math.abs(e.deltaY)) return;
       e.preventDefault();
       if (performance.now() < wheelLock || Math.abs(e.deltaY) < 8) return;
       wheelLock = performance.now() + 600;
@@ -352,18 +377,26 @@
       if (document.readyState === 'complete') later(); else addEventListener('load', later, { once: true });
     }
 
-    // Videos: play (muted, looping) while at least 40% is on screen, pause when scrolled away.
-    // If the visitor pauses one themselves, it stays paused. Start loading a screen ahead.
-    cs.querySelectorAll('video.cs-video').forEach((v) => {
+    // Videos: play (muted) while at least 40% is on screen, pause when scrolled away. If the visitor
+    // pauses one themselves, it stays paused. Start loading a screen ahead. A video marked
+    // data-autoplay="after" waits for the one before it to finish, then plays (now, if it's on
+    // screen, or as soon as it's scrolled to).
+    const vids = [...cs.querySelectorAll('video.cs-video')];
+    vids.forEach((v, i) => {
       if (!('IntersectionObserver' in window)) return;
       const autoplay = !matchMedia('(prefers-reduced-motion: reduce)').matches;
-      let byUs = false, userPaused = false;
+      let byUs = false, userPaused = false, inView = false, armed = v.dataset.autoplay !== 'after';
       v.addEventListener('pause', () => { if (!byUs && !v.ended) userPaused = true; byUs = false; });
-      v.addEventListener('play', () => { userPaused = false; });
+      v.addEventListener('play', () => { userPaused = false; armed = true; });
+      if (!armed && vids[i - 1]) vids[i - 1].addEventListener('ended', () => {
+        armed = true; v.preload = 'auto';
+        if (inView && autoplay && !userPaused) v.play().catch(() => {});
+      });
       new IntersectionObserver(([e]) => { if (e.isIntersecting) v.preload = 'auto'; }, { rootMargin: '100% 0px' }).observe(v);
       new IntersectionObserver(([e]) => {
-        if (e.isIntersecting && autoplay && !userPaused) v.play().catch(() => {});
-        else if (!e.isIntersecting && !v.paused) { byUs = true; v.pause(); }
+        inView = e.isIntersecting;
+        if (inView && autoplay && armed && !userPaused) v.play().catch(() => {});
+        else if (!inView && !v.paused) { byUs = true; v.pause(); }
       }, { threshold: 0.4 }).observe(v);
     });
 
@@ -413,6 +446,39 @@
       nums.forEach((el) => io.observe(el));
     }
 
+    // Card titles ([data-scramble]): letters flip through random ones, then settle left to right
+    // (once, in view). Spaces and punctuation stay put; screen readers get the real title.
+    const titles = [...cs.querySelectorAll('[data-scramble]')];
+    if (titles.length && 'IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const FLIP_MS = 45, SETTLE_MS = 300, EACH_MS = 40;        // ✏️ flip speed, when the first letter settles, then each next
+      const LOWER = 'abcdefghijklmnopqrstuvwxyz', UPPER = LOWER.toUpperCase();
+      const jumble = (ch) => (/[a-z]/.test(ch) ? LOWER : /[A-Z]/.test(ch) ? UPPER : /\d/.test(ch) ? '0123456789' : '');
+      const randomize = (final, keep) => [...final].map((ch, i) => { const set = jumble(ch); return i < keep || !set ? ch : set[Math.floor(Math.random() * set.length)]; }).join('');
+      titles.forEach((el) => {
+        const final = el.textContent;
+        el.textContent = '';
+        el.append(Object.assign(document.createElement('span'), { className: 'sr-only', textContent: final }),
+          Object.assign(document.createElement('span'), { className: 'scramble', textContent: randomize(final, 0) }));
+        el.lastChild.setAttribute('aria-hidden', 'true');
+        el.dataset.final = final;
+      });
+      const run = (el) => {
+        const out = el.querySelector('.scramble'), final = el.dataset.final, letters = [...final];
+        const t0 = performance.now();
+        const tick = () => {
+          const t = performance.now() - t0;
+          const keep = t < SETTLE_MS ? 0 : Math.floor((t - SETTLE_MS) / EACH_MS) + 1;
+          out.textContent = randomize(final, keep);
+          if (keep < letters.length) setTimeout(tick, FLIP_MS);
+        };
+        tick();
+      };
+      const io = new IntersectionObserver((entries) => entries.forEach((e) => {
+        if (e.isIntersecting) { io.unobserve(e.target); run(e.target); }
+      }), { threshold: 0.6 });
+      titles.forEach((el) => io.observe(el));
+    }
+
     cs.addEventListener('click', (e) => { const v = e.target.closest('.cs-zoom'); if (v) open(v); });
     cs.addEventListener('keydown', (e) => {
       const v = e.target.closest && e.target.closest('.cs-zoom');
@@ -421,7 +487,7 @@
     lb.addEventListener('click', (e) => {
       if (e.target.closest('.lb-prev')) step(-1);
       else if (e.target.closest('.lb-next')) step(1);
-      else if (e.target.closest('.lb-x') || !e.target.closest('.lb-item > .crop, .lb-item > img, .lb-item figcaption, .lb-nav')) close();   // ✕ or the veil
+      else if (e.target.closest('.lb-x') || !e.target.closest('.lb-item > .crop, .lb-item > img, .lb-page figcaption, .lb-nav')) close();   // ✕ or the veil
     });
     // keys work as soon as it's open, wherever focus is
     document.addEventListener('keydown', (e) => {
