@@ -436,13 +436,19 @@ a.card:active .card-cta, .cs-pager a:active { color: var(--accent-hover); }
   font-family: var(--font-serif); font-weight: 600; font-size: 20px; line-height: 1.37;
 }
 .cs-card p + p { margin-top: 4px; }
-.cs-card-big h3 { font-size: 40px; line-height: 1.2; }               /* heading/section (Switchchord: The opportunity) */
-.cs-card-big { gap: 16px; padding: 24px; }
+/* Callout (Switchchord: The opportunity): label/eyebrow in secondary, then a heading/pager line */
+.cs-callout { display: flex; flex-direction: column; gap: 8px; }
+.cs-callout h3 { font-family: var(--font-sans); font-weight: 600; font-size: 18px; line-height: 1.5; color: var(--text-secondary); text-transform: uppercase; }   /* label/meta */
+.cs-callout p { font-family: var(--font-serif); font-weight: 600; font-size: 40px; line-height: 1.2; color: var(--text-primary); }
+/* Takeaway (Switchchord: Going wide): a paragraph, then outlined cards with one heading/m line each */
+.cs-takeaway { display: flex; flex-direction: column; gap: 16px; }
+.cs-stat-text { justify-content: center; font-family: var(--font-serif); font-weight: 600; font-size: 24px; line-height: 1.5; color: var(--text-heading); }
 /* Card titles that type themselves in: letters flip through random ones, then settle left to right (js/site.js) */
 [data-scramble] .scramble { white-space: pre-wrap; }
 .cs-videos { display: flex; flex-direction: column; gap: 40px; }      /* videos stacked, each full width */
 .cs-videos figure { display: flex; flex-direction: column; gap: 8px; }
-.cs-videos .cs-video { width: 100%; height: auto; }
+/* ✏️ never taller than the screen (below the nav, with its caption): the 3:4 videos get narrower instead */
+.cs-videos .cs-video { width: min(100%, (100svh - var(--layout-nav-height) - 48px - 30px) * 3 / 4); height: auto; }
 
 /* Gated part (everything after the summary) */
 .cs-body .cs-lock { position: relative; margin-top: 80px; }
@@ -488,7 +494,7 @@ html.cs-is-locked { overflow-x: clip; }              /* the veil is full-width; 
   .cs-pager { margin-top: 80px; }
   .cs-pager > div { padding-block: 48px; }
   .cs-pager a { font-size: 24px; }
-  .cs-card-big h3 { font-size: 32px; }
+  .cs-callout p { font-size: 24px; }
 }
 @media (max-width: 559px) {
   .cs-pair { grid-template-columns: 1fr; }

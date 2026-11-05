@@ -426,7 +426,7 @@
     // (once, in view). Spaces and punctuation stay put; screen readers get the real title.
     const titles = [...cs.querySelectorAll('[data-scramble]')];
     if (titles.length && 'IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      const FLIP_MS = 45, SETTLE_MS = 300, EACH_MS = 40;        // ✏️ flip speed, when the first letter settles, then each next
+      const FLIP_MS = 40, SETTLE_MS = 150, EACH_MS = 25;        // ✏️ flip speed, when the first letter settles, then each next
       const LOWER = 'abcdefghijklmnopqrstuvwxyz', UPPER = LOWER.toUpperCase();
       const jumble = (ch) => (/[a-z]/.test(ch) ? LOWER : /[A-Z]/.test(ch) ? UPPER : /\d/.test(ch) ? '0123456789' : '');
       const randomize = (final, keep) => [...final].map((ch, i) => { const set = jumble(ch); return i < keep || !set ? ch : set[Math.floor(Math.random() * set.length)]; }).join('');
