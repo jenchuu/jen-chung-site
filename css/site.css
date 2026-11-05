@@ -150,15 +150,12 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 }
 @media (min-width: 760px) { .nav-link-list { display: contents; } }
 
-/* Case studies: the nav stays at the top, fades away while you scroll down and comes back when you
-   scroll up or reach the end (js/site.js switches .nav-hidden on <html>) */
+/* Every page: the nav stays pinned to the top while you scroll */
 .nav-auto {
   position: sticky; top: 0;
   background: var(--bg-page);
-  transition: opacity .3s ease, transform .3s var(--ease-out), background-color .3s ease;
+  transition: background-color .3s ease;
 }
-.nav-hidden .nav-auto { opacity: 0; transform: translateY(-16px); pointer-events: none; }   /* ✏️ how far it slides up as it fades */
-@media (prefers-reduced-motion: reduce) { .nav-hidden .nav-auto { transform: none; } }
 
 /* ---- Hero (konbini) ----------------------------------------------------------- */
 .hero { padding-top: var(--hero-gap); }
@@ -175,7 +172,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 }
 
 /* ---- Sections ------------------------------------------------------------------ */
-.section { scroll-margin-top: 24px; }
+.section { scroll-margin-top: calc(var(--layout-nav-height) + 24px); }   /* clear the sticky nav once it comes back */
 .section h2 {
   margin: 0 0 48px;
   font-family: var(--font-serif); font-weight: 600;
@@ -344,12 +341,10 @@ a.card:active .card-cta, .cs-pager a:active { color: var(--accent-hover); }
 }
 .cs-section + .cs-section { margin-top: 80px; }
 .cs-h2 {
-  position: sticky; top: calc(var(--layout-nav-height) + var(--cs-pin-top));   /* below the nav while it shows */
+  position: sticky; top: calc(var(--layout-nav-height) + var(--cs-pin-top));   /* just below the nav */
   font-family: var(--font-serif); font-weight: 600; font-size: 56px; line-height: 1.2;   /* ✏️ */
   color: var(--text-heading);
-  transition: top .3s var(--ease-out);
 }
-.nav-hidden .cs-h2 { top: var(--cs-pin-top); }
 .cs-main { display: flex; flex-direction: column; gap: 40px; min-width: 0; }
 .cs-main-tight { gap: 16px; }
 .cs-text { font-size: 18px; line-height: 1.37; }
