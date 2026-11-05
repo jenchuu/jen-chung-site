@@ -29,7 +29,7 @@
   function renderTheme() {
     const dark = theme() === 'dark';
     toggle.setAttribute('aria-pressed', String(dark));
-    themeColor.setAttribute('content', dark ? '#222222' : '#fcf9ef');
+    themeColor.setAttribute('content', dark ? '#121212' : '#fcf9ef');
   }
   toggle.addEventListener('click', () => {
     root.dataset.theme = theme() === 'dark' ? 'light' : 'dark';
@@ -348,7 +348,8 @@
     if (root.classList.contains('cs-rise-ready')) {
       const RISE_STEP_MS = 80;                                   // ✏️ gap between blocks that arrive together
       const MAX_WAIT_MS = 240;                                   // ✏️ longest any block waits (so a fast scroll never leaves it blank)
-      const blocks = [...cs.querySelectorAll('.cs-label, .cs-title, .cs-h2, .cs-meta > div, .cs-meta-title, .cs-text > *, .cs-main > :not(.cs-text)')];
+      const blocks = [...cs.querySelectorAll('.cs-label, .cs-title, .cs-h2, .cs-meta > div, .cs-meta-title, .cs-text > *, .cs-main > :not(.cs-text, .ds-colors, .ds-scale-wrap), '
+        + '.ds-intro, .ds .cs-main > .cs-text, .ds-colors > *, .ds-specimen, .ds-step')];   // (same list as css/site.css)
       let nextAt = 0;
       const riseIO = new IntersectionObserver((entries) => {
         entries.filter((e) => e.isIntersecting)
@@ -534,6 +535,18 @@
         }
         sw.lastElementChild.innerHTML = html;
       });
+    });
+  }
+
+  /* ---- Design system page: type scale, in use only or in full ------------------------- */
+  // The "Show full type scale" switch adds every weight of each typeface (css/site.css shows it with .is-full).
+  const scaleToggle = document.getElementById('ds-scale-toggle');
+  if (scaleToggle) {
+    const scale = document.getElementById(scaleToggle.getAttribute('aria-controls'));
+    scaleToggle.addEventListener('click', () => {
+      const full = scaleToggle.getAttribute('aria-checked') !== 'true';
+      scaleToggle.setAttribute('aria-checked', String(full));
+      scale.classList.toggle('is-full', full);
     });
   }
 

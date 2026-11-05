@@ -12,6 +12,8 @@
     var t = 'light';
     try { t = localStorage.getItem('jc-theme') || t; } catch (e) {}
     document.documentElement.dataset.theme = t === 'dark' ? 'dark' : 'light';
+    // Soft rise: text and visuals start hidden and rise in as they scroll into view (js/site.js), as on the case studies
+    if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('cs-rise-ready');
   })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -93,95 +95,115 @@
       </section>
 
       <!-- ===== Type scale ===== -->
-      <!-- Every text style, biggest first, shown in each weight of its typeface; "In use" marks the one the site uses.
+      <!-- Every text style, biggest first. By default each shows one sample (.ds-sample) as the site uses it; the "Show full type scale" switch
+           (js/site.js) adds the Ag specimens and every weight of its typeface (.ds-weights), "In use" marking the one the site uses.
            ✏️ Written out by hand: if a style changes in css/site.css, change its row here (style="--d: desktop size; --m: phone size; --lh: line height"). -->
-      <section class="cs-section ds-wide" aria-labelledby="ds-type">
+      <section class="cs-section" aria-labelledby="ds-type">
         <h2 class="cs-h2" id="ds-type">Type scale</h2>
         <div class="cs-main">
-          <p class="cs-text">Two typefaces: Crimson Text for headings, Inter for everything you read or click. Each style is shown in every weight of its typeface, with the one the site uses marked. Phone sizes take over below 760px wide.</p>
-        </div>
-        <div class="ds-scale-wrap">
-          <div class="ds-family ds-serif">
-            <div class="ds-specimen"><p class="ds-family-name">Crimson Text · Headings</p><p class="ds-ag" aria-hidden="true">Ag</p><p class="ds-abc" aria-hidden="true">ABCDEFGHIJKLMNOPQRSTUVWXYZ<br>abcdefghijklmnopqrstuvwxyz<br>0123456789 !@#$%^&amp;*()</p></div>
-            <ol class="ds-scale">
-              <li class="ds-step" style="--d:56px;--m:40px;--lh:1.2">
-                <div class="ds-step-head"><p><b>display/title</b>Case study page title</p><p><span>Font size: 56px / 3.5rem</span> | <span>Line height: 120%</span> | <span>Phone: 40px</span></p></div>
-                <div class="ds-weights"><p style="--w:400">Regular</p><p style="--w:400;font-style:italic">Italic</p><p class="is-used" style="--w:600">SemiBold<span>In use</span></p><p style="--w:700">Bold</p></div>
-              </li>
-              <li class="ds-step" style="--d:56px;--m:40px;--lh:1.2">
-                <div class="ds-step-head"><p><b>display/section</b>Case study section titles</p><p><span>Font size: 56px / 3.5rem</span> | <span>Line height: 120%</span> | <span>Phone: 40px</span></p></div>
-                <div class="ds-weights"><p style="--w:400">Regular</p><p style="--w:400;font-style:italic">Italic</p><p class="is-used" style="--w:600">SemiBold<span>In use</span></p><p style="--w:700">Bold</p></div>
-              </li>
-              <li class="ds-step" style="--d:40px;--m:32px;--lh:1.2">
-                <div class="ds-step-head"><p><b>heading/section</b>Home section titles</p><p><span>Font size: 40px / 2.5rem</span> | <span>Line height: 120%</span> | <span>Phone: 32px</span></p></div>
-                <div class="ds-weights"><p style="--w:400">Regular</p><p style="--w:400;font-style:italic">Italic</p><p class="is-used" style="--w:600">SemiBold<span>In use</span></p><p style="--w:700">Bold</p></div>
-              </li>
-              <li class="ds-step" style="--d:40px;--m:32px;--lh:1.2">
-                <div class="ds-step-head"><p><b>heading/dialog</b>Password title</p><p><span>Font size: 40px / 2.5rem</span> | <span>Line height: 120%</span> | <span>Phone: 32px</span></p></div>
-                <div class="ds-weights"><p style="--w:400">Regular</p><p style="--w:400;font-style:italic">Italic</p><p class="is-used" style="--w:600">SemiBold<span>In use</span></p><p style="--w:700">Bold</p></div>
-              </li>
-              <li class="ds-step" style="--d:40px;--m:24px;--lh:1.2">
-                <div class="ds-step-head"><p><b>heading/pager</b>Next case study link</p><p><span>Font size: 40px / 2.5rem</span> | <span>Line height: 120%</span> | <span>Phone: 24px</span></p></div>
-                <div class="ds-weights"><p style="--w:400">Regular</p><p style="--w:400;font-style:italic">Italic</p><p class="is-used" style="--w:600">SemiBold<span>In use</span></p><p style="--w:700">Bold</p></div>
-              </li>
-              <li class="ds-step" style="--d:32px;--m:24px;--lh:1.31">
-                <div class="ds-step-head"><p><b>heading/intro</b>Konbini hero sentence (the rotating word is Italic)</p><p><span>Font size: 32px / 2rem</span> | <span>Line height: 131%</span> | <span>Phone: 24px</span></p></div>
-                <div class="ds-weights"><p class="is-used" style="--w:400">Regular<span>In use</span></p><p style="--w:400;font-style:italic">Italic</p><p style="--w:600">SemiBold</p><p style="--w:700">Bold</p></div>
-              </li>
-              <li class="ds-step" style="--d:24px;--m:24px;--lh:1.2">
-                <div class="ds-step-head"><p><b>heading/connect</b>Footer</p><p><span>Font size: 24px / 1.5rem</span> | <span>Line height: 120%</span> | <span>Phone: 24px</span></p></div>
-                <div class="ds-weights"><p style="--w:400">Regular</p><p style="--w:400;font-style:italic">Italic</p><p style="--w:600">SemiBold</p><p class="is-used" style="--w:700">Bold<span>In use</span></p></div>
-              </li>
-              <li class="ds-step" style="--d:24px;--m:24px;--lh:1.5">
-                <div class="ds-step-head"><p><b>heading/m</b>Stat numbers, lede line</p><p><span>Font size: 24px / 1.5rem</span> | <span>Line height: 150%</span> | <span>Phone: 24px</span></p></div>
-                <div class="ds-weights"><p style="--w:400">Regular</p><p style="--w:400;font-style:italic">Italic</p><p class="is-used" style="--w:600">SemiBold<span>In use</span></p><p style="--w:700">Bold</p></div>
-              </li>
-              <li class="ds-step" style="--d:20px;--m:20px;--lh:1.05">
-                <div class="ds-step-head"><p><b>body/card</b>Home card description</p><p><span>Font size: 20px / 1.25rem</span> | <span>Line height: 105%</span> | <span>Phone: 20px</span></p></div>
-                <div class="ds-weights"><p class="is-used" style="--w:400">Regular<span>In use</span></p><p style="--w:400;font-style:italic">Italic</p><p style="--w:600">SemiBold</p><p style="--w:700">Bold</p></div>
-              </li>
-              <li class="ds-step" style="--d:18px;--m:18px;--lh:1.5">
-                <div class="ds-step-head"><p><b>heading/s</b>Step titles, card titles</p><p><span>Font size: 18px / 1.125rem</span> | <span>Line height: 150%</span> | <span>Phone: 18px</span></p></div>
-                <div class="ds-weights"><p style="--w:400">Regular</p><p style="--w:400;font-style:italic">Italic</p><p class="is-used" style="--w:600">SemiBold<span>In use</span></p><p style="--w:700">Bold</p></div>
-              </li>
-              <li class="ds-step" style="--d:16px;--m:20px;--lh:1.37">
-                <div class="ds-step-head"><p><b>nav/link</b>Nav links (the logo is Bold)</p><p><span>Font size: 16px / 1rem</span> | <span>Line height: 137%</span> | <span>Phone: 20px</span></p></div>
-                <div class="ds-weights"><p class="is-used" style="--w:400">Regular<span>In use</span></p><p style="--w:400;font-style:italic">Italic</p><p style="--w:600">SemiBold</p><p style="--w:700">Bold</p></div>
-              </li>
-            </ol>
-          </div>
-          <div class="ds-family">
-            <div class="ds-specimen"><p class="ds-family-name">Inter · Body, labels, buttons</p><p class="ds-ag" aria-hidden="true">Ag</p><p class="ds-abc" aria-hidden="true">ABCDEFGHIJKLMNOPQRSTUVWXYZ<br>abcdefghijklmnopqrstuvwxyz<br>0123456789 !@#$%^&amp;*()</p></div>
-            <ol class="ds-scale">
-              <li class="ds-step" style="--d:24px;--m:20px;--lh:1.5">
-                <div class="ds-step-head"><p><b>label/eyebrow</b>Label above the case study title</p><p><span>Font size: 24px / 1.5rem</span> | <span>Line height: 150%</span> | <span>Phone: 20px</span></p></div>
-                <div class="ds-weights"><p class="is-used" style="--w:400">Regular<span>In use</span></p><p style="--w:500">Medium</p><p style="--w:600">SemiBold</p><p style="--w:700">Bold</p></div>
-              </li>
-              <li class="ds-step" style="--d:18px;--m:18px;--lh:1.5">
-                <div class="ds-step-head"><p><b>label/meta</b>Role, timeline, summary labels</p><p><span>Font size: 18px / 1.125rem</span> | <span>Line height: 150%</span> | <span>Phone: 18px</span></p></div>
-                <div class="ds-weights"><p style="--w:400">Regular</p><p style="--w:500">Medium</p><p class="is-used" style="--w:600">SemiBold<span>In use</span></p><p style="--w:700">Bold</p></div>
-              </li>
-              <li class="ds-step" style="--d:18px;--m:18px;--lh:1.37">
-                <div class="ds-step-head"><p><b>body/l</b>Case study paragraphs (bold words are Bold)</p><p><span>Font size: 18px / 1.125rem</span> | <span>Line height: 137%</span> | <span>Phone: 18px</span></p></div>
-                <div class="ds-weights"><p class="is-used" style="--w:400">Regular<span>In use</span></p><p style="--w:500">Medium</p><p style="--w:600">SemiBold</p><p style="--w:700">Bold</p></div>
-              </li>
-              <li class="ds-step" style="--d:16px;--m:16px;--lh:1.37">
-                <div class="ds-step-head"><p><b>body/m</b>Step text, captions</p><p><span>Font size: 16px / 1rem</span> | <span>Line height: 137%</span> | <span>Phone: 16px</span></p></div>
-                <div class="ds-weights"><p class="is-used" style="--w:400">Regular<span>In use</span></p><p style="--w:500">Medium</p><p style="--w:600">SemiBold</p><p style="--w:700">Bold</p></div>
-              </li>
-              <li class="ds-step" style="--d:16px;--m:16px;--lh:1.37">
-                <div class="ds-step-head"><p><b>button/text</b>Text buttons, password button</p><p><span>Font size: 16px / 1rem</span> | <span>Line height: 137%</span> | <span>Phone: 16px</span></p></div>
-                <div class="ds-weights"><p style="--w:400">Regular</p><p class="is-used" style="--w:500">Medium<span>In use</span></p><p style="--w:600">SemiBold</p><p style="--w:700">Bold</p></div>
-              </li>
-              <li class="ds-step" style="--d:14px;--m:14px;--lh:1.37">
-                <div class="ds-step-head"><p><b>body/s</b>Card labels, chips, field label</p><p><span>Font size: 14px / 0.875rem</span> | <span>Line height: 137%</span> | <span>Phone: 14px</span></p></div>
-                <div class="ds-weights"><p class="is-used" style="--w:400">Regular<span>In use</span></p><p style="--w:500">Medium</p><p style="--w:600">SemiBold</p><p style="--w:700">Bold</p></div>
-              </li>
-              <li class="ds-step" style="--d:12px;--m:12px;--lh:1.37">
-                <div class="ds-step-head"><p><b>body/xs</b>Error message, colophon (in italic)</p><p><span>Font size: 12px / 0.75rem</span> | <span>Line height: 137%</span> | <span>Phone: 12px</span></p></div>
-                <div class="ds-weights"><p class="is-used" style="--w:400">Regular<span>In use</span></p><p style="--w:500">Medium</p><p style="--w:600">SemiBold</p><p style="--w:700">Bold</p></div>
-              </li>
-            </ol>
+          <p class="cs-text">Two typefaces: Crimson Text for headings, Inter for everything you read or click. Each style is shown as the site uses it. (The full type scale adds every weight of its typeface.) Phone sizes take over below 760px wide.</p>
+          <button class="ds-switch" id="ds-scale-toggle" type="button" role="switch" aria-checked="false" aria-controls="ds-scale"><span class="ds-switch-track" aria-hidden="true"></span>Show full type scale</button>
+          <div class="ds-scale-wrap" id="ds-scale">
+            <div class="ds-family ds-serif">
+              <div class="ds-specimen"><p class="ds-family-name">Crimson Text · Headings</p><p class="ds-ag" aria-hidden="true">Ag</p><p class="ds-abc" aria-hidden="true">ABCDEFGHIJKLMNOPQRSTUVWXYZ<br>abcdefghijklmnopqrstuvwxyz<br>0123456789 !@#$%^&amp;*()</p></div>
+              <ol class="ds-scale">
+                <li class="ds-step" style="--d:56px;--m:40px;--lh:1.2">
+                  <div class="ds-step-head"><p><b>display/title</b>Case study page title</p><p><span>Font size: 56px / 3.5rem</span> | <span>Line height: 120%</span> | <span>Phone: 40px</span></p></div>
+                  <p class="ds-sample" style="--w:600">Live financial reporting</p>
+                  <div class="ds-weights"><div style="--w:400"><p aria-hidden="true">display/<wbr>title</p><p>Regular</p></div><div style="--w:400;font-style:italic"><p aria-hidden="true">display/<wbr>title</p><p>Italic</p></div><div style="--w:600"><p aria-hidden="true">display/<wbr>title</p><p>SemiBold</p><span class="chip chip-purple">In use</span></div><div style="--w:700"><p aria-hidden="true">display/<wbr>title</p><p>Bold</p></div></div>
+                </li>
+                <li class="ds-step" style="--d:56px;--m:40px;--lh:1.2">
+                  <div class="ds-step-head"><p><b>display/section</b>Case study section titles</p><p><span>Font size: 56px / 3.5rem</span> | <span>Line height: 120%</span> | <span>Phone: 40px</span></p></div>
+                  <p class="ds-sample" style="--w:600;color:var(--text-heading)">The problem</p>
+                  <div class="ds-weights"><div style="--w:400"><p aria-hidden="true">display/<wbr>section</p><p>Regular</p></div><div style="--w:400;font-style:italic"><p aria-hidden="true">display/<wbr>section</p><p>Italic</p></div><div style="--w:600"><p aria-hidden="true">display/<wbr>section</p><p>SemiBold</p><span class="chip chip-purple">In use</span></div><div style="--w:700"><p aria-hidden="true">display/<wbr>section</p><p>Bold</p></div></div>
+                </li>
+                <li class="ds-step" style="--d:40px;--m:32px;--lh:1.2">
+                  <div class="ds-step-head"><p><b>heading/section</b>Home section titles</p><p><span>Font size: 40px / 2.5rem</span> | <span>Line height: 120%</span> | <span>Phone: 32px</span></p></div>
+                  <p class="ds-sample" style="--w:600">Work</p>
+                  <div class="ds-weights"><div style="--w:400"><p aria-hidden="true">heading/<wbr>section</p><p>Regular</p></div><div style="--w:400;font-style:italic"><p aria-hidden="true">heading/<wbr>section</p><p>Italic</p></div><div style="--w:600"><p aria-hidden="true">heading/<wbr>section</p><p>SemiBold</p><span class="chip chip-purple">In use</span></div><div style="--w:700"><p aria-hidden="true">heading/<wbr>section</p><p>Bold</p></div></div>
+                </li>
+                <li class="ds-step" style="--d:40px;--m:32px;--lh:1.2">
+                  <div class="ds-step-head"><p><b>heading/dialog</b>Password title</p><p><span>Font size: 40px / 2.5rem</span> | <span>Line height: 120%</span> | <span>Phone: 32px</span></p></div>
+                  <p class="ds-sample" style="--w:600">Enter password</p>
+                  <div class="ds-weights"><div style="--w:400"><p aria-hidden="true">heading/<wbr>dialog</p><p>Regular</p></div><div style="--w:400;font-style:italic"><p aria-hidden="true">heading/<wbr>dialog</p><p>Italic</p></div><div style="--w:600"><p aria-hidden="true">heading/<wbr>dialog</p><p>SemiBold</p><span class="chip chip-purple">In use</span></div><div style="--w:700"><p aria-hidden="true">heading/<wbr>dialog</p><p>Bold</p></div></div>
+                </li>
+                <li class="ds-step" style="--d:40px;--m:24px;--lh:1.2">
+                  <div class="ds-step-head"><p><b>heading/pager</b>Next case study link</p><p><span>Font size: 40px / 2.5rem</span> | <span>Line height: 120%</span> | <span>Phone: 24px</span></p></div>
+                  <p class="ds-sample" style="--w:600;color:var(--accent-default)">Parts Management →</p>
+                  <div class="ds-weights"><div style="--w:400"><p aria-hidden="true">heading/<wbr>pager</p><p>Regular</p></div><div style="--w:400;font-style:italic"><p aria-hidden="true">heading/<wbr>pager</p><p>Italic</p></div><div style="--w:600"><p aria-hidden="true">heading/<wbr>pager</p><p>SemiBold</p><span class="chip chip-purple">In use</span></div><div style="--w:700"><p aria-hidden="true">heading/<wbr>pager</p><p>Bold</p></div></div>
+                </li>
+                <li class="ds-step" style="--d:32px;--m:24px;--lh:1.31">
+                  <div class="ds-step-head"><p><b>heading/intro</b>Konbini hero sentence (the rotating word is Italic)</p><p><span>Font size: 32px / 2rem</span> | <span>Line height: 131%</span> | <span>Phone: 24px</span></p></div>
+                  <p class="ds-sample" style="--w:400">I’m a Product Designer in Los Angeles</p>
+                  <div class="ds-weights"><div style="--w:400"><p aria-hidden="true">heading/<wbr>intro</p><p>Regular</p><span class="chip chip-purple">In use</span></div><div style="--w:400;font-style:italic"><p aria-hidden="true">heading/<wbr>intro</p><p>Italic</p></div><div style="--w:600"><p aria-hidden="true">heading/<wbr>intro</p><p>SemiBold</p></div><div style="--w:700"><p aria-hidden="true">heading/<wbr>intro</p><p>Bold</p></div></div>
+                </li>
+                <li class="ds-step" style="--d:24px;--m:24px;--lh:1.2">
+                  <div class="ds-step-head"><p><b>heading/connect</b>Footer</p><p><span>Font size: 24px / 1.5rem</span> | <span>Line height: 120%</span> | <span>Phone: 24px</span></p></div>
+                  <p class="ds-sample" style="--w:600">Let’s connect</p>
+                  <div class="ds-weights"><div style="--w:400"><p aria-hidden="true">heading/<wbr>connect</p><p>Regular</p></div><div style="--w:400;font-style:italic"><p aria-hidden="true">heading/<wbr>connect</p><p>Italic</p></div><div style="--w:600"><p aria-hidden="true">heading/<wbr>connect</p><p>SemiBold</p><span class="chip chip-purple">In use</span></div><div style="--w:700"><p aria-hidden="true">heading/<wbr>connect</p><p>Bold</p></div></div>
+                </li>
+                <li class="ds-step" style="--d:24px;--m:24px;--lh:1.5">
+                  <div class="ds-step-head"><p><b>heading/m</b>Stat numbers, lede line</p><p><span>Font size: 24px / 1.5rem</span> | <span>Line height: 150%</span> | <span>Phone: 24px</span></p></div>
+                  <p class="ds-sample" style="--w:600;color:var(--text-heading)">75%</p>
+                  <div class="ds-weights"><div style="--w:400"><p aria-hidden="true">heading/<wbr>m</p><p>Regular</p></div><div style="--w:400;font-style:italic"><p aria-hidden="true">heading/<wbr>m</p><p>Italic</p></div><div style="--w:600"><p aria-hidden="true">heading/<wbr>m</p><p>SemiBold</p><span class="chip chip-purple">In use</span></div><div style="--w:700"><p aria-hidden="true">heading/<wbr>m</p><p>Bold</p></div></div>
+                </li>
+                <li class="ds-step" style="--d:20px;--m:20px;--lh:1.05">
+                  <div class="ds-step-head"><p><b>body/card</b>Home card description</p><p><span>Font size: 20px / 1.25rem</span> | <span>Line height: 105%</span> | <span>Phone: 20px</span></p></div>
+                  <p class="ds-sample" style="--w:400">A live-data dashboard feature that puts reporting in finance teams’ hands</p>
+                  <div class="ds-weights"><div style="--w:400"><p aria-hidden="true">body/<wbr>card</p><p>Regular</p><span class="chip chip-purple">In use</span></div><div style="--w:400;font-style:italic"><p aria-hidden="true">body/<wbr>card</p><p>Italic</p></div><div style="--w:600"><p aria-hidden="true">body/<wbr>card</p><p>SemiBold</p></div><div style="--w:700"><p aria-hidden="true">body/<wbr>card</p><p>Bold</p></div></div>
+                </li>
+                <li class="ds-step" style="--d:18px;--m:18px;--lh:1.5">
+                  <div class="ds-step-head"><p><b>heading/s</b>Step titles, card titles</p><p><span>Font size: 18px / 1.125rem</span> | <span>Line height: 150%</span> | <span>Phone: 18px</span></p></div>
+                  <p class="ds-sample" style="--w:600;color:var(--text-heading)">1. Building a widget</p>
+                  <div class="ds-weights"><div style="--w:400"><p aria-hidden="true">heading/<wbr>s</p><p>Regular</p></div><div style="--w:400;font-style:italic"><p aria-hidden="true">heading/<wbr>s</p><p>Italic</p></div><div style="--w:600"><p aria-hidden="true">heading/<wbr>s</p><p>SemiBold</p><span class="chip chip-purple">In use</span></div><div style="--w:700"><p aria-hidden="true">heading/<wbr>s</p><p>Bold</p></div></div>
+                </li>
+                <li class="ds-step" style="--d:16px;--m:20px;--lh:1.37">
+                  <div class="ds-step-head"><p><b>nav/link</b>Nav links (the logo is Bold)</p><p><span>Font size: 16px / 1rem</span> | <span>Line height: 137%</span> | <span>Phone: 20px</span></p></div>
+                  <p class="ds-sample" style="--w:400">Work &nbsp; Resume &nbsp; About &nbsp; Connect</p>
+                  <div class="ds-weights"><div style="--w:400"><p aria-hidden="true">nav/<wbr>link</p><p>Regular</p><span class="chip chip-purple">In use</span></div><div style="--w:400;font-style:italic"><p aria-hidden="true">nav/<wbr>link</p><p>Italic</p></div><div style="--w:600"><p aria-hidden="true">nav/<wbr>link</p><p>SemiBold</p></div><div style="--w:700"><p aria-hidden="true">nav/<wbr>link</p><p>Bold</p></div></div>
+                </li>
+              </ol>
+            </div>
+            <div class="ds-family">
+              <div class="ds-specimen"><p class="ds-family-name">Inter · Body, labels, buttons</p><p class="ds-ag" aria-hidden="true">Ag</p><p class="ds-abc" aria-hidden="true">ABCDEFGHIJKLMNOPQRSTUVWXYZ<br>abcdefghijklmnopqrstuvwxyz<br>0123456789 !@#$%^&amp;*()</p></div>
+              <ol class="ds-scale">
+                <li class="ds-step ds-caps" style="--d:24px;--m:20px;--lh:1.5">
+                  <div class="ds-step-head"><p><b>label/eyebrow</b>Label above the case study title</p><p><span>Font size: 24px / 1.5rem</span> | <span>Line height: 150%</span> | <span>Phone: 20px</span></p></div>
+                  <p class="ds-sample" style="--w:400;color:var(--accent-default)">CUBE: BOARDS</p>
+                  <div class="ds-weights"><div style="--w:400"><p aria-hidden="true">label/<wbr>eyebrow</p><p>Regular</p><span class="chip chip-purple">In use</span></div><div style="--w:500"><p aria-hidden="true">label/<wbr>eyebrow</p><p>Medium</p></div><div style="--w:600"><p aria-hidden="true">label/<wbr>eyebrow</p><p>SemiBold</p></div><div style="--w:700"><p aria-hidden="true">label/<wbr>eyebrow</p><p>Bold</p></div></div>
+                </li>
+                <li class="ds-step ds-caps" style="--d:18px;--m:18px;--lh:1.5">
+                  <div class="ds-step-head"><p><b>label/meta</b>Role, timeline, summary labels</p><p><span>Font size: 18px / 1.125rem</span> | <span>Line height: 150%</span> | <span>Phone: 18px</span></p></div>
+                  <p class="ds-sample" style="--w:600;color:var(--text-secondary)">ROLE</p>
+                  <div class="ds-weights"><div style="--w:400"><p aria-hidden="true">label/<wbr>meta</p><p>Regular</p></div><div style="--w:500"><p aria-hidden="true">label/<wbr>meta</p><p>Medium</p></div><div style="--w:600"><p aria-hidden="true">label/<wbr>meta</p><p>SemiBold</p><span class="chip chip-purple">In use</span></div><div style="--w:700"><p aria-hidden="true">label/<wbr>meta</p><p>Bold</p></div></div>
+                </li>
+                <li class="ds-step" style="--d:18px;--m:18px;--lh:1.37">
+                  <div class="ds-step-head"><p><b>body/l</b>Case study paragraphs (bold words are Bold)</p><p><span>Font size: 18px / 1.125rem</span> | <span>Line height: 137%</span> | <span>Phone: 18px</span></p></div>
+                  <p class="ds-sample" style="--w:400">Finance teams relied on a third-party tool that didn’t feel like Cube.</p>
+                  <div class="ds-weights"><div style="--w:400"><p aria-hidden="true">body/<wbr>l</p><p>Regular</p><span class="chip chip-purple">In use</span></div><div style="--w:500"><p aria-hidden="true">body/<wbr>l</p><p>Medium</p></div><div style="--w:600"><p aria-hidden="true">body/<wbr>l</p><p>SemiBold</p></div><div style="--w:700"><p aria-hidden="true">body/<wbr>l</p><p>Bold</p></div></div>
+                </li>
+                <li class="ds-step" style="--d:16px;--m:16px;--lh:1.37">
+                  <div class="ds-step-head"><p><b>body/m</b>Step text, captions</p><p><span>Font size: 16px / 1rem</span> | <span>Line height: 137%</span> | <span>Phone: 16px</span></p></div>
+                  <p class="ds-sample" style="--w:400">Step text, captions and the password description.</p>
+                  <div class="ds-weights"><div style="--w:400"><p aria-hidden="true">body/<wbr>m</p><p>Regular</p><span class="chip chip-purple">In use</span></div><div style="--w:500"><p aria-hidden="true">body/<wbr>m</p><p>Medium</p></div><div style="--w:600"><p aria-hidden="true">body/<wbr>m</p><p>SemiBold</p></div><div style="--w:700"><p aria-hidden="true">body/<wbr>m</p><p>Bold</p></div></div>
+                </li>
+                <li class="ds-step" style="--d:16px;--m:16px;--lh:1.37">
+                  <div class="ds-step-head"><p><b>button/text</b>Text buttons, password button</p><p><span>Font size: 16px / 1rem</span> | <span>Line height: 137%</span> | <span>Phone: 16px</span></p></div>
+                  <p class="ds-sample" style="--w:500;color:var(--accent-default)">View case study --&gt;</p>
+                  <div class="ds-weights"><div style="--w:400"><p aria-hidden="true">button/<wbr>text</p><p>Regular</p></div><div style="--w:500"><p aria-hidden="true">button/<wbr>text</p><p>Medium</p><span class="chip chip-purple">In use</span></div><div style="--w:600"><p aria-hidden="true">button/<wbr>text</p><p>SemiBold</p></div><div style="--w:700"><p aria-hidden="true">button/<wbr>text</p><p>Bold</p></div></div>
+                </li>
+                <li class="ds-step" style="--d:14px;--m:14px;--lh:1.37">
+                  <div class="ds-step-head"><p><b>body/s</b>Card labels, chips, field label</p><p><span>Font size: 14px / 0.875rem</span> | <span>Line height: 137%</span> | <span>Phone: 14px</span></p></div>
+                  <p class="ds-sample" style="--w:400">CUBE: COMMENTS</p>
+                  <div class="ds-weights"><div style="--w:400"><p aria-hidden="true">body/<wbr>s</p><p>Regular</p><span class="chip chip-purple">In use</span></div><div style="--w:500"><p aria-hidden="true">body/<wbr>s</p><p>Medium</p></div><div style="--w:600"><p aria-hidden="true">body/<wbr>s</p><p>SemiBold</p></div><div style="--w:700"><p aria-hidden="true">body/<wbr>s</p><p>Bold</p></div></div>
+                </li>
+                <li class="ds-step" style="--d:12px;--m:12px;--lh:1.37">
+                  <div class="ds-step-head"><p><b>body/xs</b>Error message, colophon (in italic)</p><p><span>Font size: 12px / 0.75rem</span> | <span>Line height: 137%</span> | <span>Phone: 12px</span></p></div>
+                  <p class="ds-sample" style="--w:400;font-style:italic;color:var(--text-secondary)">Jen Chung © 2026. Designed + AI coded by me with care &amp; matcha</p>
+                  <div class="ds-weights"><div style="--w:400"><p aria-hidden="true">body/<wbr>xs</p><p>Regular</p><span class="chip chip-purple">In use</span></div><div style="--w:500"><p aria-hidden="true">body/<wbr>xs</p><p>Medium</p></div><div style="--w:600"><p aria-hidden="true">body/<wbr>xs</p><p>SemiBold</p></div><div style="--w:700"><p aria-hidden="true">body/<wbr>xs</p><p>Bold</p></div></div>
+                </li>
+              </ol>
+            </div>
           </div>
         </div>
       </section>
@@ -219,7 +241,7 @@
           <dl class="ds-notes">
             <div><dt>Button</dt><dd>Pill, 13 × 32 padding, accent background. Darker on hover in light mode, lighter in dark.</dd></div>
             <div><dt>Text button</dt><dd>Accent text, the arrow nudges right on hover.</dd></div>
-            <div><dt>Chip</dt><dd>Pill outline in the secondary khaki.</dd></div>
+            <div><dt>Chip</dt><dd>Pill outline, in two colors. Gray (secondary khaki) for tags like Finance; purple (accent hover outline, heading text) for “In use” in the type scale.</dd></div>
             <div><dt>Outlined card</dt><dd>1px border, radius m (16). Solid purple in light, a purple gradient in dark.</dd></div>
             <div><dt>Input</dt><dd>Underline only; it turns purple on focus and red on an error.</dd></div>
           </dl>

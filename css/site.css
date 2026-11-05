@@ -54,10 +54,10 @@
   --reveal-dur: 2s;         /* ✏️ how long each card's entrance takes */
 }
 [data-theme="dark"] {
-  --bg-page: #222222;
-  --bg-veil: rgb(34 34 34 / .9);
+  --bg-page: #121212;
+  --bg-veil: rgb(18 18 18 / .9);
   --text-primary: #f2f2f2;
-  --text-secondary: #a5a08f;             /* 6.1:1 on the page */
+  --text-secondary: #a5a08f;             /* 7.2:1 on the page */
   --text-on-accent: #222222;
   --text-heading: #d4b5ff;               /* the light-mode purple is too dark to read here */
   --accent-default: #9e81ee;
@@ -65,7 +65,7 @@
   --border-card: linear-gradient(to left, #7961c7, #d4b5ff 33%, #7961c7 67%);   /* as in Figma dark */
   --border-rule: #4e4e4e;
   --border-input: #cccccc;
-  --status-error: #ef5b5c;               /* 4.8:1 on the page */
+  --status-error: #ef5b5c;               /* 5.6:1 on the page */
 }
 @media (min-width: 760px)  { :root { --layout-gutter: 24px; } }
 @media (min-width: 1000px) { :root { --layout-gutter: max(24px, calc((100vw - var(--layout-content)) / 2)); } }
@@ -277,7 +277,7 @@ a.card:active .card-cta, .cs-pager a:active { color: var(--accent-hover); }
 .connect-title {
   display: flex; align-items: center; gap: 12px;
   margin: 0;
-  font-family: var(--font-serif); font-weight: 700; font-size: 24px; line-height: 1.2;
+  font-family: var(--font-serif); font-weight: 600; font-size: 24px; line-height: 1.2;
 }
 .connect-title img { width: 32px; height: 3px; transform: scaleY(-1); }
 .socials { display: flex; gap: 16px; }
@@ -330,7 +330,7 @@ a.card:active .card-cta, .cs-pager a:active { color: var(--accent-hover); }
 
 /* Title + main images */
 .cs-head { padding-top: 56px; }                      /* + the 64px nav = 120px, as in Figma */
-.cs-label { font-family: var(--font-sans); font-size: 24px; line-height: 1.5; color: var(--accent-default); }
+.cs-label { font-family: var(--font-sans); font-size: 24px; line-height: 1.5; color: var(--accent-default); text-transform: uppercase; }
 .cs-title { margin-top: 8px; font-family: var(--font-serif); font-weight: 600; font-size: 56px; line-height: 1.2; }
 .cs-hero { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 32px; }
 .cs-hero img { aspect-ratio: 503 / 358; object-fit: cover; }
@@ -379,7 +379,9 @@ a.card:active .card-cta, .cs-pager a:active { color: var(--accent-hover); }
 
 /* Soft rise: titles, paragraphs, images and cards fade in and rise 16px as they scroll into view,
    a beat apart when several arrive together (js/site.js adds .is-in). Same easing as the main images. */
-.cs-rise-ready :is(.cs-label, .cs-title, .cs-h2, .cs-meta > div, .cs-meta-title, .cs-text > *, .cs-main > :not(.cs-text)):not(.is-in) {
+/* (On the design system page the long blocks rise a row at a time, and its intro paragraphs too.) */
+.cs-rise-ready :is(.cs-label, .cs-title, .cs-h2, .cs-meta > div, .cs-meta-title, .cs-text > *, .cs-main > :not(.cs-text, .ds-colors, .ds-scale-wrap),
+  .ds-intro, .ds .cs-main > .cs-text, .ds-colors > *, .ds-specimen, .ds-step):not(.is-in) {
   opacity: 0; transform: translateY(16px);              /* ✏️ how far it rises */
 }
 .cs-rise-ready .is-in {
@@ -398,7 +400,7 @@ a.card:active .card-cta, .cs-pager a:active { color: var(--accent-hover); }
 /* Role / timeline / platform / team */
 .cs-meta { display: flex; flex-direction: column; gap: 40px; }
 .cs-meta > div { display: flex; flex-direction: column; gap: 16px; }
-.cs-meta dt, .cs-meta-title { font-family: var(--font-sans); font-weight: 600; font-size: 18px; line-height: 1.5; color: var(--text-secondary); }
+.cs-meta dt, .cs-meta-title { font-family: var(--font-sans); font-weight: 600; font-size: 18px; line-height: 1.5; color: var(--text-secondary); text-transform: uppercase; }
 .cs-meta dd { font-size: 18px; line-height: 1.37; }
 .cs-overview .cs-main { gap: 16px; }
 .cs-overview .cs-stats { margin-top: 8px; }          /* 24px below the summary */
@@ -418,7 +420,10 @@ a.card:active .card-cta, .cs-pager a:active { color: var(--accent-hover); }
 .cs-stat-num { font-family: var(--font-serif); font-weight: 600; font-size: 24px; line-height: 1.5; color: var(--text-heading); }
 .cs-card h3 { font-family: var(--font-serif); font-weight: 600; font-size: 18px; line-height: 1.5; color: var(--text-heading); }
 .chips { display: flex; gap: 8px; padding: 0; list-style: none; }   /* one row, as in Figma (wraps on smaller screens) */
-.chips li { padding: 4px 10px; border: 1px solid var(--text-secondary); border-radius: var(--radius-pill); font-size: 14px; line-height: 1.37; white-space: nowrap; }
+/* Chip (Figma: Chip, Color=Gray / Purple). Gray is the default; add .chip-purple for the purple one */
+.chips li, .chip { padding: 4px 10px; border: 1px solid var(--text-secondary); border-radius: var(--radius-pill); font-size: 14px; line-height: 1.37; white-space: nowrap; }
+.chip { font-family: var(--font-sans); font-style: normal; font-weight: 400; }
+.chip-purple { border-color: var(--accent-hover); color: var(--text-heading); }
 
 /* Pieces the other case studies add to the Boards template */
 .cs-hero-fit img { aspect-ratio: auto; object-fit: initial; }   /* images keep their own shape; columns set per page (style="grid-template-columns: …") */
@@ -606,6 +611,7 @@ html.lb-open { overflow: hidden; }
   display: grid; grid-template-columns: minmax(0, 1.1fr) repeat(2, minmax(0, 1fr)); gap: 12px; align-items: center;
   padding-block: 10px; border-bottom: 1px solid var(--border-rule);
 }
+.ds-color:last-child { border-bottom: 0; }   /* no divider after the last color */
 .ds-colors-head { padding-top: 0; font-size: 14px; line-height: 1.37; font-weight: 600; color: var(--text-secondary); }
 .ds-colors-head span:not(:first-child) { padding-left: 8px; }
 .ds-token b { display: block; font-weight: 600; font-size: 16px; line-height: 1.37; }
@@ -623,31 +629,62 @@ html.lb-open { overflow: hidden; }
 .ds-hex { min-width: 0; font-size: 14px; line-height: 1.37; overflow-wrap: anywhere; }
 .ds-ratio { display: block; font-size: 12px; color: var(--text-secondary); }
 
-/* Type scale: one row per style, in every weight of its typeface. --d is the desktop size, --m the phone size.
-   It runs the full width under the section title, so the title doesn't pin here. */
-.ds-wide { row-gap: 48px; }
-.ds-wide .cs-h2 { position: static; }
-.ds-scale-wrap { grid-column: 1 / -1; display: flex; flex-direction: column; gap: 96px; }
-.ds-specimen { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; }
+/* Type scale: one row per style, biggest first. --d is the desktop size, --m the phone size.
+   By default each row shows one sample as the site uses it (.ds-sample). The "Show full type scale" switch (.is-full, js/site.js)
+   swaps that for the style in every weight of its typeface (.ds-weights) and adds the Ag specimens. */
+/* Switch: a pill track with a white knob; khaki when off, purple when on. Its label sits to the right (body/m). */
+.ds-switch {
+  display: inline-flex; align-items: center; gap: 10px; align-self: flex-start;
+  margin-top: -24px;   /* 16px under the intro (the column's gap is 40) */
+  font-family: var(--font-sans); font-size: 16px; line-height: 1.37; color: var(--text-primary);
+}
+.ds-switch-track {
+  position: relative; flex: none; width: 36px; height: 20px;   /* ✏️ switch size */
+  border-radius: var(--radius-pill); background: var(--text-secondary);
+  transition: background-color .2s ease;
+}
+.ds-switch-track::after {
+  content: ""; position: absolute; top: 3px; left: 3px; width: 14px; height: 14px;
+  border-radius: 50%; background: var(--bg-toggle);
+  transition: transform .25s var(--ease-out);
+}
+.ds-switch[aria-checked="true"] .ds-switch-track { background: var(--accent-default); }
+.ds-switch[aria-checked="true"] .ds-switch-track::after { transform: translateX(16px); }
+@media (hover: hover) { .ds-switch:hover .ds-switch-track { background: var(--text-primary); } .ds-switch[aria-checked="true"]:hover .ds-switch-track { background: var(--accent-hover); } }
+@media (prefers-reduced-motion: reduce) { .ds-switch-track, .ds-switch-track::after { transition: none; } }
+.ds-scale-wrap { display: flex; flex-direction: column; gap: 96px; }
+.ds-specimen { display: flex; flex-direction: column; gap: 8px; margin-bottom: 32px; }
+.is-full .ds-specimen { margin-bottom: 40px; }
 .ds-family-name { font-size: 24px; line-height: 1.3; }
 .ds-ag { font-size: 96px; line-height: 1.1; }
 .ds-abc { font-size: 28px; line-height: 1.25; overflow-wrap: anywhere; }
-.ds-serif :is(.ds-ag, .ds-abc, .ds-weights p) { font-family: var(--font-serif); }
-.ds-scale { padding: 0; list-style: none; }
-.ds-step { padding-block: 24px; }
+.ds-serif :is(.ds-ag, .ds-abc, .ds-weights p, .ds-sample) { font-family: var(--font-serif); }
+/* As in Figma: each style is its label + sample(s), closed by a divider underneath (20px below, 40px above the next label).
+   The last style of each typeface has no divider. */
+.ds-scale { display: flex; flex-direction: column; gap: 40px; padding: 0; list-style: none; }
+.ds-step { padding-bottom: 20px; border-bottom: 1px solid var(--border-rule); }
+.ds-step:last-child { padding-bottom: 0; border-bottom: 0; }
+.ds-caps :is(.ds-sample, .ds-weights p:first-child) { text-transform: uppercase; }   /* label/eyebrow, label/meta: All caps in Figma */
 .ds-step-head {
   display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 16px;
-  padding-bottom: 12px; border-bottom: 1px solid var(--border-rule);
   font-size: 12px; line-height: 1.37; color: var(--text-secondary);
 }
 .ds-step-head b { margin-right: 8px; font-weight: 600; color: var(--text-primary); }
 .ds-step-head span { white-space: nowrap; }   /* each spec stays on one line */
-.ds-weights { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; padding-top: 20px; }
-.ds-weights p { font-weight: var(--w); font-size: var(--d); line-height: var(--lh); overflow-wrap: anywhere; }
-.ds-weights span { display: block; margin-top: 6px; font: 500 12px/1.37 var(--font-sans); color: var(--accent-default); }
-@media (max-width: 999px) { .ds-weights { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.ds-sample { padding-top: 20px; font-weight: var(--w); font-size: var(--d); line-height: var(--lh); overflow-wrap: anywhere; }
+.ds-weights { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 16px; padding-top: 20px; }
+.ds-weights p { max-width: 100%; font-weight: var(--w); font-size: var(--d); line-height: var(--lh); overflow-wrap: anywhere; }
+/* Each weight: the style name, the weight name, and an "In use" chip on the one the site uses. Gap is 20% of the size, at least 4px (as in Figma) */
+.ds-weights > div { display: flex; flex-direction: column; align-items: flex-start; gap: max(4px, calc(var(--d) * .2)); min-width: 0; }
+/* in use only / in full */
+.ds-scale-wrap:not(.is-full) :is(.ds-ag, .ds-abc, .ds-weights), .is-full .ds-sample { display: none; }
+@media (prefers-reduced-motion: no-preference) {
+  .is-full :is(.ds-ag, .ds-abc, .ds-weights) { animation: ds-fill .6s ease both; }   /* ✏️ the rest fades in as it fills */
+}
+@keyframes ds-fill { from { opacity: 0; transform: translateY(8px); } }
 @media (max-width: 759px) {
-  .ds-weights p { font-size: var(--m); }
+  .ds-weights p, .ds-sample { font-size: var(--m); }
+  .ds-weights > div { gap: max(4px, calc(var(--m) * .2)); }
   .ds-ag { font-size: 72px; }
   .ds-abc { font-size: 20px; }
   .ds-scale-wrap { gap: 64px; }
