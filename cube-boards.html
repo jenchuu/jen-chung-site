@@ -168,7 +168,7 @@
             <p>Boards had to feel like the spreadsheet tools finance already trusts, and be practical for engineering to ship. These were the calls that got us there:</p>
           </div>
           <div class="cs-step">
-            <h3 class="cs-h3 cs-h3-m">1. Building a widget</h3>
+            <h3 class="cs-h3">1. Building a widget</h3>
             <p>I reused Cube’s spreadsheet range builder so configuring Columns, Rows, and Filters to build widgets felt familiar.</p>
             <div class="cs-pair">
               <figure><img src="assets/cube-boards/builder-spreadsheet.webp" alt="Cube's spreadsheet add-on with the range builder panel" width="652" height="464" loading="lazy"><figcaption>SPREADSHEET APP</figcaption></figure>
@@ -176,12 +176,12 @@
             </div>
           </div>
           <div class="cs-step">
-            <h3 class="cs-h3 cs-h3-m">2. Split preview modal</h3>
+            <h3 class="cs-h3">2. Split preview modal</h3>
             <p>Editing, styling, and formatting sat beside a live preview, with a Table View toggle to sanity-check the chart as a pivot table, the format they’re familiar with and trust most.</p>
             <img src="assets/cube-boards/builder-preview-modal.webp" alt="The preview modal: widget settings on the left, the live chart with Table View turned on at the right" width="1336" height="950" loading="lazy">
           </div>
           <div class="cs-step">
-            <h3 class="cs-h3 cs-h3-m">3. Text widget editing: right drawer → inline toolbar</h3>
+            <h3 class="cs-h3">3. Text widget editing: right drawer → inline toolbar</h3>
             <p>Some familiar patterns needed rethinking. My first text widget design used a right drawer, until Engineering and I realized it could cover the very widget being edited. I proposed a toolbar above the board instead.</p>
             <div class="cs-pair">
               <figure><img src="assets/cube-boards/text-widget-before.webp" alt="Before: text settings in a right drawer" width="652" height="464" loading="lazy"><figcaption>BEFORE</figcaption></figure>
@@ -189,7 +189,7 @@
             </div>
           </div>
           <div class="cs-step">
-            <h3 class="cs-h3 cs-h3-m">4. Widget interaction: hover → click</h3>
+            <h3 class="cs-h3">4. Widget interaction: hover → click</h3>
             <p>I also changed widget actions from hover to click after front-end engineers flagged the hover behavior as finicky. The goal stayed the same; the interaction became more practical to build.</p>
             <div class="cs-pair">
               <figure><img src="assets/cube-boards/widget-hover-before.webp" alt="Before: widget actions shown on hover" width="652" height="463" loading="lazy"><figcaption>BEFORE</figcaption></figure>
@@ -246,7 +246,7 @@
             <p>Beyond the big flows, a few smaller decisions did a lot to make Boards feel like the spreadsheets finance already works in, and set up patterns we could reuse later.</p>
           </div>
           <div class="cs-step">
-            <h3 class="cs-h3 cs-h3-m">1. Calculated columns</h3>
+            <h3 class="cs-h3">1. Calculated columns</h3>
             <p>Calculated columns needed more room than an in-cell interaction allowed, so I moved formula entry above the table, familiar to any spreadsheet user and a foundation we could scale (with suggested-formula logic and dimension chips later). I also designed a confirmation for instances when deleting a column would delete a dependent calculation.</p>
             <div class="cs-pair">
               <img src="assets/cube-boards/calc-columns.webp" alt="Adding a calculated column with the formula above the table" width="652" height="464" loading="lazy">
@@ -254,7 +254,7 @@
             </div>
           </div>
           <div class="cs-step">
-            <h3 class="cs-h3 cs-h3-m">2. Formatting</h3>
+            <h3 class="cs-h3">2. Formatting</h3>
             <p>For formatting, expandable cards let users format and reorder individual data points. “Use same format for all” applied shared formatting while keeping individual colors and ordering available. The chart icons and color-theme drawer were later reused in Decks.</p>
             <div class="cs-pair">
               <img src="assets/cube-boards/formatting-cards.webp" alt="Expandable formatting cards for each data point" width="652" height="464" loading="lazy">

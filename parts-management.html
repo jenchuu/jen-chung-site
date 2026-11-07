@@ -137,16 +137,16 @@
             <p>These decisions helped us narrow the scope.</p>
           </div>
           <div class="cs-step">
-            <h3 class="cs-h3 cs-h3-m">1. Parts List Scope: Keep first release tied to maintenance cases</h3>
+            <h3 class="cs-h3">1. Case context over a global list</h3>
             <p>We considered a standalone global parts list versus parts associated with cases. Customer feedback and team discussions led us to prioritize case-linked parts requests, keeping the repair context attached to the parts being tracked.</p>
             <p>We left the broader standalone list out the first release.</p>
             <div class="cs-pair cs-pair-fit">
               <figure><img src="assets/parts-management/scope-standalone.webp" alt="Explored: a standalone list of all parts across cases" width="1288" height="808" loading="lazy"><figcaption>Explored: standalone parts list</figcaption></figure>
-              <figure><img src="assets/parts-management/scope-case-linked.webp" alt="Selected: parts requests shown with each open case" width="1291" height="812" loading="lazy"><figcaption>Selected: case-linked parts requests</figcaption></figure>
+              <figure><img src="assets/parts-management/scope-case-linked.webp" alt="Selected: parts requests shown with each open case, with the Parts links highlighted" width="3400" height="2140" loading="lazy"><figcaption>Selected: case-linked parts requests</figcaption></figure>
             </div>
           </div>
           <div class="cs-step">
-            <h3 class="cs-h3 cs-h3-m">2. Responsible Person Field: Clarify the need</h3>
+            <h3 class="cs-h3">2. Free text before locking in ownership</h3>
             <p>The PM proposed assigning a “Responsible Person” through mentions and notifications. But testing revealed confusion among customers and the team about what that responsibility actually meant.</p>
             <p>We switched to free text so we could learn how teams used the field before committing to assignment rules. This preserved flexibility, but left structured ownership and notifications unresolved.</p>
             <div class="cs-pair cs-pair-fit">
@@ -165,12 +165,12 @@
             <p>Customer testing highlighted two priorities: spotting requests that needed attention and knowing when parts would arrive. I refined the status chips and arrival information to make both easier to see.</p>
           </div>
           <div class="cs-step">
-            <h3 class="cs-h3 cs-h3-m">1. Urgent requests stand out</h3>
+            <h3 class="cs-h3">1. Urgent requests stand out</h3>
             <p>Customers wanted urgent requests to be easier to spot. I strengthened the visual emphasis of Pending and Delayed status chips while retaining their text labels.</p>
             <div class="cs-pair cs-pair-fit"><figure><img src="assets/parts-management/modal-before.webp" alt="The parts modal with the old status chips" width="1224" height="1171" loading="lazy"><figcaption>BEFORE</figcaption></figure><figure><img src="assets/parts-management/modal-after.webp" alt="The parts modal with the new status chips" width="1224" height="1171" loading="lazy"><figcaption>AFTER</figcaption></figure></div>
           </div>
           <div class="cs-step">
-            <h3 class="cs-h3 cs-h3-m">2. Clearer timelines</h3>
+            <h3 class="cs-h3">2. Clearer timelines</h3>
             <p>Customer feedback highlighted the importance of seeing expected arrival dates at a glance. I added the ETA information to part details to support planning around outstanding requests.</p>
             <div class="cs-pair cs-pair-fit"><figure><img src="assets/parts-management/eta-before.webp" alt="Part details without an ETA" width="1288" height="868" loading="lazy"><figcaption>BEFORE</figcaption></figure><figure><img src="assets/parts-management/eta-after.webp" alt="Part details with the ETA date added" width="1288" height="868" loading="lazy"><figcaption>AFTER</figcaption></figure></div>
           </div>
@@ -188,15 +188,15 @@
           <div class="cs-step">
             <h3 class="cs-h3">Visibility</h3>
             <figure class="cs-figure">
-              <!-- ✏️ Plays (muted, looping) while on screen, like the Cube Boards video. Made from the Figma GIFs (30s and 33s). -->
-              <video class="cs-video" src="assets/parts-management/results-visibility.mp4" poster="assets/parts-management/results-visibility-poster.webp" width="1680" height="1050" muted loop playsinline controls preload="metadata" aria-label="Filtering parts requests on desktop"></video>
+              <!-- ✏️ Visibility plays (muted) once it's on screen; Management waits until Visibility ends, then plays. Made from the Figma GIFs (30s and 33s). -->
+              <video class="cs-video" src="assets/parts-management/results-visibility.mp4" poster="assets/parts-management/results-visibility-poster.webp" width="1680" height="1050" muted playsinline controls preload="metadata" aria-label="Filtering parts requests on desktop"></video>
               <figcaption>DESKTOP - Key user type: MTX planners, Materials team</figcaption>
             </figure>
           </div>
           <div class="cs-step">
             <h3 class="cs-h3">Management</h3>
             <figure class="cs-figure" style="max-width: 575px">
-              <video class="cs-video" src="assets/parts-management/results-management.mp4" poster="assets/parts-management/results-management-poster.webp" width="768" height="1024" muted loop playsinline controls preload="metadata" aria-label="Managing parts requests in the live prototype on a tablet"></video>
+              <video class="cs-video" src="assets/parts-management/results-management.mp4" poster="assets/parts-management/results-management-poster.webp" width="766" height="1024" muted playsinline controls preload="none" data-autoplay="after" aria-label="Managing parts requests in the live prototype on a tablet"></video>
               <figcaption>TABLET - Key user type: Technicians</figcaption>
             </figure>
           </div>
@@ -211,18 +211,18 @@
             <p>I designed and proposed a couple enhancements beyond the first release.</p>
           </div>
           <div class="cs-step">
-            <h3 class="cs-h3 cs-h3-m">1. Easier access to parts management</h3>
+            <h3 class="cs-h3">1. Easier access to parts management</h3>
             <p>I proposed moving parts management from the case’s general edit controls into “Manage,” alongside people and ground-support equipment (GSE).</p>
             <p>This would separate ongoing resource management from editing basic case details.</p>
-            <div class="cs-pair cs-pair-fit"><figure><img src="assets/parts-management/ia-before.webp" alt="First release: parts edited from the case details pencil icon" width="770" height="940" loading="lazy"><figcaption>First Release</figcaption></figure><figure><img src="assets/parts-management/ia-after.webp" alt="Proposed improvement: parts managed from a bottom sheet under Manage" width="770" height="940" loading="lazy"><figcaption>Proposed improvement</figcaption></figure></div>
+            <div class="cs-pair cs-pair-fit"><figure><video class="cs-video" src="assets/parts-management/ia-before.mp4" poster="assets/parts-management/ia-before-poster.webp" width="768" height="938" muted playsinline controls preload="metadata" aria-label="First release: parts edited from the case details pencil icon"></video><figcaption>First release</figcaption></figure><figure><video class="cs-video" src="assets/parts-management/ia-after.mp4" poster="assets/parts-management/ia-after-poster.webp" width="768" height="938" muted playsinline controls preload="none" data-autoplay="after" aria-label="Proposed improvement: parts managed from a bottom sheet under Manage"></video><figcaption>Proposed improvement</figcaption></figure></div>
           </div>
           <div class="cs-step">
-            <h3 class="cs-h3 cs-h3-m">2. Clearer parts activity in chat</h3>
+            <h3 class="cs-h3">2. Clearer parts activity in chat</h3>
             <p>In the first release, parts additions, edits, and deletions used the generic “Detail Updated” tag due to engineering constraints. The activity was recorded, but harder to distinguish from other case updates.</p>
             <p>I designed and proposed a parts-specific tagging flow to make those changes easier to spot when scanning the conversation.</p>
             <div class="cs-pair cs-pair-fit">
-              <figure><img src="assets/parts-management/chat-first-release.webp" alt="First release: a parts change shown in the case chat with the general Detail Updated tag" width="644" height="638" loading="lazy"><figcaption>First release</figcaption></figure>
-              <figure><img src="assets/parts-management/chat-proposed.webp" alt="Proposed improvement: parts changes shown in the case chat with parts-specific tags" width="1287" height="1276" loading="lazy"><figcaption>Proposed improvement</figcaption></figure>
+              <figure><img src="assets/parts-management/chat-first-release.webp" alt="First release: a parts change shown in the case chat with the general Detail Updated tag" width="2236" height="2211" loading="lazy"><figcaption>First release</figcaption></figure>
+              <figure><img src="assets/parts-management/chat-proposed.webp" alt="Proposed improvement: parts changes shown in the case chat with parts-specific tags" width="2540" height="2520" loading="lazy"><figcaption>Proposed improvement</figcaption></figure>
             </div>
           </div>
         </div>

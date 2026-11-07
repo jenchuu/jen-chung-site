@@ -328,7 +328,7 @@ a.card:active .card-cta, .cs-pager a:active { color: var(--accent-hover); }
 /* Title + main images */
 .cs-head { padding-top: 56px; }                      /* + the 64px nav = 120px, as in Figma */
 .cs-label { font-family: var(--font-sans); font-size: 24px; line-height: 1.5; color: var(--accent-default); text-transform: uppercase; }
-.cs-title { margin-top: 8px; font-family: var(--font-serif); font-weight: 600; font-size: 56px; line-height: 1.2; }
+.cs-title { margin-top: 8px; font-family: var(--font-serif); font-weight: 600; font-size: 56px; line-height: 1; }
 .cs-hero { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 32px; }
 .cs-hero img { aspect-ratio: 503 / 358; object-fit: cover; }
 
@@ -357,8 +357,7 @@ a.card:active .card-cta, .cs-pager a:active { color: var(--accent-hover); }
 
 /* Numbered steps: title, text, then images */
 .cs-step { display: flex; flex-direction: column; gap: 8px; }
-.cs-h3 { font-family: var(--font-serif); font-weight: 600; font-size: 18px; line-height: 1.5; }
-.cs-h3-m { font-size: 24px; }                                  /* heading/m: numbered step titles ("1. …") */
+.cs-h3 { font-family: var(--font-serif); font-weight: 600; font-size: 24px; line-height: 1.5; }   /* heading/m: step titles */
 .cs-step > p { font-size: 16px; line-height: 1.37; }
 
 /* Images and captions */
