@@ -50,7 +50,7 @@
   </div>
 </header>
 
-<!-- Content: the live Wix page jen-chung.com/parts-management (Nov 2026), in the Cube Boards case study layout.
+<!-- Design source: Figma "Portfolio designs 2026" › Beacon Parts case study (dark 10624:44587, light 10625:45120), in the Cube Boards layout.
      ✏️ Images live in assets/parts-management/. Each section's title (left) stays pinned while you scroll its section. -->
 <main class="cs" id="case-study">
 
@@ -69,46 +69,20 @@
   <div class="cs-body wrap">
     <div>
 
-      <!-- ===== Role + overview ===== -->
+      <!-- ===== Role + summary ===== -->
       <section class="cs-section cs-overview" aria-label="Overview">
         <dl class="cs-meta">
           <div><dt>ROLE</dt><dd>Product Designer</dd></div>
-          <div><dt>DATE</dt><dd>2023</dd></div>
+          <div><dt>TIMELINE</dt><dd>2023</dd></div>
+          <div><dt>PLATFORM</dt><dd>Web app</dd></div>
           <div><dt>TEAM</dt><dd>Product (3)<br>Engineering (4)</dd></div>
         </dl>
         <div class="cs-main">
-          <h2 class="cs-meta-title">OVERVIEW</h2>
+          <h2 class="cs-meta-title">SUMMARY</h2>
           <div class="cs-text">
             <p>Beacon is an aviation maintenance coordination and communication web app. Think of it as a “Slack + Ticketing System” for aviation professionals: it tracks aircraft repairs and improves communication to get planes back in service faster.</p>
-            <p>I was the main Product Designer who led the strategy, user testing, and design of the Parts Management feature, addressing prioritization of parts and information architecture challenges.</p>
-            <p>The shipped MVP enabled users to manage, view, and filter parts requests, improving visibility and communication.</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- ===== Problem space ===== -->
-      <section class="cs-section">
-        <h2 class="cs-h2">Problem space</h2>
-        <div class="cs-main">
-          <div class="cs-text">
-            <h3 class="cs-lede">To understand better, let’s look at an aviation maintenance user’s journey:</h3>
-          </div>
-          <figure class="cs-figure">
-            <img src="assets/parts-management/journey-map.webp" alt="User journey map for Mike, a materials team member: phases, actions, feelings, pain points and opportunities" width="2400" height="1920" loading="lazy">
-            <figcaption>User journey map: Mike, Materials Team Member.</figcaption>
-          </figure>
-          <div class="cs-text">
-            <p>Through customer feedback we had some data about what customers value and what their challenges are. Some key quotes from our existing research database:</p>
-          </div>
-          <div class="cs-quotes">
-            <blockquote>“I want to have all our parts requests visible in one place”</blockquote>
-            <blockquote>“TRAX users need to open case by case to check parts status”</blockquote>
-            <blockquote>“Parts requests that were ordered to attend a specific case and join the stock, are not reserved for that case, being available to any other event, making it very difficult”</blockquote>
-          </div>
-          <div class="cs-text">
-            <p>As you can see from the user journey map, aviation maintenance involves multiple teams coordinating in high-pressure environments to get planes operational. When a part is needed for a repair, teams rely on emails, calls, and legacy systems like TRAX or AMOS to track parts availability and status.</p>
-            <p>The disjointed process and customer data show there is:</p>
-            <ul><li><b>Inefficient communication</b> between maintenance teams, delaying repairs</li><li><b>Lack of visibility</b> into pending and available parts</li><li><b>Difficulty in tracking orders</b>, leading to confusion about delivery timelines</li></ul>
+            <p>I led the design of Parts Management, helping materials teams, maintenance planners, and technicians track parts requests alongside the cases they support.</p>
+            <p>I explored solutions with Product and Engineering, gathered customer feedback, and refined status visibility, arrival information, and access to part details. The first release supported viewing, filtering, and managing case-linked parts requests.</p>
           </div>
         </div>
       </section>
@@ -118,64 +92,138 @@
         <h2 class="cs-h2">The problem</h2>
         <div class="cs-main">
           <div class="cs-text">
-            <h3 class="cs-lede">Aviation maintenance professionals lack a centralized system for managing parts requests, leading to inefficiencies in logging, visibility, and communication across multiple platforms.</h3>
+            <p>Tracking a part meant piecing together updates from emails, calls, and systems like TRAX or AMOS. Teams needed to see which requests required attention and when parts were expected to arrive.</p>
           </div>
-          <div class="cs-card"><h3>How might we…</h3><p>…increase visibility of parts requests and their statuses?</p><p>…make it easier for users to manage parts requests?</p></div>
+          <img src="assets/parts-management/journey-map.webp" alt="User journey map for Mike, a materials team member: Parts Request, Communication and Fix phases, with actions, feelings, pain points and opportunities" width="2405" height="1925" loading="lazy">
+          <div class="cs-text">
+            <p>Existing customer research highlighted two recurring frustrations:</p>
+          </div>
+          <!-- speech bubbles: the first sits left with its tail on the left, the second sits right with its tail on the right -->
+          <div class="cs-bubbles">
+            <blockquote>“I want to have all our parts requests visible in one place”</blockquote>
+            <blockquote>“Parts requests that were ordered to attend a specific case and join the stock, are not reserved for that case, being available to any other event, making it very difficult”</blockquote>
+          </div>
+          <div class="cs-text">
+            <p>My focus was bringing that information into Beacon while keeping each request connected to its maintenance case.</p>
+          </div>
         </div>
       </section>
 
-      <!-- ===== Ideation &amp; testing ===== -->
+      <!-- ===== Ideations &amp; testing ===== -->
       <section class="cs-section">
-        <h2 class="cs-h2">Ideation &amp; testing</h2>
+        <h2 class="cs-h2">Ideations &amp; testing</h2>
         <div class="cs-main">
           <div class="cs-text">
-            <p>I ideated solutions for visibility and management of parts requests and then narrowed down the best solutions through collaborative sessions with our Eng and Product teams. With those designs, I conducted four internal sales sessions and usability testing sessions with users and affinity mapped my findings.</p>
+            <p>I explored concepts with Product and Engineering, conducted four internal Sales sessions, and usability tested designs with customers.</p>
+            <p>I grouped the feedback into themes that informed the next iterations: make urgent requests stand out, surface arrival dates, and clarify how parts information should be managed.</p>
           </div>
-          <div class="cs-pair cs-pair-fit"><figure><img src="assets/parts-management/usability-testing.webp" alt="A remote usability testing session" width="1992" height="1071" loading="lazy"><figcaption>USABILITY TESTING</figcaption></figure><figure><img src="assets/parts-management/affinity-map.webp" alt="An affinity map of the testing findings" width="2400" height="1619" loading="lazy"><figcaption>AFFINITY MAP</figcaption></figure></div>
+          <figure class="cs-figure">
+            <img src="assets/parts-management/usability-testing.webp" alt="A remote usability testing session: a customer is asked how they would see more parts details for a case in the table view" width="1995" height="795" loading="lazy">
+            <figcaption>USABILITY TESTING</figcaption>
+          </figure>
+          <figure class="cs-figure">
+            <img src="assets/parts-management/affinity-map.webp" alt="An affinity map of the testing findings" width="2400" height="1619" loading="lazy">
+            <figcaption>AFFINITY MAP</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- ===== Challenges &amp; tradeoffs ===== -->
+      <section class="cs-section">
+        <h2 class="cs-h2">Challenges &amp; tradeoffs</h2>
+        <div class="cs-main">
+          <div class="cs-text">
+            <p>The first release needed to make parts requests visible and manageable within maintenance cases. I worked with Product and Engineering to decide where additional complexity was worth the effort... and what could wait.</p>
+            <p>These decisions helped us narrow the scope.</p>
+          </div>
+          <div class="cs-step">
+            <h3 class="cs-h3 cs-h3-m">1. Parts List Scope: Keep first release tied to maintenance cases</h3>
+            <p>We considered a standalone global parts list versus parts associated with cases. Customer feedback and team discussions led us to prioritize case-linked parts requests, keeping the repair context attached to the parts being tracked.</p>
+            <p>We left the broader standalone list out the first release.</p>
+            <div class="cs-pair cs-pair-fit">
+              <figure><img src="assets/parts-management/scope-standalone.webp" alt="Explored: a standalone list of all parts across cases" width="1288" height="808" loading="lazy"><figcaption>Explored: standalone parts list</figcaption></figure>
+              <figure><img src="assets/parts-management/scope-case-linked.webp" alt="Selected: parts requests shown with each open case" width="1291" height="812" loading="lazy"><figcaption>Selected: case-linked parts requests</figcaption></figure>
+            </div>
+          </div>
+          <div class="cs-step">
+            <h3 class="cs-h3 cs-h3-m">2. Responsible Person Field: Clarify the need</h3>
+            <p>The PM proposed assigning a “Responsible Person” through mentions and notifications. But testing revealed confusion among customers and the team about what that responsibility actually meant.</p>
+            <p>We switched to free text so we could learn how teams used the field before committing to assignment rules. This preserved flexibility, but left structured ownership and notifications unresolved.</p>
+            <div class="cs-pair cs-pair-fit">
+              <figure><img src="assets/parts-management/person-mentions.webp" alt="Explored: a Responsible Person field that mentions and notifies a teammate" width="1288" height="1208" loading="lazy"><figcaption>Explored: mentions and notifications</figcaption></figure>
+              <figure><img src="assets/parts-management/person-free-text.webp" alt="Selected: a free text Responsible Person field" width="1288" height="1208" loading="lazy"><figcaption>Selected: free text field</figcaption></figure>
+            </div>
+          </div>
         </div>
       </section>
 
       <!-- ===== What I improved ===== -->
       <section class="cs-section">
         <h2 class="cs-h2">What I improved</h2>
-        <div class="cs-main cs-main-loose">
+        <div class="cs-main">
           <div class="cs-text">
-            <p>After many meetings with Product, Eng, and Design teams and user testing we made significant changes and improvements. Some key improvements I made were:</p>
-            <ul><li><b>Urgency prioritization</b> through color coded part status chips</li><li><b>Clearer timelines</b> through ETA detail added to part information</li><li><b>Future information architecture</b> through restructuring where the parts feature lives</li></ul>
+            <p>Customer testing highlighted two priorities: spotting requests that needed attention and knowing when parts would arrive. I refined the status chips and arrival information to make both easier to see.</p>
           </div>
           <div class="cs-step">
-            <h3 class="cs-h3">1. Urgency prioritization</h3>
-            <p>I improved parts order status chips, especially “Pending” and “Delayed,” through brighter orange and red colors that match users’ mental models for warning/danger so they will have an easier time understanding which parts order needs attention ASAP.</p>
-            <div class="cs-pair cs-pair-fit" style="grid-template-columns: 323fr 749fr; max-width: 420px"><figure><img src="assets/parts-management/chips-before.webp" alt="Parts order status chips before: muted colors" width="323" height="672" loading="lazy"><figcaption>BEFORE</figcaption></figure><figure><img src="assets/parts-management/chips-after.webp" alt="Parts order status chips after: brighter orange for Pending and red for Delayed" width="749" height="672" loading="lazy"><figcaption>AFTER</figcaption></figure></div>
-            <div class="cs-pair cs-pair-fit"><figure><img src="assets/parts-management/modal-before.webp" alt="The parts modal with the old status chips" width="1225" height="1193" loading="lazy"><figcaption>BEFORE</figcaption></figure><figure><img src="assets/parts-management/modal-after.webp" alt="The parts modal with the new status chips" width="1225" height="1191" loading="lazy"><figcaption>AFTER</figcaption></figure></div>
+            <h3 class="cs-h3 cs-h3-m">1. Urgent requests stand out</h3>
+            <p>Customers wanted urgent requests to be easier to spot. I strengthened the visual emphasis of Pending and Delayed status chips while retaining their text labels.</p>
+            <div class="cs-pair cs-pair-fit"><figure><img src="assets/parts-management/modal-before.webp" alt="The parts modal with the old status chips" width="1224" height="1171" loading="lazy"><figcaption>BEFORE</figcaption></figure><figure><img src="assets/parts-management/modal-after.webp" alt="The parts modal with the new status chips" width="1224" height="1171" loading="lazy"><figcaption>AFTER</figcaption></figure></div>
           </div>
           <div class="cs-step">
-            <h3 class="cs-h3">2. Clearer timelines</h3>
-            <p>Added ETA date to part information so users can better plan/adjust timelines and resources accordingly.</p>
-            <div class="cs-pair cs-pair-fit"><figure><img src="assets/parts-management/eta-before.webp" alt="Part information without an ETA" width="1585" height="895" loading="lazy"><figcaption>BEFORE</figcaption></figure><figure><img src="assets/parts-management/eta-after.webp" alt="Part information with the ETA date added" width="1585" height="895" loading="lazy"><figcaption>AFTER</figcaption></figure></div>
-          </div>
-          <div class="cs-step">
-            <h3 class="cs-h3">3. Better information architecture (for future)</h3>
-            <p>For a future release, I moved management of parts info under the “Manage” button since info under the pencil edit icon is about editing general details about the case. The Parts feature doesn’t fit well there in terms of IA. It has more details involved, so I decided to move it to the “Manage” area where users can manage people, parts, and GSE.</p>
-            <div class="cs-pair cs-pair-fit"><figure><img src="assets/parts-management/ia-before.webp" alt="Before: parts edited from the case details pencil icon" width="652" height="869" loading="lazy"><figcaption>BEFORE</figcaption></figure><figure><img src="assets/parts-management/ia-after.webp" alt="After: parts managed from a bottom sheet under Manage" width="652" height="869" loading="lazy"><figcaption>AFTER</figcaption></figure></div>
+            <h3 class="cs-h3 cs-h3-m">2. Clearer timelines</h3>
+            <p>Customer feedback highlighted the importance of seeing expected arrival dates at a glance. I added the ETA information to part details to support planning around outstanding requests.</p>
+            <div class="cs-pair cs-pair-fit"><figure><img src="assets/parts-management/eta-before.webp" alt="Part details without an ETA" width="1288" height="868" loading="lazy"><figcaption>BEFORE</figcaption></figure><figure><img src="assets/parts-management/eta-after.webp" alt="Part details with the ETA date added" width="1288" height="868" loading="lazy"><figcaption>AFTER</figcaption></figure></div>
           </div>
         </div>
       </section>
 
-      <!-- ===== Results ===== -->
+      <!-- ===== What shipped ===== -->
       <section class="cs-section">
-        <h2 class="cs-h2">Results</h2>
-        <div class="cs-main cs-main-loose">
+        <h2 class="cs-h2">What shipped</h2>
+        <div class="cs-main">
           <div class="cs-text">
-            <h3 class="cs-lede">Beacon successfully launched the first release of the Parts feature, allowing users to manage and track parts requests more efficiently.</h3>
+            <p>The first release let teams view, filter, and manage parts requests more efficiently with them linked to maintenance cases. Desktop views supported maintenance planners and materials teams, while tablet workflows supported technicians. The next step was to evaluate adoption and usability after launch.</p>
+            <p>Check it out below!</p>
           </div>
           <div class="cs-step">
             <h3 class="cs-h3">Visibility</h3>
-            <img src="assets/parts-management/results-visibility.webp" alt="Filtering parts requests on desktop" width="1000" height="625" loading="lazy">
+            <figure class="cs-figure">
+              <!-- ✏️ Plays (muted, looping) while on screen, like the Cube Boards video. Made from the Figma GIFs (30s and 33s). -->
+              <video class="cs-video" src="assets/parts-management/results-visibility.mp4" poster="assets/parts-management/results-visibility-poster.webp" width="1680" height="1050" muted loop playsinline controls preload="metadata" aria-label="Filtering parts requests on desktop"></video>
+              <figcaption>DESKTOP - Key user type: MTX planners, Materials team</figcaption>
+            </figure>
           </div>
           <div class="cs-step">
             <h3 class="cs-h3">Management</h3>
-            <div class="cs-pair cs-pair-fit"><img src="assets/parts-management/results-management.webp" alt="Managing parts requests in the live prototype on a tablet" width="652" height="869" loading="lazy"></div>
+            <figure class="cs-figure" style="max-width: 575px">
+              <video class="cs-video" src="assets/parts-management/results-management.mp4" poster="assets/parts-management/results-management-poster.webp" width="768" height="1024" muted loop playsinline controls preload="metadata" aria-label="Managing parts requests in the live prototype on a tablet"></video>
+              <figcaption>TABLET - Key user type: Technicians</figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== Future direction ===== -->
+      <section class="cs-section">
+        <h2 class="cs-h2">Future direction</h2>
+        <div class="cs-main">
+          <div class="cs-text">
+            <p>I designed and proposed a couple enhancements beyond the first release.</p>
+          </div>
+          <div class="cs-step">
+            <h3 class="cs-h3 cs-h3-m">1. Easier access to parts management</h3>
+            <p>I proposed moving parts management from the case’s general edit controls into “Manage,” alongside people and ground-support equipment (GSE).</p>
+            <p>This would separate ongoing resource management from editing basic case details.</p>
+            <div class="cs-pair cs-pair-fit"><figure><img src="assets/parts-management/ia-before.webp" alt="First release: parts edited from the case details pencil icon" width="770" height="940" loading="lazy"><figcaption>First Release</figcaption></figure><figure><img src="assets/parts-management/ia-after.webp" alt="Proposed improvement: parts managed from a bottom sheet under Manage" width="770" height="940" loading="lazy"><figcaption>Proposed improvement</figcaption></figure></div>
+          </div>
+          <div class="cs-step">
+            <h3 class="cs-h3 cs-h3-m">2. Clearer parts activity in chat</h3>
+            <p>In the first release, parts additions, edits, and deletions used the generic “Detail Updated” tag due to engineering constraints. The activity was recorded, but harder to distinguish from other case updates.</p>
+            <p>I designed and proposed a parts-specific tagging flow to make those changes easier to spot when scanning the conversation.</p>
+            <div class="cs-pair cs-pair-fit">
+              <figure><img src="assets/parts-management/chat-first-release.webp" alt="First release: a parts change shown in the case chat with the general Detail Updated tag" width="644" height="638" loading="lazy"><figcaption>First release</figcaption></figure>
+              <figure><img src="assets/parts-management/chat-proposed.webp" alt="Proposed improvement: parts changes shown in the case chat with parts-specific tags" width="1287" height="1276" loading="lazy"><figcaption>Proposed improvement</figcaption></figure>
+            </div>
           </div>
         </div>
       </section>
@@ -185,10 +233,8 @@
         <h2 class="cs-h2">Reflection</h2>
         <div class="cs-main">
           <div class="cs-text">
-            <h3 class="cs-lede">Balancing speed, impact, and feasibility</h3>
-            <p>Delivering meaningful value in a first release while balancing design impact, engineering feasibility, and tight timelines is always a challenge. With a lean team of three designers and a packed roadmap, we often had to quickly shift focus, moving straight from this Parts Management feature to the next feature, Internal Teams, to support backend restructuring. Given more time and resources, I’d advocate for follow-ups with customers and closer collaboration with Product and the rest of the team to track adoption and refine usability.</p>
-            <h3 class="cs-lede">Research learnings</h3>
-            <p>It was exciting to carry out user testing since I advocated for more user feedback! Although we were constrained by group calls, where hierarchical dynamics often prevented candid feedback, it was great to involve customers earlier on in the design process. In future projects, I would work with Product and Sales to explain the importance of user research and best practices to secure buy-in for one-on-one user interviews, ensuring deeper insights into customer pain points.</p>
+            <p>It was exciting to carry out user testing since I advocated for more user feedback! Although we were constrained by group calls, where hierarchical dynamics often prevented candid feedback, it was great to involve customers earlier on in the design process. Next time, I’d work with Product and Sales to arrange individual sessions around specific tasks.</p>
+            <p>After launch, the team moved directly to another roadmap priority. With a lean team of three designers and a packed roadmap, we often had to quickly shift focus. Given more time and resources, I’d advocate for follow-up research and adoption reviews into the release plan so we could evaluate the workflow and prioritize refinements.</p>
           </div>
         </div>
       </section>
