@@ -422,6 +422,49 @@
       nums.forEach((el) => io.observe(el));
     }
 
+    // Speech bubbles (.cs-bubbles): each quote pops in as "…" typing dots, then types in, one bubble after
+    // the other (each waits until it's on screen). Screen readers get the quote straight away.
+    const bubbleSets = [...cs.querySelectorAll('.cs-bubbles')];
+    if (bubbleSets.length && 'IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const DOTS_MS = 1100, TYPE_MS = 1500, MAX_CHAR_MS = 35, GAP_MS = 300;   // ✏️ dots time, typing time per bubble, slowest letter, pause between bubbles
+      const wait = (ms) => new Promise((res) => setTimeout(res, ms));
+      const onScreen = (el) => new Promise((res) => {
+        const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { io.disconnect(); res(); } }, { threshold: 0.6 });
+        io.observe(el);
+      });
+      const type = (live, text) => new Promise((res) => {
+        const each = Math.min(MAX_CHAR_MS, TYPE_MS / text.length), t0 = performance.now();
+        const frame = (now) => {
+          const n = Math.min(text.length, Math.floor((now - t0) / each) + 1);
+          live.textContent = text.slice(0, n);
+          if (n < text.length) requestAnimationFrame(frame); else res();
+        };
+        requestAnimationFrame(frame);
+      });
+      bubbleSets.forEach(async (set) => {
+        const bubbles = [...set.querySelectorAll('blockquote')].map((q) => {
+          const text = q.textContent.trim();
+          const live = Object.assign(document.createElement('div'), { className: 'bubble-live' });
+          live.setAttribute('aria-hidden', 'true');
+          q.textContent = '';
+          q.append(Object.assign(document.createElement('span'), { className: 'sr-only', textContent: text }),
+            Object.assign(document.createElement('span'), { className: 'bubble-ghost', textContent: text }), live);
+          q.querySelector('.bubble-ghost').setAttribute('aria-hidden', 'true');
+          return { q, text, live };
+        });
+        set.classList.add('is-typing');
+        for (const b of bubbles) {
+          await onScreen(b.q);
+          b.live.innerHTML = '<span class="bubble-dots"><span></span><span></span><span></span></span>';
+          b.live.getBoundingClientRect();                        // start from the popped-out state
+          b.live.classList.add('is-on');
+          await wait(DOTS_MS);
+          await type(b.live, b.text);
+          await wait(GAP_MS);
+        }
+      });
+    }
+
     // Card titles ([data-scramble]): letters flip through random ones, then settle left to right
     // (once, in view). Spaces and punctuation stay put; screen readers get the real title.
     const titles = [...cs.querySelectorAll('[data-scramble]')];

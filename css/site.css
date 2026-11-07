@@ -436,19 +436,38 @@ a.card:active .card-cta, .cs-pager a:active { color: var(--accent-hover); }
   font-family: var(--font-serif); font-weight: 600; font-size: 20px; line-height: 1.37;
 }
 .cs-card p + p { margin-top: 4px; }
-/* Speech bubbles (Beacon: The problem): heading/connect on accent, tail at the bottom; the 2nd sits right with its tail on the right */
+/* Speech bubbles (Beacon: The problem): heading/connect on accent, tail at the bottom; the 2nd sits right with its tail on the right.
+   Tail as in Figma: a 24px triangle, 8px up from the bottom, half of it tucked under the bubble so it stays attached. */
 .cs-bubbles { display: flex; flex-direction: column; gap: 40px; }
-.cs-bubbles blockquote {
-  position: relative; width: min(318px, 100% - 22px); margin: 0 0 0 22px; padding: 12px 16px; border-radius: 16px;
+.cs-bubbles blockquote, .bubble-live {
+  padding: 12px 16px; border-radius: 16px;
   background: var(--accent-default); color: var(--text-on-accent);
   font-family: var(--font-serif); font-weight: 600; font-size: 24px; line-height: 1.2;
 }
-.cs-bubbles blockquote::before {
-  content: ""; position: absolute; bottom: 7px; left: -14px; width: 16px; height: 24px;
+.cs-bubbles blockquote { position: relative; width: min(320px, 100% - 20px); margin: 0 0 0 20px; }
+.cs-bubbles blockquote::before, .bubble-live::before {
+  content: ""; position: absolute; bottom: 8px; left: -12px; width: 24px; height: 24px;
   background: inherit; clip-path: polygon(0 50%, 100% 0, 100% 100%);
 }
-.cs-bubbles blockquote:nth-child(even) { align-self: flex-end; margin: 0 22px 0 0; }
-.cs-bubbles blockquote:nth-child(even)::before { left: auto; right: -14px; clip-path: polygon(0 0, 100% 50%, 0 100%); }
+.cs-bubbles blockquote:nth-child(even) { align-self: flex-end; margin: 0 20px 0 0; }
+.cs-bubbles blockquote:nth-child(even)::before, .cs-bubbles blockquote:nth-child(even) .bubble-live::before { left: auto; right: -12px; clip-path: polygon(0 0, 100% 50%, 0 100%); }
+/* Typing entrance (js/site.js): each blockquote keeps the quote's final size (so nothing below jumps) while a
+   live bubble inside it pops in with "…" dots, then grows as the quote types in. */
+.cs-bubbles.is-typing blockquote { background: none; }
+.cs-bubbles.is-typing blockquote::before { content: none; }
+.cs-bubbles.is-typing .bubble-ghost { visibility: hidden; }
+.bubble-live {
+  position: absolute; left: 0; bottom: 0; width: max-content; max-width: 100%;
+  opacity: 0; transform: scale(.5); transform-origin: 0 100%;
+  transition: opacity .2s ease, transform .4s var(--ease-rise);
+}
+.cs-bubbles blockquote:nth-child(even) .bubble-live { left: auto; right: 0; transform-origin: 100% 100%; }
+.bubble-live.is-on { opacity: 1; transform: none; }
+.bubble-dots { display: inline-flex; gap: 6px; height: 1.2em; align-items: center; padding: 0 2px; }
+.bubble-dots span { width: 8px; height: 8px; border-radius: 50%; background: currentColor; animation: bubble-dot 1s ease-in-out infinite; }
+.bubble-dots span:nth-child(2) { animation-delay: .15s; }
+.bubble-dots span:nth-child(3) { animation-delay: .3s; }
+@keyframes bubble-dot { 0%, 60%, 100% { opacity: .4; transform: none; } 30% { opacity: 1; transform: translateY(-4px); } }
 .cs-step > p + p { margin-top: calc(1.37em - 8px); }   /* a blank line between paragraphs (the step's 8px gap + this) */
 /* Callout (Switchchord: The opportunity): label/eyebrow in secondary, then a heading/pager line */
 .cs-callout { display: flex; flex-direction: column; gap: 8px; }
