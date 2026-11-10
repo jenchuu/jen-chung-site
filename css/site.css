@@ -107,13 +107,32 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 }
 .logo img { width: 12px; height: 20px; }
 .nav-links { display: flex; align-items: center; gap: 48px; }
-.nav-links a {
+.nav-links a, .nav-work-btn {
   font-size: 16px; line-height: 1.37;
   text-decoration: none;
   transition: color .2s ease;
 }
 .nav-links a:hover { color: var(--accent-default); }
-.nav-links a[aria-current] { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 6px; }   /* the page you're on (Work on the home page and case studies) */
+.nav-links a[aria-current] { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 6px; }   /* the page you're on (Design system, or the case study in the Work menu) */
+
+/* Work: opens a list of the case studies + View all (Figma 4802:413; on phones it expands
+   inside the full-page menu instead, Figma 4817:691). Opens on hover or click (js/site.js). */
+.nav-work-btn { display: inline-flex; align-items: center; gap: 4px; }
+.nav-chevron { width: 16px; height: 16px; flex: none; transition: transform .25s var(--ease-out); }
+.nav-work-menu > div { display: flex; flex-direction: column; gap: 4px; }
+.nav-work-menu a { padding: 10px 0; }
+.nav-work-menu a:hover { color: var(--accent-hover); }
+/* View all: a text button, like View case study on the cards */
+.nav-links .nav-view-all {
+  align-self: flex-start;
+  padding: 8px; margin-inline: -8px;   /* like .card-cta: lines up with the text around it */
+  font-family: var(--font-sans); font-weight: 500; font-size: 16px; line-height: 1.37;
+  color: var(--accent-default);
+}
+.nav-view-all .arrow { display: inline-block; transition: transform .25s var(--ease-out); }
+.nav-view-all:hover .arrow, .nav-view-all:focus-visible .arrow { transform: translateX(4px); }
+.nav-links .nav-view-all:hover, .nav-links .nav-view-all:focus-visible { color: var(--accent-hover); }
+@media (prefers-reduced-motion: reduce) { .nav-view-all:hover .arrow, .nav-view-all:focus-visible .arrow { transform: none; } }
 
 /* Light/dark switch (Figma 6796:8401) */
 .theme-toggle {
@@ -134,21 +153,56 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .nav.is-open .menu-close { opacity: 1; transform: none; }
 .nav-tools { display: flex; align-items: center; gap: 16px; }
 
+/* Phones: ☰ opens a full-page menu with lines between the links; Work expands in place,
+   its case studies indented underneath */
 @media (max-width: 759px) {
   .menu-btn { display: inline-grid; }
   .nav-links .nav-link-list {
     position: absolute; left: 0; right: 0; top: var(--layout-nav-height);
-    display: grid; gap: 4px;
+    height: calc(100vh - var(--layout-nav-height));
+    height: calc(100dvh - var(--layout-nav-height));
+    overflow-y: auto; overscroll-behavior: contain;
+    display: flex; flex-direction: column;
     padding: 8px var(--layout-gutter) 20px;
     background: var(--bg-page);
-    box-shadow: 0 12px 24px -16px rgba(0, 0, 0, .35);
-    opacity: 0; transform: translateY(-8px); pointer-events: none;
-    transition: opacity .2s ease, transform .25s var(--ease-out);
+    opacity: 0; transform: translateY(-8px); visibility: hidden;
+    transition: opacity .2s ease, transform .25s var(--ease-out), visibility 0s linear .25s;
   }
-  .nav.is-open .nav-link-list { opacity: 1; transform: none; pointer-events: auto; }
-  .nav-link-list a { padding: 10px 0; font-size: 20px; }
+  .nav.is-open .nav-link-list { opacity: 1; transform: none; visibility: visible; transition-delay: 0s; }
+  .nav-link-list > a, .nav-work-btn { padding: 10px 0; font-size: 20px; }
+  .nav-link-list > * + * { margin-top: 4px; border-top: 1px solid var(--border-rule); }   /* 4px, the line, 4px */
+  .nav-link-list > * + a { padding-top: 13px; }
+  .nav-work-btn { width: 100%; justify-content: space-between; text-align: left; }
+  .nav-chevron { width: 24px; height: 24px; transition: none; }   /* flips straight to ⌃, no turn */
+  .nav-work.is-open .nav-chevron { transform: rotate(180deg); }
+  .nav-work-menu { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .3s var(--ease-out); }
+  .nav-work-menu > div { min-height: 0; overflow: hidden; visibility: hidden; transition: visibility 0s linear .3s; }
+  .nav-work.is-open .nav-work-menu { grid-template-rows: 1fr; }
+  .nav-work.is-open .nav-work-menu > div { visibility: visible; transition-delay: 0s; }
+  .nav-work-menu a { padding: 4px 0 4px 24px; font-size: 20px; }
+  .nav-work-menu a:first-child { margin-top: 4px; }
+  .nav-links .nav-view-all { margin-left: 16px; }   /* 24px indent − 8px padding, so View all lines up with the case studies */
 }
-@media (min-width: 760px) { .nav-link-list { display: contents; } }
+:root.menu-locked { overflow: hidden; }   /* the page stays put behind the full-page menu */
+
+/* Desktop: the case studies drop down under Work */
+@media (min-width: 760px) {
+  .nav-link-list { display: contents; }
+  .nav-links, .nav-work { align-self: stretch; }   /* full bar height, so the pointer can travel down to the menu */
+  .nav-work { position: relative; display: flex; align-items: center; }
+  .nav-work.is-open .nav-work-btn { color: var(--accent-hover); }
+  .nav-work-menu {
+    position: absolute; top: 100%; left: -10px;
+    width: max-content;
+    padding: 8px 16px 20px;
+    border-radius: var(--radius-s);
+    background: var(--bg-page);
+    box-shadow: 0 12px 24px -16px rgba(0, 0, 0, .35);
+    opacity: 0; transform: translateY(-8px); visibility: hidden;
+    transition: opacity .2s ease, transform .25s var(--ease-out), visibility 0s linear .25s;
+  }
+  .nav-work.is-open .nav-work-menu { opacity: 1; transform: none; visibility: visible; transition-delay: 0s; }
+}
 
 /* Every page: the nav stays pinned to the top while you scroll */
 .nav-auto {
@@ -222,6 +276,7 @@ a.card:focus-visible .card-media img { transform: scale(1.06); }   /* slow zoom 
 .card-desc { margin: 0; font-weight: 400; font-size: 20px; line-height: 1.05; }
 .card-cta {
   padding: 8px;
+  margin-inline: -8px;   /* text buttons: the padding stays (tap area, focus ring), but the text lines up with the text around it */
   font-family: var(--font-sans); font-weight: 500; font-size: 16px; line-height: 1.37;
   color: var(--accent-default);
   transition: color .15s ease;
@@ -496,15 +551,24 @@ html.cs-is-locked { overflow-x: clip; }              /* the veil is full-width; 
   padding-block: 80px;
   border-top: 2px solid var(--border-rule);
 }
+/* Each link = uppercase label (body/l; body/s on phones) over the title + arrow (heading/pager) */
 .cs-pager a {
-  display: inline-flex; align-items: center; gap: 16px;
-  font-family: var(--font-serif); font-weight: 600; font-size: 40px; line-height: 1.2;
+  display: flex; flex-direction: column; gap: 4px;
   color: var(--accent-default); text-decoration: none;
   transition: color .15s ease;
 }
-.cs-pager svg { width: 32px; height: 32px; flex: none; transition: transform .25s var(--ease-out); }
+.cs-pager-prev { align-items: flex-end; }          /* PREVIOUS sits flush with the end of its title */
+.cs-pager-next { align-items: flex-start; margin-left: auto; }
+.cs-pager-label {
+  font-family: var(--font-sans); font-weight: 400; font-size: 18px; line-height: 1.37;
+  text-transform: uppercase; color: var(--text-secondary);
+}
+.cs-pager-title {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-family: var(--font-serif); font-weight: 600; font-size: 40px; line-height: 1.2;
+}
+.cs-pager svg { width: 40px; height: 40px; flex: none; transition: transform .25s var(--ease-out); }
 .cs-pager-prev:hover svg { transform: translateX(-4px); }
-.cs-pager-next { margin-left: auto; }
 .cs-pager-next:hover svg { transform: translateX(4px); }
 
 @media (max-width: 999px) {
@@ -525,8 +589,14 @@ html.cs-is-locked { overflow-x: clip; }              /* the veil is full-width; 
   .cs-meta { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: auto auto; grid-auto-flow: column; gap: 32px 24px; }
   .cs-stats { gap: 24px; }                         /* % cards + use-case cards stay side by side; they stack on phones */
   .cs-pager { margin-top: 80px; }
-  .cs-pager > div { padding-block: 48px; }
-  .cs-pager a { font-size: 24px; }
+  /* Pager stacks on phones: Next first, then Previous, both centered.
+     (Side by side, the longest pair, Switchchord: Splits + Cube: Boards, needs ~660px; 760px wide gives 712px) */
+  .cs-pager > div { flex-direction: column; align-items: center; gap: 24px; padding-block: 56px; }
+  .cs-pager a { align-items: center; margin: 0; text-align: center; }
+  .cs-pager-next { order: -1; }
+  .cs-pager-label { font-size: 14px; }             /* body/s */
+  .cs-pager-title { font-size: 24px; }
+  .cs-pager svg { width: 24px; height: 24px; }
   .cs-callout p { font-size: 24px; }
 }
 @media (max-width: 559px) {
@@ -535,6 +605,7 @@ html.cs-is-locked { overflow-x: clip; }              /* the veil is full-width; 
   .cs-hero-fit { grid-template-columns: 1fr !important; }
   .cs-meta { display: flex; }
   .cs-stats, .cs-cards { flex-direction: column; gap: 16px; }
+  .cs-main > .cs-cards + .cs-cards { margin-top: -24px; }   /* two rows of cards stack into one list: 16px apart, like the cards in each row (40px column gap − 24) */
 }
 
 /* ---- Enlarged visuals ----------------------------------------------------------------

@@ -30,7 +30,16 @@
     <a class="logo" href="index.html" aria-label="Jen Chung, home">Jen<img src="assets/icons/logo-dash.svg" alt=""></a>
     <nav class="nav-links" aria-label="Main">
       <div class="nav-link-list" id="nav-menu">
-        <a aria-current="page" href="index.html#work">Work</a>
+        <div class="nav-work">
+          <button class="nav-work-btn" type="button" aria-expanded="false" aria-controls="work-menu">Work<svg class="nav-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m19.5 8.25-7.5 7.5-7.5-7.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <div class="nav-work-menu" id="work-menu"><div>   <!-- ✏️ case studies, in this order -->
+            <a href="cube-boards.html">Cube: Boards</a>
+            <a aria-current="page" href="switchchord-splits.html">Switchchord: Splits</a>
+            <a href="parts-management.html">Beacon: Parts</a>
+            <a href="index.html#work">Cube: Comments</a>   <!-- no case study page yet: goes to Work -->
+            <a class="nav-view-all" href="index.html#work">View all <span class="arrow">--&gt;</span></a>
+          </div></div>
+        </div>
         <a href="design-system.html">Design system</a>
         <a href="https://www.jen-chung.com/about">About</a>   <!-- TODO Phase 4: about.html -->
         <a href="https://drive.google.com/file/d/1YyUNneKgoWcizkY0iiJYyRAiehRn6xVk/view?usp=sharing" target="_blank" rel="noopener">Resume</a>
@@ -94,7 +103,7 @@
             <p>When people make a song together, the hardest part is splits: figuring out who owns what and how much each person should get.</p>
             <p>Today that conversation lives in group texts, screenshots, and half-remembered studio promises, and gets formalized late, if ever. The CEO and PM, music industry veterans, described it as complicated and location dependent. In LA and New York it can be a tense negotiation over who deserves what; in Nashville it’s almost always an even split and barely a conversation.</p>
           </div>
-          <div class="cs-shots"><img src="assets/switchchord-splits/problem-1.webp" alt="Two music collaborators working together at a mixing desk in a studio" width="1336" height="800" loading="lazy"><img src="assets/switchchord-splits/problem-2.webp" alt="A person holding a phone with a group chat open" width="1336" height="624" loading="lazy"></div>
+          <div class="cs-shots"><img src="assets/switchchord-splits/problem-1.webp" alt="Two music collaborators working together at a mixing desk in a studio" width="1336" height="800" loading="lazy"></div>
           <div class="cs-text">
             <p>This is where I came in. My job for Sprint 3 was to reframe and design a solution for messy split conversations, while working within constraints.</p>
           </div>
@@ -298,8 +307,8 @@
   <!-- ===== Previous / next case study ===== -->
   <nav class="cs-pager wrap" aria-label="More case studies">
     <div>
-      <a class="cs-pager-prev" href="cube-boards.html"><svg viewBox="0 0 24 24" width="32" height="32" aria-hidden="true"><path d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Cube Boards</a>
-      <a class="cs-pager-next" href="parts-management.html">Parts Management<svg viewBox="0 0 24 24" width="32" height="32" aria-hidden="true"><path d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      <a class="cs-pager-prev" href="cube-boards.html"><span class="cs-pager-label">Previous</span><span class="cs-pager-title"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Cube: Boards</span></a>
+      <a class="cs-pager-next" href="parts-management.html"><span class="cs-pager-label">Next</span><span class="cs-pager-title">Beacon: Parts<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
     </div>
   </nav>
 </main>

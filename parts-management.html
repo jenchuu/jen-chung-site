@@ -30,7 +30,16 @@
     <a class="logo" href="index.html" aria-label="Jen Chung, home">Jen<img src="assets/icons/logo-dash.svg" alt=""></a>
     <nav class="nav-links" aria-label="Main">
       <div class="nav-link-list" id="nav-menu">
-        <a aria-current="page" href="index.html#work">Work</a>
+        <div class="nav-work">
+          <button class="nav-work-btn" type="button" aria-expanded="false" aria-controls="work-menu">Work<svg class="nav-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m19.5 8.25-7.5 7.5-7.5-7.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <div class="nav-work-menu" id="work-menu"><div>   <!-- ✏️ case studies, in this order -->
+            <a href="cube-boards.html">Cube: Boards</a>
+            <a href="switchchord-splits.html">Switchchord: Splits</a>
+            <a aria-current="page" href="parts-management.html">Beacon: Parts</a>
+            <a href="index.html#work">Cube: Comments</a>   <!-- no case study page yet: goes to Work -->
+            <a class="nav-view-all" href="index.html#work">View all <span class="arrow">--&gt;</span></a>
+          </div></div>
+        </div>
         <a href="design-system.html">Design system</a>
         <a href="https://www.jen-chung.com/about">About</a>   <!-- TODO Phase 4: about.html -->
         <a href="https://drive.google.com/file/d/1YyUNneKgoWcizkY0iiJYyRAiehRn6xVk/view?usp=sharing" target="_blank" rel="noopener">Resume</a>
@@ -57,7 +66,7 @@
   <!-- ===== Title + main image ===== -->
   <header class="cs-head wrap">
     <div>
-      <p class="cs-label">BEACON: PARTS MANAGEMENT</p>
+      <p class="cs-label">BEACON: PARTS</p>
       <h1 class="cs-title">Helping aviation professionals manage parts requests to fix planes quickly so they can get back to flying</h1>
       <div class="cs-hero cs-hero-fit" style="grid-template-columns: 2890fr 1483fr">
         <img src="assets/parts-management/hero-web.webp" alt="Beacon’s parts requests list on desktop, with color coded status chips" width="2400" height="1389">
@@ -245,8 +254,8 @@
   <!-- ===== Previous / next case study ===== -->
   <nav class="cs-pager wrap" aria-label="More case studies">
     <div>
-      <a class="cs-pager-prev" href="switchchord-splits.html"><svg viewBox="0 0 24 24" width="32" height="32" aria-hidden="true"><path d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Switchchord Splits</a>
-      <a class="cs-pager-next" href="cube-boards.html">Cube Boards<svg viewBox="0 0 24 24" width="32" height="32" aria-hidden="true"><path d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      <a class="cs-pager-prev" href="switchchord-splits.html"><span class="cs-pager-label">Previous</span><span class="cs-pager-title"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Switchchord: Splits</span></a>
+      <a class="cs-pager-next" href="cube-boards.html"><span class="cs-pager-label">Next</span><span class="cs-pager-title">Cube: Boards<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
     </div>
   </nav>
 </main>

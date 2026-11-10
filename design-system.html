@@ -30,7 +30,16 @@
     <a class="logo" href="index.html" aria-label="Jen Chung, home">Jen<img src="assets/icons/logo-dash.svg" alt=""></a>
     <nav class="nav-links" aria-label="Main">
       <div class="nav-link-list" id="nav-menu">
-        <a href="index.html#work">Work</a>
+        <div class="nav-work">
+          <button class="nav-work-btn" type="button" aria-expanded="false" aria-controls="work-menu">Work<svg class="nav-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m19.5 8.25-7.5 7.5-7.5-7.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <div class="nav-work-menu" id="work-menu"><div>   <!-- ✏️ case studies, in this order -->
+            <a href="cube-boards.html">Cube: Boards</a>
+            <a href="switchchord-splits.html">Switchchord: Splits</a>
+            <a href="parts-management.html">Beacon: Parts</a>
+            <a href="index.html#work">Cube: Comments</a>   <!-- no case study page yet: goes to Work -->
+            <a class="nav-view-all" href="index.html#work">View all <span class="arrow">--&gt;</span></a>
+          </div></div>
+        </div>
         <a aria-current="page" href="design-system.html">Design system</a>
         <a href="https://www.jen-chung.com/about">About</a>   <!-- TODO Phase 4: about.html -->
         <a href="https://drive.google.com/file/d/1YyUNneKgoWcizkY0iiJYyRAiehRn6xVk/view?usp=sharing" target="_blank" rel="noopener">Resume</a>
@@ -129,7 +138,7 @@
                 </li>
                 <li class="ds-step" style="--d:40px;--m:24px;--lh:1.2">
                   <div class="ds-step-head"><p><b>heading/pager</b>Next case study link</p><p><span>Font size: 40px / 2.5rem</span> | <span>Line height: 120%</span> | <span>Phone: 24px</span></p></div>
-                  <p class="ds-sample" style="--w:600;color:var(--accent-default)">Parts Management →</p>
+                  <p class="ds-sample" style="--w:600;color:var(--accent-default)">Beacon: Parts →</p>
                   <div class="ds-weights"><div style="--w:400"><p aria-hidden="true">heading/<wbr>pager</p><p>Regular</p></div><div style="--w:400;font-style:italic"><p aria-hidden="true">heading/<wbr>pager</p><p>Italic</p></div><div style="--w:600"><p aria-hidden="true">heading/<wbr>pager</p><p>SemiBold</p><span class="chip chip-purple">In use</span></div><div style="--w:700"><p aria-hidden="true">heading/<wbr>pager</p><p>Bold</p></div></div>
                 </li>
                 <li class="ds-step" style="--d:32px;--m:24px;--lh:1.31">

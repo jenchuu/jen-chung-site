@@ -42,11 +42,50 @@
   /* ---- Mobile menu ------------------------------------------------------------ */
   const nav = document.querySelector('.nav');
   const menuBtn = document.getElementById('menu-btn');
-  const setMenu = (open) => { nav.classList.toggle('is-open', open); menuBtn.setAttribute('aria-expanded', String(open)); };
+  const phone = matchMedia('(max-width: 759px)');
+  const setMenu = (open) => {
+    nav.classList.toggle('is-open', open);
+    menuBtn.setAttribute('aria-expanded', String(open));
+    root.classList.toggle('menu-locked', open && phone.matches);   // full-page menu: the page doesn't scroll behind it
+    if (!open) setWork(false);
+  };
   menuBtn.addEventListener('click', () => setMenu(!nav.classList.contains('is-open')));
+  phone.addEventListener('change', () => setMenu(false));
+
+  /* ---- Work menu: a dropdown on desktop (hover or click), expands in place on phones ---- */
+  const WORK_CLOSE_MS = 200;   // ✏️ grace time to move the pointer from Work down into the menu
+  const work = nav.querySelector('.nav-work');
+  const workBtn = work.querySelector('.nav-work-btn');
+  const hoverable = matchMedia('(min-width: 760px) and (hover: hover)');
+  let workPinned = false, workTimer = 0;   // pinned = opened with a click, so it stays open after the pointer leaves
+  function setWork(open) {
+    clearTimeout(workTimer);
+    if (!open) workPinned = false;
+    work.classList.toggle('is-open', open);
+    workBtn.setAttribute('aria-expanded', String(open));
+  }
+  const workOpen = () => work.classList.contains('is-open');
+  workBtn.addEventListener('click', () => {
+    if (!workOpen()) { setWork(true); workPinned = true; }
+    else if (workPinned || !hoverable.matches) setWork(false);
+    else workPinned = true;   // already open from hovering: a click keeps it open
+  });
+  work.addEventListener('mouseenter', () => { if (hoverable.matches) setWork(true); });
+  work.addEventListener('mouseleave', () => {
+    if (hoverable.matches && !workPinned) workTimer = setTimeout(() => setWork(false), WORK_CLOSE_MS);
+  });
+  work.addEventListener('focusout', (e) => { if (!phone.matches && !work.contains(e.relatedTarget)) setWork(false); });
+
   document.getElementById('nav-menu').addEventListener('click', (e) => { if (e.target.closest('a')) setMenu(false); });
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && nav.classList.contains('is-open')) { setMenu(false); menuBtn.focus(); } });
-  document.addEventListener('click', (e) => { if (nav.classList.contains('is-open') && !nav.contains(e.target)) setMenu(false); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    if (nav.classList.contains('is-open')) { setMenu(false); menuBtn.focus(); }
+    else if (workOpen()) { setWork(false); workBtn.focus(); }
+  });
+  document.addEventListener('click', (e) => {
+    if (nav.classList.contains('is-open') && !nav.contains(e.target)) setMenu(false);
+    if (workOpen() && !phone.matches && !work.contains(e.target)) setWork(false);   // phones: Work stays expanded until the menu closes
+  });
 
   /* ---- Card entrance ------------------------------------------------------------ */
   // Each card reveals once, when a fifth of it is on screen — whether visitors scroll,
@@ -635,4 +674,16 @@
     if (msg.type === 'konbini:scroll') document.getElementById('work').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
   });
   sizeHero();
+
+  // Arriving at index.html#work (View all in the nav on another page): the konbini above
+  // settles its height after the browser has jumped to Work, so keep Work in place until it
+  // has — unless the visitor starts scrolling first.
+  const arrival = !atKonbini() && location.hash && document.getElementById(location.hash.slice(1));
+  if (arrival) {
+    const keep = new ResizeObserver(() => arrival.scrollIntoView({ behavior: 'instant' }));
+    const stop = () => { keep.disconnect(); ['wheel', 'touchstart', 'keydown'].forEach((t) => removeEventListener(t, stop)); };
+    keep.observe(hero);
+    ['wheel', 'touchstart', 'keydown'].forEach((t) => addEventListener(t, stop, { passive: true }));
+    setTimeout(stop, 4000);
+  }
 })();
