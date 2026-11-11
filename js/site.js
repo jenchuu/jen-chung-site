@@ -607,6 +607,37 @@
     });
   }
 
+  /* ---- Back to top (case studies) ------------------------------------------------- */
+  // Hidden until the visitor reaches the last section (its heading, e.g. "Reflection", is fully on
+  // screen or already scrolled past); it pops in TO_TOP_DELAY_MS later with a slight bounce
+  // (css/site.css). Clicking scrolls to the top (smoothly unless reduced motion is on) and moves
+  // keyboard focus to the title.
+  const TO_TOP_DELAY_MS = 1000;                                  // ✏️ wait after reaching the last section
+  const toTop = document.querySelector('.to-top-wrap .to-top');
+  if (toTop) {
+    root.classList.add('to-top-ready');
+    const lastHeading = [...document.querySelectorAll('.cs-section > .cs-h2')].pop();
+    let toTopTimer = 0;
+    const reached = () => (lastHeading
+      ? lastHeading.getBoundingClientRect().bottom <= innerHeight
+      : innerHeight + scrollY >= document.documentElement.scrollHeight - 4);   // (no headings: the page's bottom)
+    const checkReached = () => {
+      if (toTopTimer || root.classList.contains('cs-is-locked') || !reached()) return;   // (a locked page doesn't count)
+      toTopTimer = setTimeout(() => toTop.classList.add('is-in'), TO_TOP_DELAY_MS);
+      removeEventListener('scroll', checkReached);
+    };
+    addEventListener('scroll', checkReached, { passive: true });
+    checkReached();
+    toTop.addEventListener('focus', () => toTop.classList.add('is-in'));   // keyboard users never tab to an invisible button
+    toTop.addEventListener('click', (e) => {
+      e.preventDefault();
+      const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+      const title = document.querySelector('h1');
+      if (title) { title.tabIndex = -1; title.focus({ preventScroll: true }); }
+    });
+  }
+
   /* ---- Konbini hero ------------------------------------------------------------- */
   // The hero is its own page (konbini/konbini-hero.html) shown in a frame. It talks to this
   // page with messages: theme, page width, frame height, case-study links and the ↓ scroll.

@@ -23,6 +23,7 @@
   --ink-hover: #8f8f8f;
   --ink-hint: #4e4e4e;
   --ink-note: #4e4e4e;
+  --text-secondary: #75705e;   /* site text/secondary */
   --purple: #7961c7;
   --loader-bg: var(--shell);
   --loader-title: #333333;
@@ -49,6 +50,7 @@
   --ink-idle: #4e4e4e;
   --ink-hover: #9a9a9a;
   --ink-note: #cccccc;
+  --text-secondary: #a5a08f;
   --purple: #9e81ee;
   --loader-bg: #121212;
   --loader-title: #f2f2f2;
@@ -103,7 +105,7 @@ img { display: block; }
   max-width: var(--card-w);
   font-family: "Inter", system-ui, sans-serif; font-weight: 400;
   font-size: 16px; line-height: 1.37;
-  color: var(--ink-note);
+  color: var(--text-secondary);
   text-align: center;
 }
 
@@ -382,8 +384,8 @@ img { display: block; }
   /* pull up past the artwork's transparent base so the gap is measured from the feet */
   margin: calc(var(--cap-gap) - var(--fw) / var(--fridge-ar) * var(--fridge-b)) 0 0;
   max-width: calc(var(--fw) * .833);   /* the fridge itself, without the artwork's transparent sides */
-  font-weight: 600; font-size: 16px; line-height: 1.37;
-  color: #a5a08f;
+  font-family: "Inter", system-ui, sans-serif; font-weight: 400; font-size: 16px; line-height: 1.37;   /* body/m, like the note under the store */
+  color: var(--text-secondary);
   text-align: center;
   text-wrap: pretty;
 }

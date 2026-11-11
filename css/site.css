@@ -236,10 +236,9 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 #archive { padding-bottom: 80px; }
 
 .grid { display: grid; row-gap: 48px; }
-.grid-work { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 80px; }
+.grid-work { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 48px; }   /* same as the row gap; cards are 487px wide at full width */
 .grid-archive { grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 48px; }
 @media (max-width: 999px) {
-  .grid-work { column-gap: 40px; }
   .grid-archive { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 32px; }
 }
 @media (max-width: 759px) {
@@ -254,7 +253,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   position: relative;
   border-radius: var(--radius-l); overflow: hidden;
   background: var(--bg-image);
-  aspect-ratio: 471 / 350;
+  aspect-ratio: 487 / 350;
 }
 /* Hover: a dark overlay on the image (clickable cards only) */
 a.card .card-media::after {
@@ -329,7 +328,7 @@ a.card:active .card-cta, .cs-pager a:active { color: var(--accent-hover); }
 .connect-title {
   display: flex; align-items: center; gap: 12px;
   margin: 0;
-  font-family: var(--font-serif); font-weight: 600; font-size: 24px; line-height: 1.2;
+  font-family: var(--font-serif); font-weight: 400; font-size: 24px; line-height: 1.2;   /* heading/connect: Regular, as in the Figma design system */
 }
 .connect-title img { width: 32px; height: 3px; transform: scaleY(-1); }
 .socials { display: flex; gap: 16px; }
@@ -544,37 +543,86 @@ a.card:active .card-cta, .cs-pager a:active { color: var(--accent-hover); }
 html.cs-is-locked { overflow-x: clip; }              /* the veil is full-width; never let it add sideways scroll */
 .cs-is-locked .cs-pager { display: none; }
 
-/* Previous / next */
+/* Previous / next: two equal halves; a long title wraps inside its half */
 .cs-pager { margin-top: 132px; }
 .cs-pager > div {
-  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 24px 40px;
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 40px;   /* ✏️ space between the halves */
   padding-block: 80px;
   border-top: 2px solid var(--border-rule);
 }
 /* Each link = uppercase label (body/l; body/s on phones) over the title + arrow (heading/pager) */
 .cs-pager a {
-  display: flex; flex-direction: column; gap: 4px;
+  display: flex; flex-direction: column; gap: 4px; max-width: 100%;
   color: var(--accent-default); text-decoration: none;
   transition: color .15s ease;
 }
-.cs-pager-prev { align-items: flex-end; }          /* PREVIOUS sits flush with the end of its title */
-.cs-pager-next { align-items: flex-start; margin-left: auto; }
+/* Previous sits at the left edge, Next at the right edge. Each label lines up with its title's text, not its
+   arrow: PREVIOUS with where the text starts, NEXT with where it ends (inset by the 40px arrow + 4px gap).
+   A wrapped title keeps its arrow on the outside edge. */
+.cs-pager-prev { grid-column: 1; justify-self: start; align-items: flex-start; text-align: left; }
+.cs-pager-next { grid-column: 2; justify-self: end; align-items: flex-end; text-align: right; }
+.cs-pager-prev .cs-pager-label { padding-left: 44px; }
+.cs-pager-next .cs-pager-label { padding-right: 44px; }
 .cs-pager-label {
   font-family: var(--font-sans); font-weight: 400; font-size: 18px; line-height: 1.37;
   text-transform: uppercase; color: var(--text-secondary);
 }
-.cs-pager-title {
-  display: inline-flex; align-items: center; gap: 4px;
-  font-family: var(--font-serif); font-weight: 600; font-size: 40px; line-height: 1.2;
+.cs-pager-title { font-family: var(--font-serif); font-weight: 600; font-size: 40px; line-height: 1.2; }
+.cs-pager-title .nowrap { white-space: nowrap; }   /* the arrow always stays with its word */
+.cs-pager svg {
+  display: inline-block; width: 1em; height: 1em; vertical-align: -.17em;
+  transition: transform .25s var(--ease-out);
 }
-.cs-pager svg { width: 40px; height: 40px; flex: none; transition: transform .25s var(--ease-out); }
+.cs-pager-prev svg { margin-right: 4px; }
+.cs-pager-next svg { margin-left: 4px; }
 .cs-pager-prev:hover svg { transform: translateX(-4px); }
 .cs-pager-next:hover svg { transform: translateX(4px); }
+
+/* Back to top: a small round button, right-aligned in the space between the last section and the pager's line.
+   It stays hidden until the visitor reaches the last section (e.g. Reflection), then pops in 1s later with a slight bounce
+   (the 1s is TO_TOP_DELAY_MS in js/site.js). */
+.to-top-wrap { margin-top: 64px; }
+.to-top-wrap > div { display: flex; justify-content: flex-end; }   /* ✏️ right-aligned; center with justify-content: center */
+.to-top-wrap + .cs-pager { margin-top: 24px; }                       /* 64 + 44 + 24 = the same 132px as before */
+.cs-is-locked .to-top-wrap { display: none; }
+.to-top {
+  display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%;
+  background: var(--bg-page); border: 1.5px solid var(--border-rule); color: var(--text-secondary);   /* 1.5px, like the icon stroke */
+  box-shadow: 0 8px 20px -12px rgba(0, 0, 0, .35);
+  transition: color .15s ease, border-color .15s ease, transform .15s ease;
+}
+.to-top svg { width: 20px; height: 20px; transition: transform .25s var(--ease-out); }
+.to-top:focus-visible, .to-top.is-focus { border-radius: 50%; }
+.to-top.is-focus { outline: 2px solid var(--accent-default); outline-offset: 3px; }
+.to-top:hover, .to-top:focus-visible, .to-top:active, .to-top.is-hover, .to-top.is-focus, .to-top.is-active { color: var(--accent-hover); border-color: var(--accent-hover); }
+.to-top:hover svg, .to-top.is-hover svg { transform: translateY(-3px); }   /* arrow nudges up */
+.to-top:active, .to-top.is-active { transform: scale(.94); }               /* pressed */
+.to-top-ready .to-top:not(.is-in) { opacity: 0; transform: translateY(16px); pointer-events: none; }
+.to-top-ready .to-top.is-in { animation: to-top-in .6s var(--ease-out) backwards; }   /* ✏️ bounce speed */
+@keyframes to-top-in {
+  0%   { opacity: 0; transform: translateY(16px); }
+  55%  { opacity: 1; transform: translateY(-5px); }    /* ✏️ bounce height */
+  80%  { transform: translateY(2px); }
+  100% { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .to-top-ready .to-top:not(.is-in) { transform: none; }
+  .to-top-ready .to-top.is-in { animation: none; transition: opacity .3s ease; }
+  .to-top:hover svg, .to-top.is-hover svg { transform: none; }
+}
 
 @media (max-width: 999px) {
   .cs-section { grid-template-columns: minmax(180px, 30%) minmax(0, 1fr); }
   .cs-h2, .cs .cs-title { font-size: clamp(40px, 5.2vw, 56px); }
   .chips { flex-wrap: wrap; }
+}
+/* Pager stacks below 860px: Next first, then Previous, both centered.
+   (Side by side, the longest title, "Switchchord: Splits →", fits its half from 814px wide) */
+@media (max-width: 859px) {
+  .cs-pager > div { display: flex; flex-direction: column; align-items: center; gap: 24px; }
+  .cs-pager a { align-items: center; justify-self: auto; margin: 0; text-align: center; }
+  .cs-pager a .cs-pager-label { padding-inline: 0; }   /* stacked: labels center over the whole title */
+  .cs-pager-next { order: -1; }
 }
 @media (max-width: 759px) {
   .cs-head { padding-top: 32px; }
@@ -589,11 +637,9 @@ html.cs-is-locked { overflow-x: clip; }              /* the veil is full-width; 
   .cs-meta { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: auto auto; grid-auto-flow: column; gap: 32px 24px; }
   .cs-stats { gap: 24px; }                         /* % cards + use-case cards stay side by side; they stack on phones */
   .cs-pager { margin-top: 80px; }
-  /* Pager stacks on phones: Next first, then Previous, both centered.
-     (Side by side, the longest pair, Switchchord: Splits + Cube: Boards, needs ~660px; 760px wide gives 712px) */
-  .cs-pager > div { flex-direction: column; align-items: center; gap: 24px; padding-block: 56px; }
-  .cs-pager a { align-items: center; margin: 0; text-align: center; }
-  .cs-pager-next { order: -1; }
+  .to-top-wrap { margin-top: 40px; }
+  .to-top-wrap + .cs-pager { margin-top: 16px; }
+  .cs-pager > div { padding-block: 56px; }
   .cs-pager-label { font-size: 14px; }             /* body/s */
   .cs-pager-title { font-size: 24px; }
   .cs-pager svg { width: 24px; height: 24px; }
@@ -807,7 +853,19 @@ html.lb-open { overflow: hidden; }
 .ds-panel .chips { flex-wrap: wrap; }
 .ds-panel .cs-stats, .ds-field { align-self: stretch; }
 .ds-static { display: inline-flex; pointer-events: none; }
-.ds-input { display: block; height: 42px; border-bottom: 1px solid var(--status-error); }   /* the error state */
+.ds-states { display: flex; flex-wrap: wrap; gap: 16px 12px; }
+.ds-states figure { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 8px; min-width: 56px; }
+.ds-states figcaption { font-size: 12px; line-height: 1.37; color: var(--text-secondary); }
+.ds-card { align-self: stretch; }
+/* Input states (Figma: Input, Label=Off), two to a row */
+.ds-inputs { align-self: stretch; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 16px; }
+.ds-inputs figure { margin: 0; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.ds-inputs figcaption { font-size: 12px; line-height: 1.37; color: var(--text-secondary); }
+.ds-input { display: flex; align-items: center; height: 42px; border-bottom: 1px solid var(--border-input); font-size: 16px; line-height: 1.37; }
+.ds-input.is-focus { border-bottom-color: var(--accent-default); }
+.ds-input.is-error { border-bottom-color: var(--status-error); }
+.ds-input.is-disabled { border-bottom-color: var(--border-rule); color: var(--border-rule); }
+.ds-caret { display: inline-block; width: 1px; height: 20px; margin-left: 2px; background: var(--text-primary); }
 .ds-notes { display: grid; gap: 12px; font-size: 16px; line-height: 1.37; }
 .ds-notes div { display: grid; grid-template-columns: 160px minmax(0, 1fr); gap: 16px; }
 .ds-notes dt { font-weight: 600; }
@@ -832,4 +890,75 @@ html.lb-open { overflow: hidden; }
   .ds-token { grid-column: 1 / -1; }
   .ds-modes { grid-template-columns: 1fr; }
   .ds-notes div { grid-template-columns: 1fr; gap: 2px; }
+}
+
+/* ---- About ----------------------------------------------------------------------------
+   Figma "Portfolio designs 2026" › About page (desktop light 10851:89042 / dark 10822:88917,
+   phone light 10759:76847 / dark 10759:76634). */
+.about { padding-top: 56px; padding-bottom: 80px; }          /* + the 64px nav = 120px, as in Figma */
+.about > div { display: flex; flex-direction: column; gap: 80px; }
+.about :where(h1, h2, p, ul) { margin: 0; }
+.about-intro { display: grid; grid-template-columns: minmax(0, 499fr) minmax(280px, 483fr); column-gap: 40px; align-items: start; }
+.about-text { display: flex; flex-direction: column; gap: 40px; }
+.about-title, .about-h2 { font-family: var(--font-serif); font-weight: 600; font-size: 56px; line-height: 1; }   /* display/title */
+.about-body { font-family: var(--font-sans); font-size: 18px; line-height: 1.37; }                              /* body/l */
+.about-body p + p { margin-top: 1.37em; }                   /* one empty line between paragraphs */
+.about-photo img { display: block; width: 100%; height: auto; aspect-ratio: 483 / 570; object-fit: cover; border-radius: var(--radius-s); }
+.about-interests { display: flex; flex-direction: column; gap: 32px; }
+
+/* Interests: a row that runs off the right edge of the screen and scrolls sideways */
+.interests {
+  display: flex; gap: 24px;
+  padding: 0; list-style: none;
+  overflow-x: auto; overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity; scrollbar-width: none;
+  margin-right: calc((100% - 100vw) / 2);                    /* to the screen edge */
+  padding-right: var(--layout-gutter);
+  cursor: grab;
+}
+.interests::-webkit-scrollbar { display: none; }
+.interests.is-dragging { cursor: grabbing; scroll-snap-type: none; user-select: none; }
+.interests:focus-visible { outline: 2px solid var(--accent-default); outline-offset: 4px; border-radius: var(--radius-m); }
+.interests li { flex: 0 0 auto; scroll-snap-align: start; }
+.interests :is(img, video) {
+  display: block; width: 394px; height: 525px;               /* ✏️ tile size (160 × 200 on phones) */
+  object-fit: cover; border-radius: var(--radius-m);
+  background: var(--bg-image);
+}
+/* Chevrons over the row: the same 44px circle as Back to top. The left one waits until the row has moved on. */
+.gallery { position: relative; }
+.gallery-btn {
+  position: absolute; top: 50%; z-index: 1;
+  display: grid; place-items: center; width: 44px; height: 44px; margin-top: -22px; padding: 0;
+  border-radius: 50%; cursor: pointer;
+  background: var(--bg-page); border: 1.5px solid var(--border-rule); color: var(--text-secondary);
+  box-shadow: 0 8px 20px -12px rgba(0, 0, 0, .35);
+  transition: color .15s ease, border-color .15s ease, transform .15s ease, opacity .3s ease, visibility .3s;
+}
+.gallery-prev { left: 16px; }
+.gallery-next { right: calc((100% - 100vw) / 2 + var(--layout-gutter)); }   /* near the screen edge, where the row ends */
+.gallery-btn svg { width: 20px; height: 20px; transition: transform .25s var(--ease-out); }
+.gallery-btn:hover, .gallery-btn:focus-visible, .gallery-btn:active { color: var(--accent-hover); border-color: var(--accent-hover); }
+.gallery-btn:focus-visible { outline: 2px solid var(--accent-default); outline-offset: 3px; }
+.gallery-prev:hover svg { transform: translateX(-3px); }
+.gallery-next:hover svg { transform: translateX(3px); }
+.gallery-btn:active { transform: scale(.94); }
+.gallery-btn.is-hidden { opacity: 0; visibility: hidden; }
+@media (prefers-reduced-motion: reduce) { .gallery-btn:hover svg { transform: none; } }
+.about-thanks { font-family: var(--font-serif); font-weight: 400; font-size: 24px; line-height: 1.2; text-align: center; }
+.about [lang="ja"] { font-family: "Noto Sans JP", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif; }   /* Japanese in a gothic (sans), as in Figma */
+
+@media (max-width: 759px) {
+  .about { padding-top: 48px; padding-bottom: 64px; }        /* 112px from the top, as in Figma */
+  .about > div { gap: 40px; }
+  .about-intro { grid-template-columns: 1fr; row-gap: 24px; }
+  .about-photo { order: -1; }                                /* photo first */
+  .about-photo img { aspect-ratio: 358 / 300; }
+  .about-text { gap: 24px; }
+  .about-title, .about-h2 { font-size: 40px; line-height: 1.2; }   /* heading/section */
+  .interests :is(img, video) { width: 160px; height: 200px; }
+  .gallery-prev { left: 8px; }                               /* both 24px from the screen edges */
+  .gallery-next { right: calc((100% - 100vw) / 2 + 24px); }
+  .about-thanks { padding-top: 40px; font-size: 16px; line-height: 1.05; }
+  .about-thanks span { display: inline-block; margin-top: 8px; }
 }

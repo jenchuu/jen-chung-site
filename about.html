@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>About | Jen Chung</title>
+<meta name="description" content="About Jen Chung, a Product Designer in Los Angeles who designs tools people rely on to get work done.">
+<meta name="theme-color" content="#fcf9ef">
+<script>
+  // Set the theme before the page paints, so there's no flash of the wrong colors.
+  // A visitor's choice is remembered; first-time visitors get light (the site's default).
+  (function () {
+    var t = 'light';
+    try { t = localStorage.getItem('jc-theme') || t; } catch (e) {}
+    document.documentElement.dataset.theme = t === 'dark' ? 'dark' : 'light';
+    // Cards animate in as they scroll into view (skipped for reduced motion)
+    if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('reveal-ready');
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&family=Inter:ital,wght@0,400;0,500;1,400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600&text=~%E3%80%9C%E3%81%84%E3%81%8A%E3%81%8F%E3%81%95%E3%81%97%E3%81%98%E3%81%9B%E3%81%9F%E3%81%A0%E3%81%A6%E3%81%AF%E3%81%BE%E3%82%81%E8%B6%8A&display=swap">   <!-- just the Japanese characters on this page -->
+<link rel="stylesheet" href="css/site.css">
+</head>
+<body>
+<a class="skip-link" href="#about">Skip to About</a>
+
+<!-- ===== Nav ===== -->
+<header class="nav nav-auto wrap">
+  <div class="nav-bar">
+    <a class="logo" href="index.html" aria-label="Jen Chung, home">Jen<img src="assets/icons/logo-dash.svg" alt=""></a>
+    <nav class="nav-links" aria-label="Main">
+      <div class="nav-link-list" id="nav-menu">
+        <div class="nav-work">
+          <button class="nav-work-btn" type="button" aria-expanded="false" aria-controls="work-menu">Work<svg class="nav-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m19.5 8.25-7.5 7.5-7.5-7.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <div class="nav-work-menu" id="work-menu"><div>   <!-- ✏️ case studies, in this order -->
+            <a href="cube-boards.html">Cube: Boards</a>
+            <a href="switchchord-splits.html">Switchchord: Splits</a>
+            <a href="parts-management.html">Beacon: Parts</a>
+            <a href="index.html#work">Cube: Comments</a>   <!-- no case study page yet: goes to Work -->
+            <a class="nav-view-all" href="index.html#work">View all <span class="arrow">--&gt;</span></a>
+          </div></div>
+        </div>
+        <a href="design-system.html">Design system</a>
+        <a aria-current="page" href="about.html">About</a>
+        <a href="https://drive.google.com/file/d/1YyUNneKgoWcizkY0iiJYyRAiehRn6xVk/view?usp=sharing" target="_blank" rel="noopener">Resume</a>
+        <a href="mailto:hello@jen-chung.com">Connect</a>
+      </div>
+      <div class="nav-tools">
+        <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Dark mode" aria-pressed="false">
+          <img class="is-light" src="assets/icons/sun-filled.svg" alt=""><img class="is-light" src="assets/icons/moon-outlined.svg" alt="">
+          <img class="is-dark" src="assets/icons/sun-outlined.svg" alt=""><img class="is-dark" src="assets/icons/moon-filled.svg" alt="">
+        </button>
+        <button class="menu-btn" id="menu-btn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav-menu">
+          <svg class="menu-open" viewBox="0 0 24 24" width="32" height="32" aria-hidden="true"><path d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg class="menu-close" viewBox="0 0 24 24" width="32" height="32" aria-hidden="true"><path d="M6 18 18 6M6 6l12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<!-- Design source: Figma "Portfolio designs 2026" › About page (desktop light 10851:89042, dark 10822:88917;
+     phone light 10759:76847, dark 10759:76634). ✏️ Photos and clips live in assets/about/. -->
+<main class="about wrap" id="about">
+  <div>
+
+    <!-- ===== Intro: text + photo (the photo goes on top on phones) ===== -->
+    <section class="about-intro" aria-labelledby="about-title">
+      <div class="about-text">
+        <h1 class="about-title" id="about-title"><span lang="ja">はじめまして〜</span><br>Nice to meet you!</h1>
+        <div class="about-body">
+          <p>Hi, I’m Jen~ I design tools people rely on to get work done. My goal is to make the hard things feel as easy as grabbing an onigiri from the konbini at 2am.</p>
+          <p>My dad taught me the Platinum Rule early on: treat people the way <i>they</i> want to be treated. It’s still how I design. I ask a lot of questions, sweat the small details, and aim for experiences so intuitive they feel invisible.</p>
+          <p>I’m happiest when I’m learning something new... whether that’s a new problem space, a new dance class, or a new hobby!</p>
+        </div>
+      </div>
+      <picture class="about-photo">
+        <source media="(max-width: 759px)" srcset="assets/about/portrait-phone.webp" width="716" height="600">
+        <img src="assets/about/portrait.webp" alt="Me in my passport photo, printed on a Kodak Moments biometric ID photo certificate" width="966" height="1140">
+      </picture>
+    </section>
+
+    <!-- ===== Interests: a row of photos and clips that moves on by itself every few seconds and loops forever.
+         Visitors can also click the chevrons, swipe, use a trackpad, or drag it with the mouse.
+         It pauses while the pointer is over it or a button has keyboard focus, and never moves on its own with reduced motion.
+         ✏️ Reorder by moving the <li>s (same order as the old site). Clips are silent and only play while they're on screen.
+         ✏️ Seconds per photo: GALLERY_DELAY_MS in the script at the bottom. ===== -->
+    <section class="about-interests" aria-labelledby="interests-title">
+      <h2 class="about-h2" id="interests-title">Interests</h2>
+      <div class="gallery">
+        <ul class="interests" id="interests-row" tabindex="0" aria-label="Interests: photos and clips, scroll sideways for more">
+          <li><img src="assets/about/pickleball.webp" alt="Pickleball at night, with my Pickles socks in front" loading="lazy"></li>
+          <li><img src="assets/about/nails-sketches.webp" alt="My hand next to sketches planning Halloween nail art" loading="lazy"></li>
+          <li><img src="assets/about/nails.webp" alt="The finished Halloween nails: ghosts, a mummy, bats and stitches on purple" loading="lazy"></li>
+          <li><img src="assets/about/mt-rainier.webp" alt="Me on a rocky trail with Mt. Rainier behind me" loading="lazy"></li>
+          <li><img src="assets/about/matcha.webp" alt="Sifting matcha into a bowl, with a bamboo whisk and a tin of Kyoto matcha" loading="lazy"></li>
+          <li><video src="assets/about/matcha-cold-foam.mp4" poster="assets/about/matcha-cold-foam-poster.webp" muted loop playsinline preload="none" aria-label="Making a matcha drink with blueberry cold foam"></video></li>
+          <li><img src="assets/about/itadori-drawing.webp" alt="My pencil drawing of Itadori from Jujutsu Kaisen, next to the reference card" loading="lazy"></li>
+          <li><img src="assets/about/rug.webp" alt="The finished tufted rug of No-Face from Spirited Away on the train" loading="lazy"></li>
+          <li><video src="assets/about/rug-tufting.mp4" poster="assets/about/rug-tufting-poster.webp" muted loop playsinline preload="none" aria-label="Tufting a rug with a tufting gun"></video></li>
+          <li><img src="assets/about/akaza-drawing.webp" alt="My pencil drawing of Akaza from Demon Slayer, next to the reference box art" loading="lazy"></li>
+        </ul>
+        <!-- Heroicons chevron-left / chevron-right. The left one stays hidden until the row first moves on. -->
+        <button class="gallery-btn gallery-prev is-hidden" type="button" aria-label="Previous photo" aria-controls="interests-row"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.75 19.5 8.25 12l7.5-7.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <button class="gallery-btn gallery-next" type="button" aria-label="Next photo" aria-controls="interests-row"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8.25 4.5 7.5 7.5-7.5 7.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      </div>
+    </section>
+
+    <p class="about-thanks">Thanks for stopping by :)<br><span lang="ja">またお越しくださいませ~</span></p>
+  </div>
+</main>
+
+<!-- ===== Footer ===== -->
+<footer class="footer" id="connect">
+  <div class="connect">
+    <h2 class="connect-title">Let’s connect <img src="assets/icons/connect-line.svg" alt=""></h2>
+    <div class="socials">
+      <a href="mailto:hello@jen-chung.com" aria-label="Email Jen">
+        <svg viewBox="-3 0 30 24" aria-hidden="true"><path d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="https://www.linkedin.com/in/jennifer-chung/" target="_blank" rel="noopener" aria-label="Jen on LinkedIn">
+        <svg viewBox="0 0 40 32" aria-hidden="true"><path fill="currentColor" d="M14.7006 26.8802H10.3469V12.9395H14.7006V26.8802ZM12.5214 11.0379C11.1292 11.0379 10 9.89131 10 8.50703C10 7.84212 10.2656 7.20443 10.7385 6.73426C11.2114 6.26409 11.8527 5.99995 12.5214 5.99995C13.1901 5.99995 13.8315 6.26409 14.3043 6.73426C14.7772 7.20443 15.0428 7.84212 15.0428 8.50703C15.0428 9.89131 13.9131 11.0379 12.5214 11.0379ZM30.9953 26.8802H26.6509V20.0939C26.6509 18.4766 26.6181 16.4025 24.3873 16.4025C22.1237 16.4025 21.7769 18.1597 21.7769 19.9774V26.8802H17.4278V12.9395H21.6034V14.8412H21.6644C22.2456 13.7458 23.6655 12.59 25.7838 12.59C30.19 12.59 31 15.475 31 19.2224V26.8802H30.9953Z"/></svg>
+      </a>
+    </div>
+  </div>
+  <p class="colophon">Jen Chung © 2026. Designed + AI coded by me with care &amp; <span class="colophon-end">matcha<span class="colophon-icons" aria-hidden="true"><img src="assets/icons/matcha.png" alt="" width="12" height="15"><svg viewBox="0 0 11.35 10.86" width="11" height="10"><path d="M5.676 10.375S13.243 4.082 10.294 1.138C7.984-1.168 5.676 2.488 5.676 2.488S3.365-1.168 1.056 1.138C-1.891 4.082 5.676 10.375 5.676 10.375Z" fill="none" stroke="currentColor" stroke-width=".75"/></svg></span></span></p>
+</footer>
+
+<script src="js/site.js"></script>
+<script>
+  // Interests gallery
+  // - Moves on to the next photo every GALLERY_DELAY_MS and loops forever: the photos are copied once
+  //   after the last one, and when the row reaches the copy of the first photo it jumps back without a visible change.
+  // - Chevrons go back / forward one photo. The left one appears once the row has moved on from the first photo.
+  // - Pauses while the pointer is over the row, while a chevron or the row has keyboard focus, while someone is
+  //   swiping or dragging it, and while it's off screen. With reduced motion it never moves by itself.
+  // - Clips play (muted) only while they're on screen.
+  (function () {
+    var GALLERY_DELAY_MS = 4000;                                   // ✏️ time on each photo (4s, as on the old site)
+    var row = document.querySelector('.interests');
+    if (!row) return;
+    var gallery = row.parentElement;
+    var prevBtn = gallery.querySelector('.gallery-prev');
+    var nextBtn = gallery.querySelector('.gallery-next');
+    var still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // One hidden copy of every tile, so the row can keep going past the last photo.
+    var originals = Array.prototype.slice.call(row.children);
+    var count = originals.length;
+    originals.forEach(function (li) {
+      var copy = li.cloneNode(true);
+      copy.setAttribute('aria-hidden', 'true');
+      copy.inert = true;
+      row.appendChild(copy);
+    });
+    var tiles = row.children;
+    var pos = function (i) { return tiles[i].offsetLeft - tiles[0].offsetLeft; };
+    var loopWidth = function () { return pos(count); };
+    var current = function () {                                    // the tile nearest the left edge
+      var best = 0, gap = Infinity;
+      for (var i = 0; i < tiles.length; i++) { var d = Math.abs(pos(i) - row.scrollLeft); if (d < gap) { gap = d; best = i; } }
+      return best;
+    };
+    var jump = function (left) {                                   // move without animating (the copy looks the same)
+      row.style.scrollSnapType = 'none'; row.scrollLeft = left; row.offsetWidth; row.style.scrollSnapType = '';
+    };
+    var go = function (i) {
+      row.scrollTo({ left: pos(i), behavior: still ? 'auto' : 'smooth' });
+      if (i % count !== 0) prevBtn.classList.remove('is-hidden');
+    };
+    var next = function () {
+      var i = current();
+      if (i >= count) { jump(row.scrollLeft - loopWidth()); i -= count; }
+      go(i + 1);
+    };
+    var prev = function () {
+      var i = current();
+      if (i <= 0) { jump(row.scrollLeft + loopWidth()); i += count; }
+      go(i - 1);
+    };
+    // After any scroll settles in the copies, quietly jump back to the same photo in the originals.
+    var settleTimer = 0;
+    var settle = function () {
+      if (row.scrollLeft >= loopWidth() - 2) jump(row.scrollLeft - loopWidth());
+      if (current() % count !== 0) prevBtn.classList.remove('is-hidden');
+    };
+    row.addEventListener('scroll', function () { clearTimeout(settleTimer); settleTimer = setTimeout(settle, 150); }, { passive: true });
+
+    // Auto-advance, with a set of reasons to hold still.
+    var timer = 0, holds = {};
+    var schedule = function () {
+      clearTimeout(timer);
+      if (still || Object.keys(holds).length) return;
+      timer = setTimeout(function () { next(); schedule(); }, GALLERY_DELAY_MS);
+    };
+    var hold = function (why) { holds[why] = 1; clearTimeout(timer); };
+    var release = function (why) { delete holds[why]; schedule(); };
+
+    nextBtn.addEventListener('click', function () { next(); schedule(); });
+    prevBtn.addEventListener('click', function () { prev(); schedule(); });
+    gallery.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') hold('hover'); });
+    gallery.addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') release('hover'); });
+    gallery.addEventListener('focusin', function () { if (gallery.querySelector(':focus-visible')) hold('focus'); });
+    gallery.addEventListener('focusout', function () { release('focus'); });
+    row.addEventListener('touchstart', function () { hold('touch'); }, { passive: true });
+    row.addEventListener('touchend', function () { release('touch'); }, { passive: true });
+    document.addEventListener('visibilitychange', function () { document.hidden ? hold('tab') : release('tab'); });
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        entries[0].isIntersecting ? release('offscreen') : hold('offscreen');
+      }).observe(row);
+    } else schedule();
+
+    // Clips play only while on screen.
+    if ('IntersectionObserver' in window && !still) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          var v = e.target;
+          if (e.isIntersecting) { v.preload = 'auto'; v.play().catch(function () {}); } else v.pause();
+        });
+      }, { threshold: 0.5 });
+      row.querySelectorAll('video').forEach(function (v) { io.observe(v); });
+    }
+
+    // With a mouse, the row can also be dragged sideways.
+    var down = null, moved = false;
+    row.addEventListener('pointerdown', function (e) {
+      if (e.pointerType !== 'mouse' || e.button !== 0) return;
+      down = { x: e.clientX, left: row.scrollLeft }; moved = false;
+    });
+    addEventListener('pointermove', function (e) {
+      if (!down) return;
+      var dx = e.clientX - down.x;
+      if (!moved && Math.abs(dx) > 4) { moved = true; row.classList.add('is-dragging'); }
+      if (moved) row.scrollLeft = down.left - dx;
+    });
+    addEventListener('pointerup', function () {
+      if (!down) return;
+      down = null;
+      if (moved) { row.classList.remove('is-dragging'); }
+    });
+    row.addEventListener('dragstart', function (e) { e.preventDefault(); });
+  })();
+</script>
+</body>
+</html>
