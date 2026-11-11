@@ -380,7 +380,8 @@ a.card:active .card-cta, .cs-pager a:active { color: var(--accent-hover); }
 .lb-item > :is(img, .crop) { border-radius: var(--radius-s); }
 
 /* Title + main images */
-.cs-head { padding-top: 56px; }                      /* + the 64px nav = 120px, as in Figma */
+.cs-head { padding-top: 56px; }                      /* case studies: 56px below the nav at every size */
+.ds .cs-head { padding-top: 32px; }                  /* other pages (Design system, About): 32px */
 .cs-label { font-family: var(--font-sans); font-size: 24px; line-height: 1.5; color: var(--accent-default); text-transform: uppercase; }
 .cs-title { margin-top: 8px; font-family: var(--font-serif); font-weight: 600; font-size: 56px; line-height: 1; }
 .cs-hero { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 32px; }
@@ -625,7 +626,6 @@ html.cs-is-locked { overflow-x: clip; }              /* the veil is full-width; 
   .cs-pager-next { order: -1; }
 }
 @media (max-width: 759px) {
-  .cs-head { padding-top: 32px; }
   .cs-label { font-size: 20px; }
   .cs-title { font-size: 40px; }
   .cs-hero { grid-template-columns: 1fr; margin-top: 24px; }
@@ -895,25 +895,53 @@ html.lb-open { overflow: hidden; }
 /* ---- About ----------------------------------------------------------------------------
    Figma "Portfolio designs 2026" › About page (desktop light 10851:89042 / dark 10822:88917,
    phone light 10759:76847 / dark 10759:76634). */
-.about { padding-top: 56px; padding-bottom: 80px; }          /* + the 64px nav = 120px, as in Figma */
+.about { padding-top: 32px; padding-bottom: 80px; }          /* 32px below the nav, like the Design system page */
 .about > div { display: flex; flex-direction: column; gap: 80px; }
 .about :where(h1, h2, p, ul) { margin: 0; }
-.about-intro { display: grid; grid-template-columns: minmax(0, 499fr) minmax(280px, 483fr); column-gap: 40px; align-items: start; }
-.about-text { display: flex; flex-direction: column; gap: 40px; }
-.about-title, .about-h2 { font-family: var(--font-serif); font-weight: 600; font-size: 56px; line-height: 1; }   /* display/title */
+/* Intro, three layouts (Figma About 1280 / 863·768·759 / 758·425·390):
+   large  (1000px+)  heading + text on the left, tilted certificate on the right
+   medium (760–999)  heading centered on one line, then text left + straight certificate right
+   small  (≤759)     heading, then the cropped certificate at a fixed size (centered), then text */
+.about-intro {
+  display: grid; grid-template-columns: minmax(0, 499fr) minmax(0, 483fr);
+  grid-template-areas: "title photo" "body photo"; grid-template-rows: auto 1fr;
+  gap: 40px; align-items: start;
+}
+.about-text { display: contents; }                          /* heading and text are placed on the grid directly */
+.about-title { grid-area: title; }
+.about-body { grid-area: body; }
+.about-photo { grid-area: photo; }
+.about-title { font-family: var(--font-serif); font-weight: 600; font-size: 56px; line-height: 1; }   /* display/title */
 .about-body { font-family: var(--font-sans); font-size: 18px; line-height: 1.37; }                              /* body/l */
 .about-body p + p { margin-top: 1.37em; }                   /* one empty line between paragraphs */
-.about-photo img { display: block; width: 100%; height: auto; aspect-ratio: 483 / 570; object-fit: cover; border-radius: var(--radius-s); }
-.about-interests { display: flex; flex-direction: column; gap: 32px; }
+/* The certificate is a cut-out with its own rounded corners. */
+.about-photo img {
+  display: block; width: calc(100% - 42px); max-width: 396px; height: auto;
+  margin: 20px 0 20px 21px;                                  /* room for the tilted corners */
+  transform: rotate(6deg);                                   /* = Figma's -6° (Figma and CSS turn opposite ways) */
+}
+@media (max-width: 999px) {
+  .about-intro { grid-template-columns: minmax(0, 1fr) 325px; grid-template-areas: "title title" "body photo"; grid-template-rows: auto; gap: 24px; align-items: center; }
+  .about-title { font-size: 40px; line-height: 1.2; text-align: center; }   /* heading/section */
+  .about-title br { display: none; }                         /* one line */
+  .about-photo img { width: 100%; max-width: none; margin: 0; transform: none; }   /* straight */
+}
+@media (max-width: 759px) {
+  .about-intro { grid-template-columns: minmax(0, 1fr); grid-template-areas: "title" "photo" "body"; }
+  .about-title br { display: inline; }                       /* two lines again */
+  .about-photo img { width: 100%; max-width: 358px; margin-inline: auto; }   /* stays this size, doesn't stretch */
+}
+@media (max-width: 479px) {
+  .about-title { font-size: 32px; line-height: 1.31; }
+}
 
-/* Interests: a row that runs off the right edge of the screen and scrolls sideways */
+/* Interests: a row that scrolls sideways, clipped to the content column */
 .interests {
   display: flex; gap: 24px;
   padding: 0; list-style: none;
   overflow-x: auto; overscroll-behavior-x: contain;
   scroll-snap-type: x proximity; scrollbar-width: none;
-  margin-right: calc((100% - 100vw) / 2);                    /* to the screen edge */
-  padding-right: var(--layout-gutter);
+  border-radius: var(--radius-m);
   cursor: grab;
 }
 .interests::-webkit-scrollbar { display: none; }
@@ -921,7 +949,7 @@ html.lb-open { overflow: hidden; }
 .interests:focus-visible { outline: 2px solid var(--accent-default); outline-offset: 4px; border-radius: var(--radius-m); }
 .interests li { flex: 0 0 auto; scroll-snap-align: start; }
 .interests :is(img, video) {
-  display: block; width: 394px; height: 525px;               /* ✏️ tile size (160 × 200 on phones) */
+  display: block; width: 300px; height: 400px;               /* ✏️ tile size (160 × 200 below 600px) */
   object-fit: cover; border-radius: var(--radius-m);
   background: var(--bg-image);
 }
@@ -936,7 +964,7 @@ html.lb-open { overflow: hidden; }
   transition: color .15s ease, border-color .15s ease, transform .15s ease, opacity .3s ease, visibility .3s;
 }
 .gallery-prev { left: 16px; }
-.gallery-next { right: calc((100% - 100vw) / 2 + var(--layout-gutter)); }   /* near the screen edge, where the row ends */
+.gallery-next { right: 16px; }
 .gallery-btn svg { width: 20px; height: 20px; transition: transform .25s var(--ease-out); }
 .gallery-btn:hover, .gallery-btn:focus-visible, .gallery-btn:active { color: var(--accent-hover); border-color: var(--accent-hover); }
 .gallery-btn:focus-visible { outline: 2px solid var(--accent-default); outline-offset: 3px; }
@@ -946,19 +974,16 @@ html.lb-open { overflow: hidden; }
 .gallery-btn.is-hidden { opacity: 0; visibility: hidden; }
 @media (prefers-reduced-motion: reduce) { .gallery-btn:hover svg { transform: none; } }
 .about-thanks { font-family: var(--font-serif); font-weight: 400; font-size: 24px; line-height: 1.2; text-align: center; }
+@media (max-width: 599px) {
+  .about > div { gap: 40px; }
+  .interests :is(img, video) { width: 160px; height: 200px; }
+}
 .about [lang="ja"] { font-family: "Noto Sans JP", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif; }   /* Japanese in a gothic (sans), as in Figma */
 
 @media (max-width: 759px) {
-  .about { padding-top: 48px; padding-bottom: 64px; }        /* 112px from the top, as in Figma */
-  .about > div { gap: 40px; }
-  .about-intro { grid-template-columns: 1fr; row-gap: 24px; }
-  .about-photo { order: -1; }                                /* photo first */
-  .about-photo img { aspect-ratio: 358 / 300; }
-  .about-text { gap: 24px; }
-  .about-title, .about-h2 { font-size: 40px; line-height: 1.2; }   /* heading/section */
-  .interests :is(img, video) { width: 160px; height: 200px; }
+  .about { padding-bottom: 64px; }
   .gallery-prev { left: 8px; }                               /* both 24px from the screen edges */
-  .gallery-next { right: calc((100% - 100vw) / 2 + 24px); }
+  .gallery-next { right: 8px; }
   .about-thanks { padding-top: 40px; font-size: 16px; line-height: 1.05; }
   .about-thanks span { display: inline-block; margin-top: 8px; }
 }

@@ -66,10 +66,10 @@
 <main class="about wrap" id="about">
   <div>
 
-    <!-- ===== Intro: text + photo (the photo goes on top on phones) ===== -->
+    <!-- ===== Intro: heading + text + photo. Three layouts (large / medium / small), see the About section in css/site.css ===== -->
     <section class="about-intro" aria-labelledby="about-title">
       <div class="about-text">
-        <h1 class="about-title" id="about-title"><span lang="ja">はじめまして〜</span><br>Nice to meet you!</h1>
+        <h1 class="about-title" id="about-title"><span lang="ja">はじめまして〜</span> <br>Nice to meet you!</h1>
         <div class="about-body">
           <p>Hi, I’m Jen~ I design tools people rely on to get work done. My goal is to make the hard things feel as easy as grabbing an onigiri from the konbini at 2am.</p>
           <p>My dad taught me the Platinum Rule early on: treat people the way <i>they</i> want to be treated. It’s still how I design. I ask a lot of questions, sweat the small details, and aim for experiences so intuitive they feel invisible.</p>
@@ -77,8 +77,8 @@
         </div>
       </div>
       <picture class="about-photo">
-        <source media="(max-width: 759px)" srcset="assets/about/portrait-phone.webp" width="716" height="600">
-        <img src="assets/about/portrait.webp" alt="Me in my passport photo, printed on a Kodak Moments biometric ID photo certificate" width="966" height="1140">
+        <source media="(max-width: 759px)" srcset="assets/about/portrait-phone.webp" width="716" height="580">
+        <img src="assets/about/portrait.webp" alt="An illustrated portrait of me on a Kodak Moments biometric ID photo certificate" width="860" height="912">
       </picture>
     </section>
 
@@ -87,8 +87,7 @@
          It pauses while the pointer is over it or a button has keyboard focus, and never moves on its own with reduced motion.
          ✏️ Reorder by moving the <li>s (same order as the old site). Clips are silent and only play while they're on screen.
          ✏️ Seconds per photo: GALLERY_DELAY_MS in the script at the bottom. ===== -->
-    <section class="about-interests" aria-labelledby="interests-title">
-      <h2 class="about-h2" id="interests-title">Interests</h2>
+    <section class="about-interests" aria-label="Interests">
       <div class="gallery">
         <ul class="interests" id="interests-row" tabindex="0" aria-label="Interests: photos and clips, scroll sideways for more">
           <li><img src="assets/about/pickleball.webp" alt="Pickleball at night, with my Pickles socks in front" loading="lazy"></li>
