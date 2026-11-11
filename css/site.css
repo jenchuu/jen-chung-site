@@ -479,6 +479,7 @@ a.card:active .card-cta, .cs-pager a:active { color: var(--accent-hover); }
 .cs-hero-fit img { aspect-ratio: auto; object-fit: initial; }   /* images keep their own shape; columns set per page (style="grid-template-columns: …") */
 .cs-hero-single { grid-template-columns: 1fr; }
 .cs-pair-fit img { aspect-ratio: auto; object-fit: initial; }   /* a pair whose images keep their own shape */
+.cs-embed { display: block; width: 100%; max-width: 534px; aspect-ratio: 534 / 789; border: 1px solid var(--border-rule); border-radius: var(--radius-s); background: var(--bg-image); }   /* an embedded Figma prototype */
 .cs-pair .cs-video { width: 100%; }
 /* phone screenshots in a row: --n across (desktop), --n-phone across on phones */
 .cs-phones { display: grid; grid-template-columns: repeat(var(--n, 4), minmax(0, 1fr)); gap: 16px; align-items: start; }

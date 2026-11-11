@@ -1,14 +1,222 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="utf-8">
-<!-- The Venmo case study moved into the home page's Archive. This keeps the old jen-chung.com/venmo link working. -->
-<title>Venmo | Jen Chung</title>
-<meta name="robots" content="noindex">
-<link rel="canonical" href="index.html#archive">
-<meta http-equiv="refresh" content="0; url=index.html#archive">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Venmo Added Feature Case Study | Jen Chung</title>
+<meta name="description" content="How Jen Chung designed a feature that helps Venmo users split uneven shared bills.">
+<meta name="theme-color" content="#fcf9ef">
+<script>
+  // Set the theme before the page paints (same as the home page).
+  (function () {
+    var t = 'light';
+    try { t = localStorage.getItem('jc-theme') || t; } catch (e) {}
+    document.documentElement.dataset.theme = t === 'dark' ? 'dark' : 'light';
+    // Soft rise: text and visuals start hidden and rise in as they scroll into view (js/site.js)
+    if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('cs-rise-ready');
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap">
+<link rel="stylesheet" href="css/site.css">
 </head>
 <body>
-<p>Venmo now lives in the <a href="index.html#archive">Archive</a>.</p>
+<a class="skip-link" href="#case-study">Skip to case study</a>
+
+<!-- ===== Nav ===== -->
+<header class="nav nav-auto wrap">
+  <div class="nav-bar">
+    <a class="logo" href="index.html" aria-label="Jen Chung, home">Jen<img src="assets/icons/logo-dash.svg" alt=""></a>
+    <nav class="nav-links" aria-label="Main">
+      <div class="nav-link-list" id="nav-menu">
+        <div class="nav-work">
+          <button class="nav-work-btn" type="button" aria-expanded="false" aria-controls="work-menu">Work<svg class="nav-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m19.5 8.25-7.5 7.5-7.5-7.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <div class="nav-work-menu" id="work-menu"><div>   <!-- ✏️ case studies, in this order -->
+            <a href="cube-boards.html">Cube: Boards</a>
+            <a href="switchchord-splits.html">Switchchord: Splits</a>
+            <a href="parts-management.html">Beacon: Parts</a>
+            <a href="index.html#work">Cube: Comments</a>   <!-- no case study page yet: goes to Work -->
+            <a class="nav-view-all" href="index.html#work">View all <span class="arrow">--&gt;</span></a>
+          </div></div>
+        </div>
+        <a href="design-system.html">Design system</a>
+        <a href="about.html">About</a>
+        <a href="https://drive.google.com/file/d/1Z2MIcYJsyO13Jyxo2BH3sNGm-nMwDpE4/view?usp=sharing" target="_blank" rel="noopener" data-resume>Resume</a>
+        <a href="mailto:hello@jen-chung.com">Connect</a>
+      </div>
+      <div class="nav-tools">
+        <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Dark mode" aria-pressed="false">
+          <img class="is-light" src="assets/icons/sun-filled.svg" alt=""><img class="is-light" src="assets/icons/moon-outlined.svg" alt="">
+          <img class="is-dark" src="assets/icons/sun-outlined.svg" alt=""><img class="is-dark" src="assets/icons/moon-filled.svg" alt="">
+        </button>
+        <button class="menu-btn" id="menu-btn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav-menu">
+          <svg class="menu-open" viewBox="0 0 24 24" width="32" height="32" aria-hidden="true"><path d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg class="menu-close" viewBox="0 0 24 24" width="32" height="32" aria-hidden="true"><path d="M6 18 18 6M6 6l12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<!-- Content from the live Wix page (jen-chung.com/venmo), in the same layout as the other case studies.
+     ✏️ Images live in assets/venmo/. Venmo is in the home page Archive (not the Work menu). -->
+<main class="cs" id="case-study">
+
+  <!-- ===== Title + main image ===== -->
+  <header class="cs-head wrap">
+    <div>
+      <p class="cs-label">VENMO: ADDED FEATURE</p>
+      <h1 class="cs-title">Feature added to Venmo to help users easily split uneven shared bills</h1>
+      <div class="cs-hero cs-hero-single">
+        <img src="assets/venmo/hero.webp" alt="iPhone screens of the split bill feature, tilted on a Venmo blue background" width="1600" height="1155" style="aspect-ratio: 1019 / 455">
+      </div>
+    </div>
+  </header>
+
+  <div class="cs-body wrap">
+    <div>
+
+      <!-- ===== Role + summary ===== -->
+      <section class="cs-section cs-overview" aria-label="Overview">
+        <dl class="cs-meta">
+          <div><dt>ROLE</dt><dd>UX Researcher &amp; Designer</dd></div>
+          <div><dt>TIMELINE</dt><dd>2021</dd></div>
+          <div><dt>PLATFORM</dt><dd>Mobile app</dd></div>
+          <div><dt>TEAM</dt><dd>Me &amp; myself</dd></div>
+        </dl>
+        <div class="cs-main">
+          <h2 class="cs-meta-title">SUMMARY</h2>
+          <div class="cs-text">
+            <p>Venmo is a mobile payment app that lets users send and receive money, pay bills, invest, and shop online.</p>
+            <p>I was the sole Product Designer and Researcher for this capstone project, where I designed an added feature for Venmo to support uneven bill splitting.</p>
+            <p>Initially, I explored a recurring charge feature based on the assumption that users, like myself, struggled to remember shared expenses like Wi-Fi, subscriptions, and utilities. However, early research quickly challenged that assumption, revealing that users were more frustrated by the lack of flexibility when splitting expenses unequally. I pivoted based on these insights, focusing the project on an uneven split bill feature to better align with user needs.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== Background ===== -->
+      <section class="cs-section">
+        <h2 class="cs-h2">Background</h2>
+        <div class="cs-main">
+          <div class="cs-text">
+            <p>Venmo is a mobile payment service owned by PayPal with over 80% of users being Millennials or Gen Z. These users share and split expenses such as rent, meals, subscriptions, utilities, and more via the Venmo app.</p>
+            <p>As a fellow Millennial Venmo user, every month I use Venmo to split expenses like wifi and subscriptions with my roommate. Both of our biggest pain point is not having a way to create recurring requests or payments through the app.</p>
+            <p>This led me to begin my capstone project with the assumption that there may be a need for a recurring payment feature among Millennials on Venmo.</p>
+          </div>
+          <figure class="cs-figure" style="max-width: 342px">
+            <img src="assets/venmo/roommate-texts.gif" alt="A reenactment of texts with my roommate about our monthly Venmo requests for wifi and subscriptions" width="406" height="720" loading="lazy">
+          </figure>
+        </div>
+      </section>
+
+      <!-- ===== Research ===== -->
+      <section class="cs-section">
+        <h2 class="cs-h2">Research</h2>
+        <div class="cs-main">
+          <div class="cs-text">
+            <p>Upon doing research, I quickly found my original assumption was NOT validated. BUT 100% of the research participants split food/beverage bills on Venmo so I decided to pivot and research users’ experiences with splitting food/beverage bills further. I found 75% of participants were frustrated by not having an easy way to see and split bills (especially uneven bills) on Venmo. From these new insights, I revised my problem statement.</p>
+          </div>
+          <figure class="cs-figure">
+            <img src="assets/venmo/research-survey.webp" alt="Survey results for “What do you use Venmo for?” (14 responses): food and beverage 100%, transportation 92.9%, utilities 85.7%, rent 78.6%, accommodation 71.4%, subscriptions 28.6%" width="1400" height="912" loading="lazy">
+            <figcaption>SURVEY: WHAT DO YOU USE VENMO FOR?</figcaption>
+          </figure>
+          <div class="cs-bubbles">
+            <blockquote>“It’s too complex to manage when splitting in large groups”</blockquote>
+            <blockquote>“I hate having to calculate how much each person owes through a separate app if different amounts”</blockquote>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== The problem ===== -->
+      <section class="cs-section">
+        <h2 class="cs-h2">The problem</h2>
+        <div class="cs-main">
+          <div class="cs-callout"><p>Millennials need an easy way to split shared bills instantly on Venmo because it’s inefficient to do calculations outside Venmo and a slow process for everyone involved.</p></div>
+        </div>
+      </section>
+
+      <!-- ===== Final designs ===== -->
+      <section class="cs-section">
+        <h2 class="cs-h2">Final designs</h2>
+        <div class="cs-main">
+          <div class="cs-text">
+            <p>Using a human-centered approach, I designed an added feature for Millennials to easily split uneven shared bills on Venmo’s mobile app. 5 out of 5 people I usability tested the feature with found it useful and convenient.</p>
+          </div>
+          <div class="cs-phones" data-gallery data-zoom="4,2" style="--n: 4; --n-phone: 2"><img src="assets/venmo/screen-1.webp" alt="Add Recipients: choosing friends to split with" width="784" height="1535" loading="lazy"><img src="assets/venmo/screen-2.webp" alt="Pay or Request, with the new Split a bill option" width="784" height="1535" loading="lazy"><img src="assets/venmo/screen-3.webp" alt="Uploading a photo of the receipt" width="784" height="1535" loading="lazy"><img src="assets/venmo/screen-4.webp" alt="The digitized bill, itemized and editable" width="784" height="1535" loading="lazy"><img src="assets/venmo/screen-5.webp" alt="Itemized split: who paid the bill in person?" width="784" height="1535" loading="lazy"><img src="assets/venmo/screen-6.webp" alt="Itemized split: everyone is split" width="784" height="1535" loading="lazy"><img src="assets/venmo/screen-7.webp" alt="Itemized split: each person’s total, ready to send" width="784" height="1535" loading="lazy"><img src="assets/venmo/screen-8.webp" alt="Incomplete requests, with reminders" width="784" height="1535" loading="lazy"></div>
+        </div>
+      </section>
+
+      <!-- ===== Prototype ===== -->
+      <section class="cs-section">
+        <h2 class="cs-h2">Prototype</h2>
+        <div class="cs-main">
+          <div class="cs-text">
+            <p>Feel free to interact with it!</p>
+          </div>
+          <!-- ✏️ The Figma prototype, embedded (it loads once it's scrolled near) -->
+          <iframe class="cs-embed" src="https://www.figma.com/embed?embed_host=share&amp;url=https%3A%2F%2Fwww.figma.com%2Fproto%2FUHTor31bx8YVN54uRyOKdx%2FVenmo-Mix-and-Hi-fidelity-design%3Fpage-id%3D208%253A0%26node-id%3D208%253A70%26viewport%3D241%252C48%252C0.2%26scaling%3Dscale-down%26starting-point-node-id%3D208%253A70" title="Interactive Figma prototype of the split bill feature" loading="lazy" allowfullscreen></iframe>
+        </div>
+      </section>
+
+      <!-- ===== Impact ===== -->
+      <section class="cs-section">
+        <h2 class="cs-h2">Impact</h2>
+        <div class="cs-main">
+          <div class="cs-text">
+            <p>If this were a live feature shipped, I would measure the success through KPIs like: how long it takes users to adopt the new feature upon learning about it, percentage of total active users using the new feature, how often key users engage with new feature (as intended), and how long users continue to use the new feature after learning about it.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== Reflection ===== -->
+      <section class="cs-section">
+        <h2 class="cs-h2">Reflection</h2>
+        <div class="cs-main">
+          <div class="cs-step">
+            <h3 class="cs-h3">It’s ok to make assumptions, but be open to letting go</h3>
+            <p>Since I was frustrated with having to retype and recreate recurring WiFi and subscription payments with my roommate, I assumed that a good majority of users would also have similar frustrations, but through user research, my assumption was not validated. Although it was sad to have to let go of solving the recurring payment problem, I learned to let go and pivot.</p>
+          </div>
+          <div class="cs-step">
+            <h3 class="cs-h3">Really listen to users</h3>
+            <p>It can be easy to want to lead questions, especially when having assumptions or biases, but UX is about uncovering truths, not choosing what I want to hear to confirm my assumptions. Listening to users openly and objectively while reading in between the lines during research/testing, along with the lesson I learned above, will better guide me towards solving legitimate problems that have greater value to users and businesses.</p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- ===== Back to top (appears 1s after the visitor reaches the last section, e.g. Reflection) ===== -->
+  <div class="to-top-wrap wrap">
+    <div><a class="to-top" href="#" aria-label="Back to top"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 10.5 12 3m0 0 7.5 7.5M12 3v18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+  </div>
+
+  <!-- ===== Venmo is an Archive project, so instead of previous / next it leads back to the Archive ===== -->
+  <nav class="cs-pager wrap" aria-label="Back to Archive">
+    <div>
+      <a class="cs-pager-prev" href="index.html#archive"><span class="cs-pager-label">Back to</span><span class="cs-pager-title"><span class="nowrap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Archive</span></span></a>
+    </div>
+  </nav>
+</main>
+
+
+<!-- ===== Footer ===== -->
+<footer class="footer" id="connect">
+  <div class="connect">
+    <h2 class="connect-title">Let’s connect <img src="assets/icons/connect-line.svg" alt=""></h2>
+    <div class="socials">
+      <a href="mailto:hello@jen-chung.com" aria-label="Email Jen">
+        <svg viewBox="-3 0 30 24" aria-hidden="true"><path d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="https://www.linkedin.com/in/jennifer-chung/" target="_blank" rel="noopener" aria-label="Jen on LinkedIn">
+        <svg viewBox="0 0 40 32" aria-hidden="true"><path fill="currentColor" d="M14.7006 26.8802H10.3469V12.9395H14.7006V26.8802ZM12.5214 11.0379C11.1292 11.0379 10 9.89131 10 8.50703C10 7.84212 10.2656 7.20443 10.7385 6.73426C11.2114 6.26409 11.8527 5.99995 12.5214 5.99995C13.1901 5.99995 13.8315 6.26409 14.3043 6.73426C14.7772 7.20443 15.0428 7.84212 15.0428 8.50703C15.0428 9.89131 13.9131 11.0379 12.5214 11.0379ZM30.9953 26.8802H26.6509V20.0939C26.6509 18.4766 26.6181 16.4025 24.3873 16.4025C22.1237 16.4025 21.7769 18.1597 21.7769 19.9774V26.8802H17.4278V12.9395H21.6034V14.8412H21.6644C22.2456 13.7458 23.6655 12.59 25.7838 12.59C30.19 12.59 31 15.475 31 19.2224V26.8802H30.9953Z"/></svg>
+      </a>
+    </div>
+  </div>
+  <p class="colophon">Jen Chung © 2026. Designed + AI coded by me with care &amp; <span class="colophon-end">matcha<span class="colophon-icons" aria-hidden="true"><img src="assets/icons/matcha.png" alt="" width="12" height="15"><svg viewBox="0 0 11.35 10.86" width="11" height="10"><path d="M5.676 10.375S13.243 4.082 10.294 1.138C7.984-1.168 5.676 2.488 5.676 2.488S3.365-1.168 1.056 1.138C-1.891 4.082 5.676 10.375 5.676 10.375Z" fill="none" stroke="currentColor" stroke-width=".75"/></svg></span></span></p>
+</footer>
+
+<script src="js/site.js"></script>
 </body>
 </html>

@@ -22,6 +22,12 @@
   const root = document.documentElement;
   const hero = document.getElementById('hero');
   const theme = () => (root.dataset.theme === 'light' ? 'light' : 'dark');
+  // ✏️ Resume: the nav's Resume link opens the PDF that matches the theme the visitor is in.
+  //    Paste each Google Drive share link here (Share → Anyone with the link → Copy link).
+  const RESUME = {
+    light: 'https://drive.google.com/file/d/1Z2MIcYJsyO13Jyxo2BH3sNGm-nMwDpE4/view?usp=sharing',
+    dark:  'https://drive.google.com/file/d/1CfXDh2Lw4okHgmZNlukYcXVHDIuUIue6/view?usp=sharing',
+  };
 
   /* ---- Light / dark ---------------------------------------------------------- */
   const toggle = document.getElementById('theme-toggle');
@@ -30,6 +36,7 @@
     const dark = theme() === 'dark';
     toggle.setAttribute('aria-pressed', String(dark));
     themeColor.setAttribute('content', dark ? '#121212' : '#fcf9ef');
+    document.querySelectorAll('a[data-resume]').forEach((a) => { a.href = RESUME[theme()]; });
   }
   toggle.addEventListener('click', () => {
     root.dataset.theme = theme() === 'dark' ? 'light' : 'dark';
