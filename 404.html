@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Page not found | Jen Chung</title>
+<script>
+  // 404.html is shown at whatever address was mistyped (even /a/b/c), so its relative links need the site root.
+  // jen-chung.com → "/"; jenchuu.github.io/jen-chung-site → "/jen-chung-site/". Local previews keep relative paths.
+  (function () {
+    var h = location.hostname, root = null;
+    if (/(^|\.)jen-chung\.com$/.test(h)) root = '/';
+    else if (/\.github\.io$/.test(h)) root = '/' + (location.pathname.split('/')[1] || '') + '/';
+    if (root) document.write('<base href="' + root + '">');
+  })();
+</script>
+<meta name="theme-color" content="#fcf9ef">
+<script>
+  // Set the theme before the page paints, so there's no flash of the wrong colors.
+  // A visitor's choice is remembered; first-time visitors get light (the site's default).
+  (function () {
+    var t = 'light';
+    try { t = localStorage.getItem('jc-theme') || t; } catch (e) {}
+    document.documentElement.dataset.theme = t === 'dark' ? 'dark' : 'light';
+    // Cards animate in as they scroll into view (skipped for reduced motion)
+    if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('reveal-ready');
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&family=Inter:ital,wght@0,400;0,500;1,400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400&text=%E3%81%99%E3%81%BF%E3%81%BE%E3%81%9B%E3%82%93%EF%BC%81&display=swap">   <!-- just the Japanese characters on this page -->
+<link rel="stylesheet" href="css/site.css">
+</head>
+<body>
+<a class="skip-link" href="#not-found">Skip to content</a>
+
+<!-- ===== Nav ===== -->
+<header class="nav nav-auto wrap">
+  <div class="nav-bar">
+    <a class="logo" href="index.html" aria-label="Jen Chung, home">Jen<img src="assets/icons/logo-dash.svg" alt=""></a>
+    <nav class="nav-links" aria-label="Main">
+      <div class="nav-link-list" id="nav-menu">
+        <div class="nav-work">
+          <button class="nav-work-btn" type="button" aria-expanded="false" aria-controls="work-menu">Work<svg class="nav-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m19.5 8.25-7.5 7.5-7.5-7.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <div class="nav-work-menu" id="work-menu"><div>   <!-- ✏️ case studies, in this order -->
+            <a href="cube-boards.html">Cube: Boards</a>
+            <a href="switchchord-splits.html">Switchchord: Splits</a>
+            <a href="parts-management.html">Beacon: Parts</a>
+            <a href="index.html#work">Cube: Comments</a>   <!-- no case study page yet: goes to Work -->
+            <a class="nav-view-all" href="index.html#work">View all <span class="arrow">--&gt;</span></a>
+          </div></div>
+        </div>
+        <a href="design-system.html">Design system</a>
+        <a href="about.html">About</a>
+        <a href="https://drive.google.com/file/d/1Z2MIcYJsyO13Jyxo2BH3sNGm-nMwDpE4/view?usp=sharing" target="_blank" rel="noopener" data-resume>Resume</a>
+        <a href="mailto:hello@jen-chung.com">Connect</a>
+      </div>
+      <div class="nav-tools">
+        <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Dark mode" aria-pressed="false">
+          <img class="is-light" src="assets/icons/sun-filled.svg" alt=""><img class="is-light" src="assets/icons/moon-outlined.svg" alt="">
+          <img class="is-dark" src="assets/icons/sun-outlined.svg" alt=""><img class="is-dark" src="assets/icons/moon-filled.svg" alt="">
+        </button>
+        <button class="menu-btn" id="menu-btn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav-menu">
+          <svg class="menu-open" viewBox="0 0 24 24" width="32" height="32" aria-hidden="true"><path d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg class="menu-close" viewBox="0 0 24 24" width="32" height="32" aria-hidden="true"><path d="M6 18 18 6M6 6l12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<!-- Design source: Figma "Portfolio designs 2026" › About page (desktop light 10851:89042, dark 10822:88917;
+     phone light 10759:76847, dark 10759:76634). ✏️ Photos and clips live in assets/about/. -->
+<!-- ===== 404: the empty konbini fridge (Figma: Portfolio designs 2026 › Loading, 404 page › 404_Light / Mobile 404_Light) =====
+     GitHub Pages shows this page for any address that doesn't exist. -->
+<main class="nf wrap" id="not-found">
+  <div class="nf-text">
+    <h1 class="nf-title">404<span class="sr-only">: page not found</span></h1>
+    <p class="nf-body"><span lang="ja">すみません！</span>This fridge is empty. The page you’re looking for was never stocked or has been moved.</p>
+    <div class="nf-actions">
+      <a class="nf-btn" href="index.html">Back to storefront</a>
+      <a class="nf-link" href="index.html#work">See my work <span class="arrow">--&gt;</span></a>
+    </div>
+  </div>
+  <div class="nf-fridge"><img src="assets/404/fridge-sold-out.webp" alt="An empty konbini fridge with a red 売り切れ (sold out) tag on the shelf" width="1008" height="1470"></div>
+</main>
+
+<footer class="footer" id="connect">
+  <div class="connect">
+    <h2 class="connect-title">Let’s connect <img src="assets/icons/connect-line.svg" alt=""></h2>
+    <div class="socials">
+      <a href="mailto:hello@jen-chung.com" aria-label="Email Jen">
+        <svg viewBox="-3 0 30 24" aria-hidden="true"><path d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="https://www.linkedin.com/in/jennifer-chung/" target="_blank" rel="noopener" aria-label="Jen on LinkedIn">
+        <svg viewBox="0 0 40 32" aria-hidden="true"><path fill="currentColor" d="M14.7006 26.8802H10.3469V12.9395H14.7006V26.8802ZM12.5214 11.0379C11.1292 11.0379 10 9.89131 10 8.50703C10 7.84212 10.2656 7.20443 10.7385 6.73426C11.2114 6.26409 11.8527 5.99995 12.5214 5.99995C13.1901 5.99995 13.8315 6.26409 14.3043 6.73426C14.7772 7.20443 15.0428 7.84212 15.0428 8.50703C15.0428 9.89131 13.9131 11.0379 12.5214 11.0379ZM30.9953 26.8802H26.6509V20.0939C26.6509 18.4766 26.6181 16.4025 24.3873 16.4025C22.1237 16.4025 21.7769 18.1597 21.7769 19.9774V26.8802H17.4278V12.9395H21.6034V14.8412H21.6644C22.2456 13.7458 23.6655 12.59 25.7838 12.59C30.19 12.59 31 15.475 31 19.2224V26.8802H30.9953Z"/></svg>
+      </a>
+    </div>
+  </div>
+  <p class="colophon">Jen Chung © 2026. Designed + AI coded by me with care &amp; <span class="colophon-end">matcha<span class="colophon-icons" aria-hidden="true"><img src="assets/icons/matcha.png" alt="" width="12" height="15"><svg viewBox="0 0 11.35 10.86" width="11" height="10"><path d="M5.676 10.375S13.243 4.082 10.294 1.138C7.984-1.168 5.676 2.488 5.676 2.488S3.365-1.168 1.056 1.138C-1.891 4.082 5.676 10.375 5.676 10.375Z" fill="none" stroke="currentColor" stroke-width=".75"/></svg></span></span></p>
+</footer>
+
+<script src="js/site.js"></script>
+</body>
+</html>

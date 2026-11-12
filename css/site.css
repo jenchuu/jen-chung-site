@@ -988,3 +988,42 @@ html.lb-open { overflow: hidden; }
   .about-thanks { padding-top: 40px; font-size: 16px; line-height: 1.05; }
   .about-thanks span { display: inline-block; margin-top: 8px; }
 }
+
+/* ---- 404 (Figma: Loading, 404 page › 404_Light, Mobile 404_Light) ------------------------------
+   Big: text column (404 centered above left-aligned copy) beside the sold-out fridge.
+   Phones: 404, fridge, copy, buttons, stacked. */
+.nf { display: grid; grid-template-columns: minmax(320px, 1fr) minmax(0, 504px); gap: 24px; padding-top: 32px; padding-bottom: 80px; }
+.nf-text { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 24px; }
+.nf :where(h1, p) { margin: 0; }
+.nf-title { font-family: var(--font-serif); font-weight: 600; font-size: 96px; line-height: 1; color: var(--text-primary); }
+.nf-body { align-self: stretch; font-family: var(--font-sans); font-size: 18px; line-height: 1.37; color: var(--text-secondary); }   /* body/l */
+.nf-body [lang="ja"] { font-family: "Noto Sans JP", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif; }
+.nf-actions { align-self: stretch; display: flex; flex-wrap: wrap; align-items: center; gap: 16px; }
+.nf-actions a { text-decoration: none; }
+.nf-btn {   /* Button (pill), as the password Enter button */
+  padding: 13px 32px; border-radius: var(--radius-pill);
+  background: var(--accent-default); color: var(--text-on-accent);
+  font-family: var(--font-sans); font-weight: 500; font-size: 16px; line-height: 1.37;
+  transition: background-color .2s ease;
+}
+.nf-link {   /* Text button, as View case study on the cards */
+  padding: 8px;
+  font-family: var(--font-sans); font-weight: 500; font-size: 16px; line-height: 1.37;
+  color: var(--accent-default); transition: color .15s ease;
+}
+.nf-link .arrow { display: inline-block; transition: transform .25s var(--ease-out); }
+@media (hover: hover) { .nf-btn:hover { background: var(--accent-hover); } .nf-link:hover { color: var(--accent-hover); } .nf-link:hover .arrow { transform: translateX(4px); } }
+.nf-btn:active, .nf-btn:focus-visible { background: var(--accent-hover); }
+.nf-link:active, .nf-link:focus-visible { color: var(--accent-hover); }
+.nf-link:focus-visible .arrow { transform: translateX(4px); }
+@media (prefers-reduced-motion: reduce) { .nf-link .arrow { transition: none; } .nf-link:hover .arrow, .nf-link:focus-visible .arrow { transform: none; } }
+/* The fridge image has room for its shadow below; the frame trims it like Figma (504 × 690) */
+.nf-fridge { aspect-ratio: 504 / 690; overflow: hidden; }
+.nf-fridge img { display: block; width: 100%; height: auto; }
+@media (max-width: 759px) {
+  .nf { grid-template-columns: minmax(0, 1fr); justify-items: center; gap: 24px; padding-bottom: 64px; }
+  .nf-text { display: contents; }
+  .nf-title { font-size: 56px; }   /* display/title */
+  .nf-fridge { order: 1; width: 300px; max-width: 100%; }
+  .nf-body, .nf-actions { order: 2; justify-self: stretch; }
+}

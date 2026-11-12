@@ -26,8 +26,8 @@
   --text-secondary: #75705e;   /* site text/secondary */
   --purple: #7961c7;
   --loader-bg: var(--shell);
-  --loader-title: #333333;
-  --loader-caption: #a5a08f;
+  --loader-title: #222222;     /* text/primary */
+  --loader-caption: #75705e;   /* text/secondary */
   --card-bg: #e8e2d2;
   --veil: #fffaf0;
 
@@ -53,8 +53,8 @@
   --text-secondary: #a5a08f;
   --purple: #9e81ee;
   --loader-bg: #121212;
-  --loader-title: #f2f2f2;
-  --loader-caption: #8d8878;
+  --loader-title: #f2f2f2;     /* text/primary */
+  --loader-caption: #a5a08f;   /* text/secondary */
   --card-bg: #2e2e2e;
 }
 
@@ -528,12 +528,12 @@ img { display: block; }
 .loader.is-visible { opacity: 1; visibility: visible; transition: opacity .3s ease, visibility 0s; }
 .loader-title {
   margin: 0;
-  font-family: var(--font-text); font-weight: 600; font-size: 24px;
+  font-family: var(--font-text); font-weight: 400; font-size: 24px; line-height: 1.2;   /* heading/connect */
   color: var(--loader-title);
 }
 .loader-caption {
   margin: 0; padding: 0 16px; text-align: center;
-  font-weight: 600; font-size: 16px; line-height: 1.37;
+  font-weight: 600; font-size: 18px; line-height: 1.5;   /* heading/s */
   color: var(--loader-caption);
 }
 .loader-art { --whisk-h: min(225px, 38vh); display: flex; flex-direction: column; align-items: center; }
