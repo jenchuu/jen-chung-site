@@ -693,7 +693,7 @@ const CONFIG = {
 
   caseStudies: {
     beacon:      '../parts-management.html',
-    venmo:       '../index.html#archive',    // Venmo lives in the Archive (no case study page)
+    comments:    null,                       // ✏️ Cube: Comments has no page yet: put its file here (e.g. '../cube-comments.html') once it's built. Until then its bento says "Coming soon" and doesn't link anywhere.
     cube:        '../cube-boards.html',
     switchchord: '../switchchord-splits.html',
   },
@@ -724,12 +724,13 @@ const CONFIG = {
     { cell: 'dumbbell',  name: 'Dumbbell',            x: 333, y: 329, w: 94,  h: 62 },
   ];
 
-  // tag = label offset inside the bento (Figma); z = stacking order from Figma
+  // tag = label offset inside the bento (Figma); z = stacking order from Figma;
+  // study = which CONFIG.caseStudies link it opens (defaults to the art's cell name)
   const BENTOS = [
-    { cell: 'beacon',      title: 'Beacon Parts Management', x: 124.38, y: 413.93, w: 139.439, h: 92.959,  tag: [28.62, 26.07], twoLine: true, z: 1 },
-    { cell: 'venmo',       title: 'Venmo Split Bill',        x: 283.48, y: 417.54, w: 148.013, h: 98.675,  tag: [20.52, 30.46], z: 1 },
-    { cell: 'cube',        title: 'Cube Boards',             x: 108.58, y: 480.83, w: 161.851, h: 121.389, tag: [38.42, 45.17], z: 3 },
-    { cell: 'switchchord', title: 'Switchchord Splits',      x: 271.3,  y: 493.92, w: 164.126, h: 101.082, tag: [37.7, 16.08], twoLine: true, z: 2 },
+    { cell: 'beacon',      title: 'Beacon: Parts',           x: 124.38, y: 413.93, w: 139.439, h: 92.959,  tag: [28.62, 26.07], twoLine: true, z: 1 },
+    { cell: 'venmo',       title: 'Cube: Comments',          x: 283.48, y: 417.54, w: 148.013, h: 98.675,  tag: [20.52, 30.46], z: 1, study: 'comments' },   // uses the old Venmo bento art
+    { cell: 'cube',        title: 'Cube: Boards',            x: 108.58, y: 480.83, w: 161.851, h: 121.389, tag: [38.42, 45.17], z: 3 },
+    { cell: 'switchchord', title: 'Switchchord: Splits',     x: 271.3,  y: 493.92, w: 164.126, h: 101.082, tag: [37.7, 16.08], twoLine: true, z: 2 },
   ];
   const SHELF_TAG = { text: 'Work', cx: 269.5, y: 583 };
   const FW = 540, FH = 810;
@@ -1332,13 +1333,20 @@ const CONFIG = {
     meals.setAttribute('aria-labelledby', 'shelf-tag');
     meals.style.cssText = 'position:absolute;inset:0;';
     BENTOS.forEach((b) => {
-      const href = CONFIG.caseStudies[b.cell];
+      const href = CONFIG.caseStudies[b.study || b.cell];
       const a = document.createElement('a');
       a.className = 'bento';
-      a.href = href;
-      a.target = '_blank';     // fallback when the Wix page-code bridge isn't installed
-      a.rel = 'noopener';
-      a.dataset.cursor = 'View case study';
+      if (href) {
+        a.href = href;
+        a.target = '_blank';     // fallback when the Wix page-code bridge isn't installed
+        a.rel = 'noopener';
+        a.dataset.cursor = 'View case study';
+      } else {                   // no page yet: shows "Coming soon" on hover and goes nowhere
+        a.setAttribute('role', 'img');
+        a.setAttribute('aria-label', `${b.title}, case study coming soon`);
+        a.dataset.cursor = 'Coming soon';
+        a.classList.add('is-soon');
+      }
       a.style.position = 'absolute';
       a.style.zIndex = b.z;
       place(a, b.x, b.y, b.w, b.h);
@@ -1357,7 +1365,7 @@ const CONFIG = {
       label.append(text);
 
       a.append(art, label);
-      a.addEventListener('click', (e) => {
+      if (href) a.addEventListener('click', (e) => {
         if (!veloBridge || e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
         e.preventDefault();
         if (CONFIG.rememberInside) session.set('kb:inside', String(Date.now()));
