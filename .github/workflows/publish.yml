@@ -1,0 +1,47 @@
+# Publishes the site to GitHub Pages.
+# Runs on every push to main, and on the 1st of every month so the home page's share image
+# (what LinkedIn, Slack and iMessage show) follows the season, like the konbini hero:
+#   spring Mar–May · summer Jun–Aug · fall Sep–Nov · winter Dec–Feb
+# The four images are assets/share/home-<season>.jpg; the published copy of assets/share/home.jpg is
+# replaced with the current season's. (The home.jpg in the repo is just the fallback.)
+# Needs: repo → Settings → Pages → Source: "GitHub Actions".
+name: Publish site
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '0 8 1 * *'   # 1st of each month, 08:00 UTC (just after midnight in Los Angeles)
+  workflow_dispatch:       # "Run workflow" button on the Actions tab
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use this season's share image
+        run: |
+          m=$(TZ=America/Los_Angeles date +%-m)
+          case $m in 3|4|5) s=spring;; 6|7|8) s=summer;; 9|10|11) s=fall;; *) s=winter;; esac
+          cp "assets/share/home-$s.jpg" assets/share/home.jpg
+          echo "Share image: $s"
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+      - id: deployment
+        uses: actions/deploy-pages@v4

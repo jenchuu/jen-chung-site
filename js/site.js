@@ -37,6 +37,9 @@
     toggle.setAttribute('aria-pressed', String(dark));
     themeColor.setAttribute('content', dark ? '#121212' : '#fcf9ef');
     document.querySelectorAll('a[data-resume]').forEach((a) => { a.href = RESUME[theme()]; });
+    // Favicon: the cream one in light mode, the dark one in dark mode (browsers that support SVG favicons)
+    const icon = document.querySelector('link[data-favicon]');
+    if (icon) icon.href = icon.getAttribute('href').replace(/favicon-(light|dark)\.svg/, `favicon-${theme()}.svg`);
   }
   toggle.addEventListener('click', () => {
     root.dataset.theme = theme() === 'dark' ? 'light' : 'dark';
@@ -201,6 +204,7 @@
     function unlock() {
       if (!locked()) return;
       try { localStorage.setItem(KEY, '1'); } catch (err) {}
+      try { window.umami?.track('Case study unlocked', { study: gated.dataset.gate }); } catch (err) {}   // analytics (Umami)
       input.blur();
       gate.classList.add('is-opening');                          // fade the veil away, then reveal
       setTimeout(() => {

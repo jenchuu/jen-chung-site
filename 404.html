@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Page not found | Jen Chung</title>
+<title>Page not found - Jen Chung</title>
 <script>
   // 404.html is shown at whatever address was mistyped (even /a/b/c), so its relative links need the site root.
   // jen-chung.com → "/"; jenchuu.github.io/jen-chung-site → "/jen-chung-site/". Local previews keep relative paths.
@@ -14,6 +14,12 @@
     if (root) document.write('<base href="' + root + '">');
   })();
 </script>
+<link rel="icon" href="assets/favicon/favicon-48.png" sizes="48x48" type="image/png">
+<link rel="icon" href="assets/favicon/favicon-light.svg" type="image/svg+xml" data-favicon>   <!-- js/site.js swaps in favicon-dark.svg in dark mode -->
+<link rel="apple-touch-icon" href="assets/favicon/apple-touch-icon.png">
+<!-- Analytics: Umami Cloud (no cookies). data-domains: only counts visits on the live site, not local previews.
+     Click events: links with data-umami-event="…" (Resume, Email, LinkedIn, case study cards) + "Case study unlocked" in js/site.js -->
+<script defer src="https://cloud.umami.is/script.js" data-website-id="02b9c8de-7507-452b-8b9c-7aef02b59c9d" data-domains="jen-chung.com,www.jen-chung.com"></script>
 <meta name="theme-color" content="#fcf9ef">
 <script>
   // Set the theme before the page paints, so there's no flash of the wrong colors.
@@ -53,8 +59,8 @@
         </div>
         <a href="design-system.html">Design system</a>
         <a href="about.html">About</a>
-        <a href="https://drive.google.com/file/d/1Z2MIcYJsyO13Jyxo2BH3sNGm-nMwDpE4/view?usp=sharing" target="_blank" rel="noopener" data-resume>Resume</a>
-        <a href="mailto:hello@jen-chung.com">Connect</a>
+        <a href="https://drive.google.com/file/d/1Z2MIcYJsyO13Jyxo2BH3sNGm-nMwDpE4/view?usp=sharing" target="_blank" rel="noopener" data-resume data-umami-event="Resume">Resume</a>
+        <a href="mailto:hello@jen-chung.com" data-umami-event="Email">Connect</a>
       </div>
       <div class="nav-tools">
         <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Dark mode" aria-pressed="false">
@@ -90,10 +96,10 @@
   <div class="connect">
     <h2 class="connect-title">Let’s connect <img src="assets/icons/connect-line.svg" alt=""></h2>
     <div class="socials">
-      <a href="mailto:hello@jen-chung.com" aria-label="Email Jen">
+      <a href="mailto:hello@jen-chung.com" data-umami-event="Email" aria-label="Email Jen">
         <svg viewBox="-3 0 30 24" aria-hidden="true"><path d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
-      <a href="https://www.linkedin.com/in/jennifer-chung/" target="_blank" rel="noopener" aria-label="Jen on LinkedIn">
+      <a href="https://www.linkedin.com/in/jennifer-chung/" data-umami-event="LinkedIn" target="_blank" rel="noopener" aria-label="Jen on LinkedIn">
         <svg viewBox="0 0 40 32" aria-hidden="true"><path fill="currentColor" d="M14.7006 26.8802H10.3469V12.9395H14.7006V26.8802ZM12.5214 11.0379C11.1292 11.0379 10 9.89131 10 8.50703C10 7.84212 10.2656 7.20443 10.7385 6.73426C11.2114 6.26409 11.8527 5.99995 12.5214 5.99995C13.1901 5.99995 13.8315 6.26409 14.3043 6.73426C14.7772 7.20443 15.0428 7.84212 15.0428 8.50703C15.0428 9.89131 13.9131 11.0379 12.5214 11.0379ZM30.9953 26.8802H26.6509V20.0939C26.6509 18.4766 26.6181 16.4025 24.3873 16.4025C22.1237 16.4025 21.7769 18.1597 21.7769 19.9774V26.8802H17.4278V12.9395H21.6034V14.8412H21.6644C22.2456 13.7458 23.6655 12.59 25.7838 12.59C30.19 12.59 31 15.475 31 19.2224V26.8802H30.9953Z"/></svg>
       </a>
     </div>
