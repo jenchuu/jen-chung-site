@@ -650,6 +650,7 @@ html.cs-is-locked { overflow-x: clip; }              /* the veil is full-width; 
   .cs-pair { grid-template-columns: 1fr; }
   .cs-phones { grid-template-columns: repeat(var(--n-phone, 2), minmax(0, 1fr)); }
   .cs-hero-fit { grid-template-columns: 1fr !important; }
+  .cs-hero-phone-43 img { aspect-ratio: 4 / 3; object-fit: cover; object-position: 50% 50%; }   /* very wide heroes (Switchchord) crop to the middle on phones, so they aren't a thin strip; tap still shows the whole image */
   .cs-meta { display: flex; }
   .cs-stats, .cs-cards { flex-direction: column; gap: 16px; }
   .cs-main > .cs-cards + .cs-cards { margin-top: -24px; }   /* two rows of cards stack into one list: 16px apart, like the cards in each row (40px column gap − 24) */
@@ -750,7 +751,7 @@ html.lb-open { overflow: hidden; }
 .gate-note a:hover { color: var(--text-primary); }
 .gate.is-wrong .gate-card { animation: gate-shake .35s ease; }
 @keyframes gate-shake { 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
-@media (max-width: 559px) { .gate-card { padding: 24px 8px 32px; margin-top: 56px; } .gate-title { font-size: 32px; } }
+@media (max-width: 559px) { .gate-card { padding: 24px var(--layout-gutter) 32px; margin-top: 56px; } .gate-title { font-size: 32px; } }   /* lines up with the page's side padding */
 @media (prefers-reduced-motion: reduce) { .gate, .gate.is-wrong .gate-card { transition: none; animation: none; } }
 
 /* ---- Design system page (design-system.html) -------------------------------------------

@@ -311,12 +311,15 @@
       const navH = g ? 60 : 0;
       const capLines = (text, width) => (text ? Math.ceil((text.length * 8.4) / Math.max(120, width)) : 0);   // ~8.4px a character at 16px
       stage.replaceChildren(...pages.map((page) => {
-        const ratios = page.map((it) => { const r = it.el.getBoundingClientRect(); return r.width / r.height || 1.4; });
+        const ratios = page.map((it) => {
+          if (it.el.matches('.cs-hero-phone-43 img') && it.el.naturalWidth) return it.el.naturalWidth / it.el.naturalHeight;   // cropped on phones: enlarge the whole image
+          const r = it.el.getBoundingClientRect(); return r.width / r.height || 1.4;
+        });
         const sum = ratios.reduce((a, b) => a + b, 0);
         const gaps = gap * (page.length - 1);
         // screens from one figure share its caption: it's shown once, under the whole row
         const shared = page.length > 1 && page[0].caption && page.every((it) => it.caption === page[0].caption) ? page[0].caption : '';
-        const capW = (rowW) => (shared ? Math.min(W, Math.max(rowW, 640)) : rowW / page.length);
+        const capW = (rowW) => (single() ? W : shared ? Math.min(W, Math.max(rowW, 640)) : rowW / page.length);   // phones: caption runs the full width (page padding), so it takes fewer lines and the image gets the room
         const capH = (rowW) => Math.max(...page.map((it) => capLines(shared || it.caption, capW(rowW)))) * 22 + (page.some((it) => it.caption) ? 8 : 0);
         // one shared height for the row: as tall as fits the screen, caption and ← → included
         let h = Math.min(innerHeight - padY * 2 - navH - capH(W), (W - gaps) / sum);
@@ -331,7 +334,8 @@
           fig.className = 'lb-item';
           const w = Math.round(h * ratios[i]);
           fig.append(zoomCopy(it, w, Math.round(h)));
-          if (it.caption && !shared) fig.append(Object.assign(document.createElement('figcaption'), { textContent: it.caption, style: `width: ${w}px` }));
+          if (single()) fig.style.alignItems = 'center';
+          if (it.caption && !shared) fig.append(Object.assign(document.createElement('figcaption'), { textContent: it.caption, style: `width: ${single() ? W : w}px` }));
           return fig;
         }));
         pg.append(row);
