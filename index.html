@@ -79,6 +79,7 @@
 </header>
 
 <main>
+  <h1 class="sr-only">Jen Chung - Product Designer &amp; Builder</h1>   <!-- the visible intro is inside the konbini frame; this gives the page its own main heading -->
   <!-- ===== Hero: the konbini (its own file, konbini/konbini-hero.html) ===== -->
   <section class="hero wrap" aria-label="Introduction">
     <iframe class="hero-frame" id="hero" title="Jen's konbini: intro and interactive storefront" allow="autoplay"></iframe>
@@ -129,7 +130,11 @@
     </div>
   </section>
 
-  <!-- ===== Archive ===== -->
+  <!-- ===== Archive: saved for a later release =====
+       Hidden for the first release: a <template> isn't shown, read out or loaded. To bring it back, delete the
+       <template> and </template> lines (js/site.js and css/site.css still handle #archive).
+       ⚠️ Also switch venmo.html's pager back to "BACK TO ← Archive" (href index.html#archive, aria-label "Back to Archive"). -->
+  <template id="archive-later">
   <section class="section wrap" id="archive" aria-labelledby="archive-title">
     <div>
       <h2 id="archive-title">Archive</h2>
@@ -175,6 +180,7 @@
       </div>
     </div>
   </section>
+  </template>
 </main>
 
 <!-- ===== Footer ===== -->

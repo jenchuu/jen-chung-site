@@ -53,13 +53,21 @@
   const nav = document.querySelector('.nav');
   const menuBtn = document.getElementById('menu-btn');
   const phone = matchMedia('(max-width: 759px)');
+  // Everything outside the nav: made inert while the full-page phone menu is open, so Tab stays in the menu
+  const behindMenu = [...document.body.children].filter((el) => el !== nav && !['SCRIPT', 'TEMPLATE'].includes(el.tagName));
   const setMenu = (open) => {
     nav.classList.toggle('is-open', open);
     menuBtn.setAttribute('aria-expanded', String(open));
     root.classList.toggle('menu-locked', open && phone.matches);   // full-page menu: the page doesn't scroll behind it
+    behindMenu.forEach((el) => { el.inert = open && phone.matches; });
     if (!open) setWork(false);
   };
-  menuBtn.addEventListener('click', () => setMenu(!nav.classList.contains('is-open')));
+  menuBtn.addEventListener('click', () => {
+    const open = !nav.classList.contains('is-open');
+    setMenu(open);
+    // the menu's links come before the ☰ button, so move focus into the menu (they'd be skipped otherwise)
+    if (open) document.querySelector('#nav-menu a, #nav-menu button')?.focus({ preventScroll: true });
+  });
   phone.addEventListener('change', () => setMenu(false));
 
   /* ---- Work menu: a dropdown on desktop (hover or click), expands in place on phones ---- */

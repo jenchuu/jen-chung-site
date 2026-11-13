@@ -684,10 +684,10 @@ img { display: block; }
    ========================================================================== */
 const CONFIG = {
   seasons: {
-    spring: { video: 'assets/storefront-spring.mp4', poster: 'assets/poster-spring.webp' },
-    summer: { video: 'assets/storefront-summer.mp4', poster: 'assets/poster-summer.webp' },
-    fall:   { video: 'assets/storefront-fall.mp4',   poster: 'assets/poster-fall.webp' },
-    winter: { video: 'assets/storefront-winter.mp4', poster: 'assets/poster-winter.webp' },
+    spring: { video: 'assets/1080p/storefront-spring.mp4', poster: 'assets/poster-spring.webp' },
+    summer: { video: 'assets/1080p/storefront-summer.mp4', poster: 'assets/poster-summer.webp' },
+    fall:   { video: 'assets/1080p/storefront-fall.mp4',   poster: 'assets/poster-fall.webp' },
+    winter: { video: 'assets/1080p/storefront-winter.mp4', poster: 'assets/poster-winter.webp' },
   },
   fridgeSprite: 'assets/fridge-sprite.webp',
 
@@ -833,10 +833,17 @@ const CONFIG = {
   // desktops and tablets, 720p on regular screens and phones), stepping down if one isn't available.
   const WIX_RENDITION = /\/(360p|480p|720p|1080p)\/mp4\//;
   const LADDER = ['1080p', '720p', '480p'];
+  // This site's own copies: assets/1080p/… (≈4.6 MB each) and assets/720p/… (≈2.3 MB, for phones and
+  // regular-density screens). Made from the originals with _dev/encode-video.js.
+  const LOCAL_RENDITION = /\/(720p|1080p)\//;
   let videoQueue = [];
   function videoCandidates(url) {
-    if (!WIX_RENDITION.test(url)) return [url];
     const shownPx = stage.getBoundingClientRect().width * Math.min(window.devicePixelRatio || 1, 2);
+    if (LOCAL_RENDITION.test(url)) {
+      const want = saveData || shownPx <= 1280 ? '720p' : '1080p';
+      return [...new Set([url.replace(LOCAL_RENDITION, `/${want}/`), url])];
+    }
+    if (!WIX_RENDITION.test(url)) return [url];
     const first = saveData ? '480p' : shownPx > 1280 ? '1080p' : '720p';
     const tries = LADDER.slice(LADDER.indexOf(first)).map((q) => url.replace(WIX_RENDITION, `/${q}/mp4/`));
     return [...new Set([...tries, url])];
@@ -1573,6 +1580,7 @@ const CONFIG = {
     await loader.hide();
 
     onIdle(() => {
+      if (saveData) return;   // Data Saver on: fetch the fridge and the other seasons only when they're asked for
       loadSprite();
       SEASONS.forEach((k) => { if (k !== pick) loadImage(CONFIG.seasons[k].poster).catch(() => {}); });
     });
