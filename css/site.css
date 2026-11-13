@@ -478,6 +478,17 @@ a.card:active .card-cta, .cs-pager a:active { color: var(--accent-hover); }
 /* Pieces the other case studies add to the Boards template */
 .cs-hero-fit img { aspect-ratio: auto; object-fit: initial; }   /* images keep their own shape; columns set per page (style="grid-template-columns: …") */
 .cs-hero-single { grid-template-columns: 1fr; }
+/* Cube: Comments: two screenshots side by side on a lavender card (Figma 11172:148493: 32px padding and gap, 492 + 137 wide) */
+.cs-hero.cc-hero {
+  grid-template-columns: 492fr 137fr; gap: 32px; align-items: start;
+  padding: 32px max(32px, calc((100% - 661px) / 2));
+  background: var(--bg-image); border-radius: var(--radius-s);
+}
+.cs-hero.cc-hero img { aspect-ratio: auto; object-fit: initial; width: 100%; height: auto; border-radius: var(--radius-s); }
+.cs-hero.cc-hero img + img { box-shadow: 0 4px 4px rgba(0, 0, 0, .25); }
+.cs-section.cc-soon { display: flex; flex-direction: column; gap: 40px; }
+.cc-soon-text { display: flex; flex-direction: column; gap: 24px; }
+.cc-soon-title { font-family: var(--font-serif); font-weight: 600; font-size: 40px; line-height: 1.2; }   /* heading/pager */
 .cs-pair-fit img { aspect-ratio: auto; object-fit: initial; }   /* a pair whose images keep their own shape */
 .cs-embed { display: block; width: 100%; max-width: 534px; aspect-ratio: 534 / 789; border: 1px solid var(--border-rule); border-radius: var(--radius-s); background: var(--bg-image); }   /* an embedded Figma prototype */
 .cs-pair .cs-video { width: 100%; }
@@ -544,6 +555,8 @@ a.card:active .card-cta, .cs-pager a:active { color: var(--accent-hover); }
 .cs-is-locked .cs-lock { max-height: max(1100px, 100vh + 240px); overflow-x: visible; overflow-y: clip; }  /* ✏️ how much blurred page shows */
 html.cs-is-locked { overflow-x: clip; }              /* the veil is full-width; never let it add sideways scroll */
 .cs-is-locked .cs-pager { display: none; }
+.cs-redact { transition: filter .4s ease; }
+.cs-is-locked .cs-redact { filter: blur(6px); user-select: none; }   /* numbers kept back until the password is entered (Cube: Boards stats) */
 
 /* Previous / next: two equal halves; a long title wraps inside its half */
 .cs-pager { margin-top: 132px; }
@@ -643,6 +656,8 @@ html.cs-is-locked { overflow-x: clip; }              /* the veil is full-width; 
   .cs-pager > div { padding-block: 56px; }
   .cs-pager-label { font-size: 14px; }             /* body/s */
   .cs-pager-title { font-size: 24px; }
+  .cc-soon-title { font-size: 24px; }
+  .cs-hero.cc-hero { gap: 12px; padding: 16px; }
   .cs-pager svg { width: 24px; height: 24px; }
   .cs-callout p { font-size: 24px; }
 }

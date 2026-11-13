@@ -25,8 +25,8 @@
   // ✏️ Resume: the nav's Resume link opens the PDF that matches the theme the visitor is in.
   //    Paste each Google Drive share link here (Share → Anyone with the link → Copy link).
   const RESUME = {
-    light: 'https://drive.google.com/file/d/1Z2MIcYJsyO13Jyxo2BH3sNGm-nMwDpE4/view?usp=sharing',
-    dark:  'https://drive.google.com/file/d/1CfXDh2Lw4okHgmZNlukYcXVHDIuUIue6/view?usp=sharing',
+    light: 'https://drive.google.com/file/d/1gC43h86qrHcaTnvZw_c9qj-CiYkb4hD7/view?usp=sharing',
+    dark:  'https://drive.google.com/file/d/1hg1xwrjLSss-u9hjlwXVdXjhtpNFbh0u/view?usp=sharing',
   };
 
   /* ---- Light / dark ---------------------------------------------------------- */
@@ -201,6 +201,8 @@
     const locked = () => root.classList.contains('cs-is-locked');
     // the blurred part can't be clicked, tabbed into or read out while it's locked
     if (locked()) hidden.inert = true;
+    const redacted = document.querySelectorAll('.cs-redact');   // blurred numbers above the form: not read out while locked
+    if (locked()) redacted.forEach((el) => el.setAttribute('aria-hidden', 'true'));
 
     const sha256 = async (text) => {
       const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
@@ -218,6 +220,7 @@
       setTimeout(() => {
         root.classList.remove('cs-is-locked');
         hidden.inert = false;
+        redacted.forEach((el) => el.removeAttribute('aria-hidden'));
         gate.classList.remove('is-opening', 'is-wrong');
         hidden.scrollIntoView({ behavior: reduce.matches ? 'auto' : 'smooth' });
       }, reduce.matches ? 0 : 400);
@@ -418,7 +421,7 @@
     // Videos: play (muted) while at least 40% is on screen, pause when scrolled away. If the visitor
     // pauses one themselves, it stays paused. Start loading a screen ahead. A video marked
     // data-autoplay="after" waits for the one before it to finish, then plays (now, if it's on
-    // screen, or as soon as it's scrolled to).
+    // screen, or as soon as it's scrolled to). One without `loop` plays once and then waits for the play button.
     const vids = [...cs.querySelectorAll('video.cs-video')];
     vids.forEach((v, i) => {
       if (!('IntersectionObserver' in window)) return;
@@ -426,6 +429,7 @@
       let byUs = false, userPaused = false, inView = false, armed = v.dataset.autoplay !== 'after';
       v.addEventListener('pause', () => { if (!byUs && !v.ended) userPaused = true; byUs = false; });
       v.addEventListener('play', () => { userPaused = false; armed = true; });
+      v.addEventListener('ended', () => { userPaused = true; });   // videos without `loop` play once: scrolling back doesn't restart them (the visitor can press play)
       if (!armed && vids[i - 1]) vids[i - 1].addEventListener('ended', () => {
         armed = true; v.preload = 'auto';
         if (inView && autoplay && !userPaused) v.play().catch(() => {});
