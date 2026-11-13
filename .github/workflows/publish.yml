@@ -39,6 +39,18 @@ jobs:
           cp "assets/share/home-$s.jpg" assets/share/home.jpg
           echo "Share image: $s"
 
+      # Browsers keep css/site.css and js/site.js for up to 10 minutes, so right after a push a page
+      # could load with the old styles. Each page links them as e.g. css/site.css?v=<first 8 characters
+      # of the file's fingerprint>: when a file changes its link changes, and browsers fetch it fresh;
+      # when it doesn't, they keep using the copy they have. Only the published copy is stamped.
+      - name: Stamp the style and script files with their version
+        run: |
+          for f in css/*.css js/*.js; do
+            v=$(sha1sum "$f" | cut -c1-8)
+            sed -i "s#\"$f\"#\"$f?v=$v\"#g" *.html
+            echo "$f?v=$v"
+          done
+
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
