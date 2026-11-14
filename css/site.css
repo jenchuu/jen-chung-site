@@ -390,8 +390,9 @@ a.card:active .card-cta, .cs-pager a:active { color: var(--accent-hover); }
 .lb-item > :is(img, .crop) { border-radius: var(--radius-s); }
 
 /* Title + main images */
-.cs-head { padding-top: 56px; }                      /* case studies: 56px below the nav at every size */
+.cs-head { padding-top: 56px; }                      /* case studies: 56px below the nav (32px on phones, below) */
 .ds .cs-head { padding-top: 32px; }                  /* other pages (Design system, About): 32px */
+@media (max-width: 759px) { .cs-head { padding-top: 32px; } }   /* phones: every page starts 32px below the nav */
 .cs-label { font-family: var(--font-sans); font-size: 24px; line-height: 1.5; color: var(--accent-default); text-transform: uppercase; }
 .cs-title { margin-top: 8px; font-family: var(--font-serif); font-weight: 600; font-size: 56px; line-height: 1; }
 .cs-hero { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 32px; }

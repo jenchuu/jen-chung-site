@@ -1509,10 +1509,25 @@ const CONFIG = {
     if (pin) tip.dataset.pinned = '1';
     tip.style.setProperty('--dx', '0px');
     tip.classList.add('is-shown');
+    fitTip(tip);
     // keep it inside the fridge: nudge it sideways if it would poke out an edge
     const w = canvas.clientWidth, half = tip.offsetWidth / 2, x = tip.offsetLeft, pad = 4;
     const dx = Math.max(pad + half - x, Math.min(0, w - pad - half - x));
     tip.style.setProperty('--dx', `${Math.round(dx)}px`);
+  }
+  // A wrapped bubble keeps its full max-width even when its lines are shorter, which leaves empty
+  // space at the sides. Shrink it to its longest line.
+  function fitTip(tip) {
+    tip.style.width = '';
+    const range = document.createRange();
+    range.selectNodeContents(tip);
+    const lines = [...range.getClientRects()];
+    if (lines.length < 2) return;                       // one line already fits snugly
+    const scale = tip.getBoundingClientRect().width / tip.offsetWidth || 1;   // it may still be scaling in
+    const widest = Math.max(...lines.map((r) => r.width)) / scale;
+    const cs = getComputedStyle(tip);
+    const sides = ['paddingLeft', 'paddingRight', 'borderLeftWidth', 'borderRightWidth'].reduce((n, k) => n + parseFloat(cs[k]), 0);
+    tip.style.width = `${Math.ceil(widest + sides + 1)}px`;
   }
   function hideTip(tip) {
     tip.classList.remove('is-shown');
