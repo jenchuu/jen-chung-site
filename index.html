@@ -33,6 +33,12 @@
     document.documentElement.dataset.theme = t === 'dark' ? 'dark' : 'light';
     // Cards animate in as they scroll into view (skipped for reduced motion)
     if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('reveal-ready');
+    // First visit: the konbini's loading screen covers the whole page, nav included, and the page
+    // can't scroll until it's done (css/site.css "First visit"; the hero says when, js/site.js).
+    // Skipped when the link points at a section (e.g. #work), so those visitors land right there.
+    try {
+      if (!localStorage.getItem('kb:visited') && (!location.hash || location.hash === '#konbini')) document.documentElement.classList.add('kb-first-load');
+    } catch (e) {}
   })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">

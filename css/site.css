@@ -213,6 +213,16 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 
 /* ---- Hero (konbini) ----------------------------------------------------------- */
 .hero { padding-top: var(--hero-gap); }
+/* First visit: the konbini's loading screen (inside the hero frame) takes over the whole page.
+   A cover in the page color hides the nav and everything below, the hero sits on top of it,
+   and the page can't scroll. When the hero is ready, the cover fades out with its loader. */
+.kb-first-load, .kb-first-load body { overflow: hidden; }
+.kb-first-load body::before, .kb-first-fade body::before {
+  content: ""; position: fixed; inset: 0; z-index: 900;
+  background: var(--bg-page);
+}
+.kb-first-fade body::before { opacity: 0; transition: opacity .4s ease; pointer-events: none; }
+.kb-first-load .hero, .kb-first-fade .hero { position: relative; z-index: 901; }
 /* Inside the konbini (#konbini): the fridge is a page of its own */
 .in-konbini main > :not(.hero), .in-konbini .footer { display: none; }
 .hero-frame {

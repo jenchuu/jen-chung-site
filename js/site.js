@@ -713,6 +713,7 @@
     if (e.source !== hero.contentWindow) return;
     const msg = e.data || {};
     if (msg.type === 'konbini:ready' || msg.type === 'konbini:measure') hello();
+    if (msg.type === 'konbini:loaded') endFirstLoad();
     if (msg.type === 'konbini:size' && msg.height > 0) { heroNatural = msg.height; sizeHero(); }
     if (msg.type === 'konbini:view') {
       heroView = msg.view;
@@ -732,6 +733,14 @@
     if (msg.type === 'konbini:scroll') document.getElementById('work').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
   });
   sizeHero();
+
+  // First visit (see the <head> of index.html): fade the page cover out together with the loader.
+  function endFirstLoad() {
+    if (!root.classList.contains('kb-first-load')) return;
+    root.classList.replace('kb-first-load', 'kb-first-fade');
+    setTimeout(() => root.classList.remove('kb-first-fade'), 450);
+  }
+  if (root.classList.contains('kb-first-load')) setTimeout(endFirstLoad, 10000);   // never trap anyone if the hero fails
 
   // Arriving at index.html#work (View all in the nav on another page): the konbini above
   // settles its height after the browser has jumped to Work, so keep Work in place until it

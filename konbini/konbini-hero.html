@@ -573,6 +573,7 @@ img { display: block; }
 }
 .loader.is-visible { opacity: 1; visibility: visible; transition: opacity .3s ease, visibility 0s; }
 .kb-first-load .loader { opacity: 1; visibility: visible; transition: none; }   /* first visit: up from the first frame */
+.loader > * { translate: 0 var(--loader-dy, 0px); }   /* first visit: centred on the whole screen, not just the hero */
 .loader-title {
   margin: 0;
   font-family: var(--font-text); font-weight: 400; font-size: 24px; line-height: 1.2;   /* heading/connect */
@@ -654,6 +655,18 @@ img { display: block; }
     var root = document.documentElement, theme = new URLSearchParams(location.search).get('theme');
     if (theme === 'dark' || theme === 'light') root.dataset.theme = theme;
     try { if (!localStorage.getItem('kb:visited')) root.classList.add('kb-first-load'); } catch (e) {}
+    window.centerLoader = function () {   // the home page covers everything around the hero, so centre on the screen
+      var dy = 0;
+      try {
+        var f = window.frameElement;
+        if (f && root.classList.contains('kb-first-load')) {
+          var r = f.getBoundingClientRect();
+          dy = window.parent.innerHeight / 2 - (r.top + r.height / 2);
+        }
+      } catch (e) {}
+      root.style.setProperty('--loader-dy', Math.round(dy) + 'px');
+    };
+    window.centerLoader();
   })();
 </script>
 </head>
@@ -875,17 +888,25 @@ const CONFIG = {
         if (root.classList.contains('kb-first-load')) {   // already up since the first frame
           el.classList.add('is-visible');
           shownAt = 0;
+          window.centerLoader();
+          addEventListener('resize', window.centerLoader);
+          try { window.parent.addEventListener('resize', window.centerLoader); } catch (e) {}
           return;
         }
+        root.style.removeProperty('--loader-dy');
         timer = setTimeout(() => { el.classList.add('is-visible'); shownAt = performance.now(); }, Math.max(0, delay));
       },
       async hide(minMs = MIN_LOADER_MS) {
         clearTimeout(timer);
-        if (!el.classList.contains('is-visible')) return;
+        const done = () => { if (window.parent !== window) window.parent.postMessage({ type: 'konbini:loaded' }, '*'); };
+        if (!el.classList.contains('is-visible')) return done();
         const left = minMs - (performance.now() - shownAt);
         if (left > 0) await wait(left);
         el.classList.remove('is-visible');
         root.classList.remove('kb-first-load');
+        removeEventListener('resize', window.centerLoader);
+        try { window.parent.removeEventListener('resize', window.centerLoader); } catch (e) {}
+        done();   // the home page fades its cover out at the same time
         await wait(400);
       },
     };
