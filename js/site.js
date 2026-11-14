@@ -43,7 +43,7 @@
   }
   toggle.addEventListener('click', () => {
     root.dataset.theme = theme() === 'dark' ? 'light' : 'dark';
-    try { localStorage.setItem('jc-theme', theme()); } catch (e) {}
+    try { sessionStorage.setItem('jc-theme', theme()); } catch (e) {}   // this visit only; every new visit starts in light
     renderTheme();
     tellHero({ type: 'konbini:theme', theme: theme() });
   });

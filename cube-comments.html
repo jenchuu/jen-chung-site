@@ -24,11 +24,14 @@
      Click events: links with data-umami-event="…" (Resume, Email, LinkedIn, case study cards) + "Case study unlocked" in js/site.js -->
 <script defer src="https://cloud.umami.is/script.js" data-website-id="02b9c8de-7507-452b-8b9c-7aef02b59c9d" data-domains="jen-chung.com,www.jen-chung.com,jenchuu.github.io"></script>
 <meta name="theme-color" content="#fcf9ef">
+<meta name="color-scheme" content="only light">   <!-- stops phones' automatic dark mode from darkening the page; the site has its own dark theme -->
 <script>
   // Set the theme before the page paints (same as the home page).
   (function () {
     var t = 'light';
-    try { t = localStorage.getItem('jc-theme') || t; } catch (e) {}
+    // Every visit starts in light. A visitor's light/dark choice lasts for this visit only (sessionStorage);
+    // the old remembered choice is cleared so returning visitors start in light too.
+    try { localStorage.removeItem('jc-theme'); t = sessionStorage.getItem('jc-theme') || t; } catch (e) {}
     document.documentElement.dataset.theme = t === 'dark' ? 'dark' : 'light';
     // Soft rise: text and visuals start hidden and rise in as they scroll into view (js/site.js)
     if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('cs-rise-ready');
