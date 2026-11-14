@@ -30,6 +30,10 @@
   --loader-caption: #75705e;   /* text/secondary */
   --card-bg: #e8e2d2;
   --veil: #fffaf0;
+  --tip-bg: #ffffff;           /* shelf item speech bubbles: white in light and dark mode */
+  --tip-border: #e2ddf0;
+  --tip-shadow: 0 6px 18px rgba(60, 40, 20, .14);
+  --tip-ink: #222222;
 
   --font-text: "Crimson Text", Georgia, "Times New Roman", serif;
   --ease-out: cubic-bezier(.2, .8, .2, 1);
@@ -56,6 +60,7 @@
   --loader-title: #f2f2f2;     /* text/primary */
   --loader-caption: #a5a08f;   /* text/secondary */
   --card-bg: #2e2e2e;
+  --tip-shadow: 0 6px 18px rgba(0, 0, 0, .45);
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -404,6 +409,47 @@ img { display: block; }
 .item:hover { transform: translateY(-3%); }
 .item:active { transform: translateY(-1%) scale(.97); }
 
+/* Speech bubble above a shelf item: shows on hover, keyboard focus, and click / tap.
+   Sizes in em scale with the fridge (14px at its Figma size, never under 12px). */
+.item-tips { inset: 0; pointer-events: none; z-index: 20; }
+.item-tip {
+  --dx: 0px;                         /* nudged sideways by JS so it never leaves the fridge */
+  position: absolute;
+  width: max-content; max-width: 17em;   /* 238px */
+  padding: .5714em .8571em;          /* 8px 12px */
+  font-family: "Inter", system-ui, sans-serif; font-weight: 400;
+  font-size: max(12px, 2.5926cqw);
+  line-height: 1.37;
+  color: var(--tip-ink);
+  text-align: center;
+  text-wrap: balance;
+  background: var(--tip-bg);
+  border: 1px solid var(--tip-border);
+  border-radius: .8571em;            /* 12px */
+  box-shadow: var(--tip-shadow);
+  transform: translate(calc(-50% + var(--dx)), calc(-100% - .7143em)) translateY(4px) scale(.96);
+  transform-origin: calc(50% - var(--dx)) 100%;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .16s ease, transform .22s var(--ease-out), visibility 0s linear .22s;
+}
+.item-tip::after {                   /* the little tail pointing at the item */
+  content: "";
+  position: absolute; left: calc(50% - var(--dx)); bottom: -.3214em;
+  width: .5714em; height: .5714em;
+  margin-left: -.2857em;
+  background: inherit;
+  border: inherit; border-width: 0 1px 1px 0;
+  border-radius: 0 0 2px 0;
+  transform: rotate(45deg);
+}
+.item-tip.is-shown {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(calc(-50% + var(--dx)), calc(-100% - .7143em));
+  transition: opacity .16s ease, transform .22s var(--ease-out), visibility 0s;
+}
+
 .bento {
   text-decoration: none;
   transition: transform .35s var(--ease-out), filter .35s ease;
@@ -533,7 +579,7 @@ img { display: block; }
 }
 .loader-caption {
   margin: 0; padding: 0 16px; text-align: center;
-  font-weight: 600; font-size: 18px; line-height: 1.5;   /* heading/s */
+  font-family: "Inter", system-ui, sans-serif; font-weight: 400; font-size: 16px; line-height: 1.37;   /* body/m */
   color: var(--loader-caption);
 }
 .loader-art { --whisk-h: min(225px, 38vh); display: flex; flex-direction: column; align-items: center; }
@@ -597,6 +643,7 @@ img { display: block; }
   .stage { transition: none; }
   .kb.is-door-hover .stage { transform: none; }
   .loader-whisk, .loader-streak > span { animation-duration: 4.4s; }
+  .item-tip, .item-tip.is-shown { transform: translate(calc(-50% + var(--dx)), calc(-100% - .7143em)); }
 }
 </style>
 </head>
@@ -715,13 +762,20 @@ const CONFIG = {
   const SPRITE = {"w":1692,"h":1536,"cells":{"fridge":[0,0,1024,1536],"pocari":[1028,0,165,248],"chips":[1028,252,155,232],"matcha":[1028,488,145,180],"manga":[1028,672,175,232],"paddle":[1028,908,250,210],"cosmetics":[1028,1122,195,210],"dumbbell":[1028,1336,235,155],"beacon":[1282,0,349,232],"venmo":[1282,236,370,247],"switchchord":[1282,487,410,253],"cube":[1282,744,405,303],"exit":[1282,1051,375,133],"label":[1282,1188,300,82]}};
 
   const SHELF_ITEMS = [
-    { cell: 'pocari',    name: 'Pocari Sweat',        x: 100, y: 136, w: 66,  h: 99 },
-    { cell: 'chips',     name: 'Calbee chips',        x: 188, y: 142, w: 62,  h: 93 },
-    { cell: 'matcha',    name: 'Iced matcha latte',   x: 272, y: 163, w: 58,  h: 72 },
-    { cell: 'manga',     name: 'Manga magazine',      x: 352, y: 142, w: 70,  h: 93 },
-    { cell: 'paddle',    name: 'Pickleball paddle',   x: 113, y: 301, w: 100, h: 84 },
-    { cell: 'cosmetics', name: 'Skincare and makeup', x: 234, y: 305, w: 78,  h: 84 },
-    { cell: 'dumbbell',  name: 'Dumbbell',            x: 333, y: 329, w: 94,  h: 62 },
+    { cell: 'pocari',    name: 'Pocari Sweat',        x: 100, y: 136, w: 66,  h: 99,
+      note: 'Hydration is a design requirement~' },
+    { cell: 'chips',     name: 'Calbee chips',        x: 188, y: 142, w: 62,  h: 93,
+      note: 'Nom nom nom' },
+    { cell: 'matcha',    name: 'Iced matcha latte',   x: 272, y: 163, w: 58,  h: 72,
+      note: 'Building this site was fueled by countless matchas!' },
+    { cell: 'manga',     name: 'Manga magazine',      x: 352, y: 142, w: 70,  h: 93,
+      note: 'My childhood was spent sitting on the floors of Borders (RIP) then B&N reading manga. My first series was Dragon Ball :3' },
+    { cell: 'paddle',    name: 'Pickleball paddle',   x: 113, y: 301, w: 100, h: 84,
+      note: 'A lil “friendly” competition and a good excuse to step away from my screen heh' },
+    { cell: 'cosmetics', name: 'Skincare and makeup', x: 234, y: 305, w: 78,  h: 84,
+      note: 'My bff is my SPF lol' },
+    { cell: 'dumbbell',  name: 'Dumbbell',            x: 333, y: 329, w: 94,  h: 62,
+      note: 'for the gainzzz!!!' },
   ];
 
   // tag = label offset inside the bento (Figma); z = stacking order from Figma;
@@ -1309,6 +1363,8 @@ const CONFIG = {
   function buildFridge() {
     $$('.sprite[data-cell]').forEach((el) => paintSprite(el, el.dataset.cell));
 
+    const tips = document.createElement('div');
+    tips.className = 'item-tips';
     const things = document.createElement('div');
     things.setAttribute('role', 'group');
     things.setAttribute('aria-label', 'A few things Jen loves');
@@ -1324,8 +1380,26 @@ const CONFIG = {
       art.className = 'item-art sprite';
       paintSprite(art, item.cell);
       btn.append(art);
-      btn.addEventListener('click', () => wiggle(art));
       things.append(btn);
+
+      if (!item.note) { btn.addEventListener('click', () => wiggle(art)); return; }
+      const tip = document.createElement('span');
+      tip.className = 'item-tip';
+      tip.id = `tip-${item.cell}`;
+      tip.setAttribute('role', 'tooltip');
+      tip.textContent = item.note;
+      place(tip, item.x + item.w / 2, item.y);
+      tips.append(tip);
+      btn.setAttribute('aria-describedby', tip.id);
+
+      btn.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') showTip(tip); });
+      btn.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse' && !tip.dataset.pinned) hideTip(tip); });
+      btn.addEventListener('focus', () => { if (btn.matches(':focus-visible')) showTip(tip); });
+      btn.addEventListener('blur', () => hideTip(tip));
+      btn.addEventListener('click', () => { wiggle(art); showTip(tip, true); });
+      btn.addEventListener('keydown', (e) => {            // Esc closes the bubble first, then exits the fridge
+        if (e.key === 'Escape' && tip.classList.contains('is-shown')) { e.stopPropagation(); hideTip(tip); }
+      });
     });
     canvas.append(things);
 
@@ -1382,8 +1456,26 @@ const CONFIG = {
       });
       meals.append(a);
     });
-    canvas.append(meals, tag);
+    canvas.append(meals, tag, tips);
   }
+
+  // One bubble at a time. A click / tap pins it until the next tap somewhere else.
+  function showTip(tip, pin) {
+    $$('.item-tip.is-shown').forEach((t) => { if (t !== tip) hideTip(t); });
+    if (pin) tip.dataset.pinned = '1';
+    tip.style.setProperty('--dx', '0px');
+    tip.classList.add('is-shown');
+    // keep it inside the fridge: nudge it sideways if it would poke out an edge
+    const w = canvas.clientWidth, half = tip.offsetWidth / 2, x = tip.offsetLeft, pad = 4;
+    const dx = Math.max(pad + half - x, Math.min(0, w - pad - half - x));
+    tip.style.setProperty('--dx', `${Math.round(dx)}px`);
+  }
+  function hideTip(tip) {
+    tip.classList.remove('is-shown');
+    delete tip.dataset.pinned;
+  }
+  function hideTips() { $$('.item-tip.is-shown').forEach(hideTip); }
+  document.addEventListener('pointerdown', (e) => { if (!e.target.closest('.item')) hideTips(); });
 
   function syncFridgeScroll() {
     if (fridgeView.hidden) return;
@@ -1404,6 +1496,7 @@ const CONFIG = {
 
   function showView(view) {
     setCursor(null);
+    hideTips();
     kb.dataset.view = view;
     if (window.parent !== window) window.parent.postMessage({ type: 'konbini:view', view }, '*');
     storeView.hidden = view !== 'store';
