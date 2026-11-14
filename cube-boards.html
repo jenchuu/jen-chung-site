@@ -29,9 +29,8 @@
   // Set the theme before the page paints (same as the home page).
   (function () {
     var t = 'light';
-    // Every visit starts in light. A visitor's light/dark choice lasts for this visit only (sessionStorage);
-    // the old remembered choice is cleared so returning visitors start in light too.
-    try { localStorage.removeItem('jc-theme'); t = sessionStorage.getItem('jc-theme') || t; } catch (e) {}
+    // Starts in light. Once a visitor picks light or dark with the toggle, it's remembered on that device.
+    try { t = localStorage.getItem('jc-theme') || t; } catch (e) {}
     document.documentElement.dataset.theme = t === 'dark' ? 'dark' : 'light';
     // Password gate: hide everything after the summary until it's been unlocked once on this device
     try { if (localStorage.getItem('jc-unlocked-cube-boards') !== '1') document.documentElement.classList.add('cs-is-locked'); }
