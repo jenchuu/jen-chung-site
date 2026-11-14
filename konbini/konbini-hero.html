@@ -748,6 +748,7 @@ const CONFIG = {
   defaultSeason: 'auto',   // 'auto' follows the calendar, or 'spring' | 'summer' | 'fall' | 'winter'
   rememberInside: true,    // Back button from a case study returns visitors to the fridge
   loaderDelayMs: 350,      // the whisk only appears if loading takes longer than this (0 = always show)
+  firstVisitLoaderMs: 2200, // first-time visitors always see the whisk for at least this long (one full stroke; 0 = off)
   theme: 'dark',           // 'dark' or 'light' — match your site's background
 
   introWords: ['strategy', 'craft', 'curiosity'],  // the purple word cycles through these
@@ -811,6 +812,11 @@ const CONFIG = {
     set(k, v) { try { sessionStorage.setItem(k, v); } catch (e) {} },
     del(k) { try { sessionStorage.removeItem(k); } catch (e) {} },
   };
+  // Remembers this browser has been here before (no cookies, nothing leaves the device).
+  const local = {
+    get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+    set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} },
+  };
   const loadImage = (src) => new Promise((resolve, reject) => {
     const img = new Image();
     img.decoding = 'async';
@@ -858,10 +864,10 @@ const CONFIG = {
         clearTimeout(timer);
         timer = setTimeout(() => { el.classList.add('is-visible'); shownAt = performance.now(); }, Math.max(0, delay));
       },
-      async hide() {
+      async hide(minMs = MIN_LOADER_MS) {
         clearTimeout(timer);
         if (!el.classList.contains('is-visible')) return;
-        const left = MIN_LOADER_MS - (performance.now() - shownAt);
+        const left = minMs - (performance.now() - shownAt);
         if (left > 0) await wait(left);
         el.classList.remove('is-visible');
         await wait(400);
@@ -1645,7 +1651,10 @@ const CONFIG = {
 
     const pick = [params.get('season'), session.get('kb:season'), CONFIG.defaultSeason]
       .find((k) => k && CONFIG.seasons[k]) || seasonFromCalendar();
-    loader.show(MSG.hello, Math.max(0, CONFIG.loaderDelayMs - performance.now()));
+    // First visit: show the whisk right away and hold it for a full stroke. After that, it only
+    // appears when loading is slow (loaderDelayMs). Clearing site data counts as a first visit again.
+    const firstVisit = CONFIG.firstVisitLoaderMs > 0 && !local.get('kb:visited');
+    loader.show(MSG.hello, firstVisit ? 0 : Math.max(0, CONFIG.loaderDelayMs - performance.now()));
     setSeason(pick, { instant: true });
 
     const firstFrame = new Promise((r) => {
@@ -1670,7 +1679,8 @@ const CONFIG = {
       showView('fridge');
       revealFridge(true);
     }
-    await loader.hide();
+    await loader.hide(firstVisit ? Math.max(MIN_LOADER_MS, CONFIG.firstVisitLoaderMs) : MIN_LOADER_MS);
+    if (firstVisit) local.set('kb:visited', String(Date.now()));
 
     onIdle(() => {
       if (saveData) return;   // Data Saver on: fetch the fridge and the other seasons only when they're asked for
