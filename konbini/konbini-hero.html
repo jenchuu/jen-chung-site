@@ -572,6 +572,7 @@ img { display: block; }
   transition: opacity .4s ease, visibility 0s linear .4s;
 }
 .loader.is-visible { opacity: 1; visibility: visible; transition: opacity .3s ease, visibility 0s; }
+.kb-first-load .loader { opacity: 1; visibility: visible; transition: none; }   /* first visit: up from the first frame */
 .loader-title {
   margin: 0;
   font-family: var(--font-text); font-weight: 400; font-size: 24px; line-height: 1.2;   /* heading/connect */
@@ -646,6 +647,15 @@ img { display: block; }
   .item-tip, .item-tip.is-shown { transform: translate(calc(-50% + var(--dx)), calc(-100% - .7143em)); }
 }
 </style>
+<script>
+  // Runs before anything paints: set the theme, and on a browser's first visit put the loader up
+  // right away, so the storefront never flashes before it (see firstVisitLoaderMs below).
+  (function () {
+    var root = document.documentElement, theme = new URLSearchParams(location.search).get('theme');
+    if (theme === 'dark' || theme === 'light') root.dataset.theme = theme;
+    try { if (!localStorage.getItem('kb:visited')) root.classList.add('kb-first-load'); } catch (e) {}
+  })();
+</script>
 </head>
 <body>
 <main class="kb" data-view="store">
@@ -748,7 +758,7 @@ const CONFIG = {
   defaultSeason: 'auto',   // 'auto' follows the calendar, or 'spring' | 'summer' | 'fall' | 'winter'
   rememberInside: true,    // Back button from a case study returns visitors to the fridge
   loaderDelayMs: 350,      // the whisk only appears if loading takes longer than this (0 = always show)
-  firstVisitLoaderMs: 2200, // first-time visitors always see the whisk for at least this long (one full stroke; 0 = off)
+  firstVisitLoaderMs: 3000, // first-time visitors always see the loader for at least this long, from the moment the hero starts loading (0 = off)
   theme: 'dark',           // 'dark' or 'light' — match your site's background
 
   introWords: ['strategy', 'craft', 'curiosity'],  // the purple word cycles through these
@@ -862,6 +872,11 @@ const CONFIG = {
         $('.loader-title', el).textContent = msg.title;
         $('.loader-caption', el).textContent = msg.caption;
         clearTimeout(timer);
+        if (root.classList.contains('kb-first-load')) {   // already up since the first frame
+          el.classList.add('is-visible');
+          shownAt = 0;
+          return;
+        }
         timer = setTimeout(() => { el.classList.add('is-visible'); shownAt = performance.now(); }, Math.max(0, delay));
       },
       async hide(minMs = MIN_LOADER_MS) {
@@ -870,6 +885,7 @@ const CONFIG = {
         const left = minMs - (performance.now() - shownAt);
         if (left > 0) await wait(left);
         el.classList.remove('is-visible');
+        root.classList.remove('kb-first-load');
         await wait(400);
       },
     };
@@ -1654,6 +1670,7 @@ const CONFIG = {
     // First visit: show the whisk right away and hold it for a full stroke. After that, it only
     // appears when loading is slow (loaderDelayMs). Clearing site data counts as a first visit again.
     const firstVisit = CONFIG.firstVisitLoaderMs > 0 && !local.get('kb:visited');
+    if (!firstVisit) root.classList.remove('kb-first-load');   // e.g. firstVisitLoaderMs set to 0
     loader.show(MSG.hello, firstVisit ? 0 : Math.max(0, CONFIG.loaderDelayMs - performance.now()));
     setSeason(pick, { instant: true });
 
