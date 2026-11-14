@@ -1188,13 +1188,14 @@ const CONFIG = {
   const FIT_MODE = params.get('fit') || 'scale';
   const SHORT_SCREEN = 500;          // below this window height, don't fit the screen at all
   let pageHeight = 0;                // the page's window height (sent by the page)
+  let pageFixed = false;             // the page sized the frame itself (short laptop windows): fit the frame, not the screen
   const MAX_CROP = .11;              // ✏️ the most of the video's height the scene may hide
   const MIN_CARD_W = 560;            // ✏️ narrowest the scene gets before everything shrinks instead
   let fitting = false;
   function fitStore() {
     if (storeView.hidden || !storeFit.offsetHeight || fitting) return;
     fitting = true;
-    const room = visibleH && visibleH < storeView.clientHeight - 1 ? visibleH - 16 : storeView.clientHeight;
+    const room = !pageFixed && visibleH && visibleH < storeView.clientHeight - 1 ? visibleH - 16 : storeView.clientHeight;
     card.style.height = '';
     storeView.style.removeProperty('--card-w');
     const natural = storeFit.offsetHeight;                // at the scene's full 16:9 (or phone) shape
@@ -1675,7 +1676,11 @@ const CONFIG = {
     if (msg.type === 'konbini:hello') {
       veloBridge = true;
       if (msg.width > 0) { pageWidth = msg.width; syncDoorHint(); }
-      if (msg.height > 0 && msg.height !== pageHeight) { pageHeight = msg.height; fitStore(); }
+      if ((msg.height > 0 && msg.height !== pageHeight) || !!msg.fixed !== pageFixed) {
+        if (msg.height > 0) pageHeight = msg.height;
+        pageFixed = !!msg.fixed;
+        fitStore();
+      }
     }
     if (msg.theme === 'dark' || msg.theme === 'light') root.dataset.theme = msg.theme;
     // The page's address changed (Back / Forward buttons)

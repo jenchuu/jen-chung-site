@@ -14,6 +14,7 @@
   // 'width' = full width at full height (the helper line may sit below the fold).
   // 'scale' = everything shrinks to fit (narrower than the rest of the page).
   const HERO_FIT = 'crop';
+  const HERO_FLOOR = 770;        // ✏️ laptop/desktop windows shorter than this keep the konbini laid out as at this height; the bottom just runs below the fold
   const SHORT_SCREEN = 500;      // windows shorter than this (phones held sideways): hero isn't fit to the screen
   const REVEAL_FIRST_MS = 150;   // first card's delay once its row scrolls into view
   const REVEAL_STEP_MS = 500;    // then each next card, in reading order
@@ -671,7 +672,10 @@
   // (Only the home page has it; everything below is skipped on case studies.)
   function tellHero(msg) { if (hero && hero.contentWindow) hero.contentWindow.postMessage(msg, '*'); }
   if (!hero) return;
-  const hello = () => tellHero({ type: 'konbini:hello', width: innerWidth, height: innerHeight, theme: theme() });
+  // Short laptop windows (SHORT_SCREEN up to HERO_FLOOR, not phones): the konbini keeps the layout
+  // it has at HERO_FLOOR instead of shrinking further; the bottom sits below the fold.
+  const heroFloor = () => HERO_FIT === 'crop' && !phone.matches && innerHeight >= SHORT_SCREEN && innerHeight < HERO_FLOOR;
+  const hello = () => tellHero({ type: 'konbini:hello', width: innerWidth, height: innerHeight, fixed: heroFloor(), theme: theme() });
 
   // Inside the konbini (the fridge) is its own page at #konbini: the rest of the home page
   // hides, and the browser's Back button walks back out through the doors.
@@ -704,7 +708,7 @@
     // screen height, since it's a page of its own.
     const fitToContent = heroNatural && heroView !== 'fridge';
     const natural = heroNatural + 2;
-    const fold = room - 24;          // keep a little space between the helper line and the fold
+    const fold = (heroFloor() ? Math.max(420, HERO_FLOOR - nav.offsetHeight - gap) : room) - 24;   // keep a little space between the helper line and the fold
     const short = innerHeight < SHORT_SCREEN;
     hero.style.height = `${!fitToContent ? room : (HERO_FIT === 'width' || short) ? natural : Math.min(fold, natural)}px`;
   }
