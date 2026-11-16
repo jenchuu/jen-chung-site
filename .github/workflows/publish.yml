@@ -43,8 +43,14 @@ jobs:
       # could load with the old styles. Each page links them as e.g. css/site.css?v=<first 8 characters
       # of the file's fingerprint>: when a file changes its link changes, and browsers fetch it fresh;
       # when it doesn't, they keep using the copy they have. Only the published copy is stamped.
+      # The konbini hero (its own page, opened in a frame by js/site.js) gets the same treatment: its
+      # link in js/site.js is stamped first, so js/site.js's own stamp changes along with it.
       - name: Stamp the style and script files with their version
         run: |
+          v=$(sha1sum konbini/konbini-hero.html | cut -c1-8)
+          grep -q 'konbini/konbini-hero.html?' js/site.js
+          sed -i "s#konbini/konbini-hero\.html?#konbini/konbini-hero.html?v=$v\&#g" js/site.js
+          echo "konbini/konbini-hero.html?v=$v"
           for f in css/*.css js/*.js; do
             v=$(sha1sum "$f" | cut -c1-8)
             sed -i "s#\"$f\"#\"$f?v=$v\"#g" *.html
