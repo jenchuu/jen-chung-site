@@ -1231,7 +1231,11 @@ const CONFIG = {
     requestAnimationFrame(() => { fitting = false; });
   }
   let foldIO = null;
-  if ('IntersectionObserver' in window) {
+  // Only when the home page is the browser tab itself. If another site frames the home page
+  // (e.g. a portfolio directory), "on screen" means on THEIR screen, where often just a sliver of
+  // the frame shows, and the konbini would shrink to fit that sliver. There it fills its frame.
+  const pageIsTab = (() => { try { return window.parent === window.top; } catch (e) { return false; } })();
+  if ('IntersectionObserver' in window && pageIsTab) {
     foldIO = new IntersectionObserver(([e]) => {
       foldIO.unobserve(kb);              // measure once per load / resize, not while scrolling
       const r = e.intersectionRect;
