@@ -472,6 +472,7 @@ img { display: block; }
   white-space: nowrap;
   background-image: var(--sprite);
   background-repeat: no-repeat;
+  translate: -50% -50%;             /* left/top are its centre */
 }
 .bento-label.is-two-line {
   width: 6.2143em; height: 3.4286em;
@@ -802,13 +803,15 @@ const CONFIG = {
       note: 'for the gainzzz!!!' },
   ];
 
-  // tag = label offset inside the bento (Figma); z = stacking order from Figma;
+  // tag = label offset inside the bento and tagSize = the label's size, both in Figma px (the label is
+  // pinned by its centre, so when phones hold its text at the 10px minimum it grows evenly around
+  // that point instead of spilling off the bento's right side); z = stacking order from Figma;
   // study = which CONFIG.caseStudies link it opens (defaults to the art's cell name)
   const BENTOS = [
-    { cell: 'beacon',      title: 'Beacon: Parts',           x: 124.38, y: 413.93, w: 139.439, h: 92.959,  tag: [28.62, 26.07], twoLine: true, z: 1 },
-    { cell: 'venmo',       title: 'Cube: Comments',          x: 283.48, y: 417.54, w: 148.013, h: 98.675,  tag: [20.52, 30.46], z: 1, study: 'comments', soon: true },   // uses the old Venmo bento art
-    { cell: 'cube',        title: 'Cube: Boards',            x: 108.58, y: 480.83, w: 161.851, h: 121.389, tag: [38.42, 45.17], z: 3 },
-    { cell: 'switchchord', title: 'Switchchord: Splits',     x: 271.3,  y: 493.92, w: 164.126, h: 101.082, tag: [37.7, 16.08], twoLine: true, z: 2 },
+    { cell: 'beacon',      title: 'Beacon: Parts',           x: 124.38, y: 413.93, w: 139.439, h: 92.959,  tag: [28.62, 26.07], tagSize: [87, 48], twoLine: true, z: 1 },
+    { cell: 'venmo',       title: 'Cube: Comments',          x: 283.48, y: 417.54, w: 148.013, h: 98.675,  tag: [20.52, 30.46], tagSize: [111, 32], z: 1, study: 'comments', soon: true },   // uses the old Venmo bento art
+    { cell: 'cube',        title: 'Cube: Boards',            x: 108.58, y: 480.83, w: 161.851, h: 121.389, tag: [38.42, 45.17], tagSize: [89, 32], z: 3 },
+    { cell: 'switchchord', title: 'Switchchord: Splits',     x: 271.3,  y: 493.92, w: 164.126, h: 101.082, tag: [37.7, 16.08], tagSize: [87, 48], twoLine: true, z: 2 },
   ];
   const SHELF_TAG = { text: 'Work', cx: 269.5, y: 583 };
   const FW = 540, FH = 810;
@@ -1486,8 +1489,8 @@ const CONFIG = {
 
       const label = document.createElement('span');
       label.className = 'bento-label' + (b.twoLine ? ' is-two-line' : '');
-      label.style.left = pct(b.tag[0], b.w);
-      label.style.top = pct(b.tag[1], b.h);
+      label.style.left = pct(b.tag[0] + b.tagSize[0] / 2, b.w);   // centre (see BENTOS)
+      label.style.top = pct(b.tag[1] + b.tagSize[1] / 2, b.h);
       paintSprite(label, 'label');
       const text = document.createElement('span');
       text.textContent = b.title;
