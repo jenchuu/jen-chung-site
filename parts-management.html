@@ -21,6 +21,17 @@
 <link rel="apple-touch-icon" href="assets/favicon/apple-touch-icon.png">
 <!-- Analytics: Umami Cloud (no cookies). data-domains: only counts visits on the live site, not local previews.
      Click events: links with data-umami-event="…" (Resume, Email, LinkedIn, case study cards) + "Case study unlocked" in js/site.js -->
+<script>
+  // Jen's own visits: open any page with ?notrack to stop counting this browser (?track to undo).
+  (function () {
+    var q = new URLSearchParams(location.search), off = q.has('notrack'), on = q.has('track');
+    if (!off && !on) return;
+    try { off ? localStorage.setItem('umami.disabled', '1') : localStorage.removeItem('umami.disabled'); } catch (e) {}
+    q.delete('notrack'); q.delete('track');
+    history.replaceState(null, '', location.pathname + (q.toString() ? '?' + q : '') + location.hash);
+    setTimeout(function () { alert(off ? "Analytics off: your visits in this browser won't be counted." : 'Analytics on: your visits in this browser count again.'); }, 300);
+  })();
+</script>
 <script defer src="https://cloud.umami.is/script.js" data-website-id="02b9c8de-7507-452b-8b9c-7aef02b59c9d" data-domains="jen-chung.com,www.jen-chung.com"></script>
 <meta name="theme-color" content="#fcf9ef">
 <meta name="color-scheme" content="only light">   <!-- stops phones' automatic dark mode from darkening the page; the site has its own dark theme -->
