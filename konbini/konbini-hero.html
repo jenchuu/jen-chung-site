@@ -285,7 +285,6 @@ img { display: block; }
 .doors:focus-visible ~ .door-glow { opacity: 1; }
 .kb.is-door-hover.has-custom-cursor .door-hint { opacity: 0; }
 .kb.is-moving .door-hint { opacity: 0; transition: none; }
-.kb.hide-door-hint .door-hint { display: none; } /* computers at the desktop breakpoint: the Enter cursor does this job */
 
 /* Zoom-in speed lines, centred on the doors (set from JS) */
 .whoosh {
@@ -1112,7 +1111,7 @@ const CONFIG = {
       if (live && WORDS.length > 1) wordTimer = setInterval(nextWord, CONFIG.introRotateMs || 4000);
       if (live) grainTimer = setInterval(() => fuzzGrain.setAttribute('seed', String((Math.random() * 1000) | 0)), 120);
     }
-    const mode = (!wantPlay || mqReduce.matches) ? 'still' : kb.classList.contains('hide-door-hint') ? 'hover' : 'auto';
+    const mode = (!wantPlay || mqReduce.matches) ? 'still' : kb.classList.contains('is-desk-mouse') ? 'hover' : 'auto';
     if (mode === fuzzMode && (mode !== 'auto' || fuzzTimer || !live)) return;
     fuzzMode = mode;
     clearTimeout(fuzzTimer); fuzzTimer = 0;
@@ -1371,14 +1370,14 @@ const CONFIG = {
   }
   function syncCursorMode() { kb.classList.toggle('has-custom-cursor', mqMouse.matches); if (!mqMouse.matches) setCursor(null); syncDoorHint(); }
 
-  // "Tap to enter" chip: hidden on computers at Wix's desktop breakpoint, shown everywhere else.
-  // The embed can't see the page, so the Wix page code reports the page width; until it does
-  // (or in the editor, where page code doesn't run) we guess from the embed's own width.
+  // Computers with a mouse at the desktop breakpoint (.is-desk-mouse): "complex" sharpens on hover
+  // instead of on its own. (The "Tap to enter" chip shows at every size; it fades while the Enter
+  // cursor is over the doors.) The page reports its width; until it does, guess from the frame's own.
   const WIX_DESKTOP_MIN = 1001;
   let pageWidth = 0;
   function syncDoorHint() {
     const desktop = pageWidth ? pageWidth >= WIX_DESKTOP_MIN : innerWidth >= 980;
-    kb.classList.toggle('hide-door-hint', desktop && mqMouse.matches);
+    kb.classList.toggle('is-desk-mouse', desktop && mqMouse.matches);
     syncIntroMotion();
   }
   syncCursorMode();
