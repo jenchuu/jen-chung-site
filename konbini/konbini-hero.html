@@ -1433,7 +1433,6 @@ const CONFIG = {
       btn.append(art);
       things.append(btn);
 
-      btn.addEventListener('click', () => track('Fridge item', { item: item.name }));
       if (!item.note) { btn.addEventListener('click', () => wiggle(art)); return; }
       const tip = document.createElement('span');
       tip.className = 'item-tip';
@@ -1498,7 +1497,7 @@ const CONFIG = {
       label.append(text);
 
       a.append(art, label);
-      if (href) a.addEventListener('click', () => track('Fridge item', { item: b.title }));
+      if (href) a.addEventListener('click', () => track('Konbini bento', { study: b.title }));
       if (href) a.addEventListener('click', (e) => {
         if (!veloBridge || e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
         e.preventDefault();

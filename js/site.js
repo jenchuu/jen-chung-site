@@ -733,7 +733,7 @@
       } catch (err) {}
       sizeHero();
     }
-    if (msg.type === 'konbini:track' && typeof msg.name === 'string') {   // analytics: "Konbini entered", "Fridge item" (+ item)
+    if (msg.type === 'konbini:track' && typeof msg.name === 'string') {   // analytics: "Konbini entered", "Konbini bento" (+ study)
       try { window.umami?.track(msg.name, msg.data || undefined); } catch (err) {}
     }
     if (msg.type === 'konbini:navigate' && msg.url) location.href = msg.url;
