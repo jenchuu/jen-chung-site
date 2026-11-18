@@ -733,6 +733,9 @@
       } catch (err) {}
       sizeHero();
     }
+    if (msg.type === 'konbini:track' && typeof msg.name === 'string') {   // analytics: "Konbini entered", "Fridge item" (+ item)
+      try { window.umami?.track(msg.name, msg.data || undefined); } catch (err) {}
+    }
     if (msg.type === 'konbini:navigate' && msg.url) location.href = msg.url;
     if (msg.type === 'konbini:scroll') document.getElementById('work').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
   });

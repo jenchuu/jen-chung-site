@@ -1433,6 +1433,7 @@ const CONFIG = {
       btn.append(art);
       things.append(btn);
 
+      btn.addEventListener('click', () => track('Fridge item', { item: item.name }));
       if (!item.note) { btn.addEventListener('click', () => wiggle(art)); return; }
       const tip = document.createElement('span');
       tip.className = 'item-tip';
@@ -1497,6 +1498,7 @@ const CONFIG = {
       label.append(text);
 
       a.append(art, label);
+      if (href) a.addEventListener('click', () => track('Fridge item', { item: b.title }));
       if (href) a.addEventListener('click', (e) => {
         if (!veloBridge || e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
         e.preventDefault();
@@ -1666,7 +1668,9 @@ const CONFIG = {
     kb.classList.remove('is-moving');
   }
 
-  doors.addEventListener('click', () => enter());
+  // Analytics: the home page's Umami counts these (js/site.js, "konbini:track").
+  function track(name, data) { if (window.parent !== window) window.parent.postMessage({ type: 'konbini:track', name, data }, '*'); }
+  doors.addEventListener('click', () => { if (!busy && kb.dataset.view !== 'fridge') track('Konbini entered'); enter(); });
   // ↓ asks the Wix page to scroll to the work section (see wix-page-code.js)
   $('.note-arrow').addEventListener('click', () => {
     if (window.parent !== window) window.parent.postMessage({ type: 'konbini:scroll', target: 'work' }, '*');
